@@ -4,7 +4,7 @@ import hu.psprog.leaflet.api.rest.request.attachment.AttachmentRequestModel;
 import hu.psprog.leaflet.bridge.client.BridgeClient;
 import hu.psprog.leaflet.bridge.client.domain.BridgeService;
 import hu.psprog.leaflet.bridge.client.exception.CommunicationFailureException;
-import hu.psprog.leaflet.bridge.client.request.Path;
+import hu.psprog.leaflet.bridge.config.LeafletPath;
 import hu.psprog.leaflet.bridge.client.request.RESTRequest;
 import hu.psprog.leaflet.bridge.client.request.RequestMethod;
 import hu.psprog.leaflet.bridge.service.AttachmentBridgeService;
@@ -30,7 +30,7 @@ class AttachmentBridgeServiceImpl implements AttachmentBridgeService {
 
         RESTRequest restRequest = RESTRequest.getBuilder()
                 .method(RequestMethod.POST)
-                .path(Path.ATTACHMENTS)
+                .path(LeafletPath.ATTACHMENTS)
                 .requestBody(attachmentRequestModel)
                 .authenticated()
                 .build();
@@ -43,7 +43,7 @@ class AttachmentBridgeServiceImpl implements AttachmentBridgeService {
 
         RESTRequest restRequest = RESTRequest.getBuilder()
                 .method(RequestMethod.PUT)
-                .path(Path.ATTACHMENTS)
+                .path(LeafletPath.ATTACHMENTS)
                 .requestBody(attachmentRequestModel)
                 .authenticated()
                 .build();

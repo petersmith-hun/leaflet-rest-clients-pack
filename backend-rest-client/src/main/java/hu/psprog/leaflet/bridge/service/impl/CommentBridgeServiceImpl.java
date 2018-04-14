@@ -11,7 +11,7 @@ import hu.psprog.leaflet.bridge.client.domain.BridgeService;
 import hu.psprog.leaflet.bridge.client.domain.OrderBy;
 import hu.psprog.leaflet.bridge.client.domain.OrderDirection;
 import hu.psprog.leaflet.bridge.client.exception.CommunicationFailureException;
-import hu.psprog.leaflet.bridge.client.request.Path;
+import hu.psprog.leaflet.bridge.config.LeafletPath;
 import hu.psprog.leaflet.bridge.client.request.RESTRequest;
 import hu.psprog.leaflet.bridge.client.request.RequestMethod;
 import hu.psprog.leaflet.bridge.service.CommentBridgeService;
@@ -46,7 +46,7 @@ class CommentBridgeServiceImpl implements CommentBridgeService {
 
         RESTRequest restRequest = RESTRequest.getBuilder()
                 .method(RequestMethod.GET)
-                .path(Path.COMMENTS_PUBLIC_PAGE_BY_ENTRY)
+                .path(LeafletPath.COMMENTS_PUBLIC_PAGE_BY_ENTRY)
                 .addPathParameter(ID, String.valueOf(entryID))
                 .addPathParameter(PAGE, String.valueOf(page))
                 .addRequestParameters(LIMIT, String.valueOf(limit))
@@ -63,7 +63,7 @@ class CommentBridgeServiceImpl implements CommentBridgeService {
 
         RESTRequest restRequest = RESTRequest.getBuilder()
                 .method(RequestMethod.GET)
-                .path(Path.COMMENTS_ALL_PAGE_BY_ENTRY)
+                .path(LeafletPath.COMMENTS_ALL_PAGE_BY_ENTRY)
                 .addPathParameter(ID, String.valueOf(entryID))
                 .addPathParameter(PAGE, String.valueOf(page))
                 .addRequestParameters(LIMIT, String.valueOf(limit))
@@ -80,7 +80,7 @@ class CommentBridgeServiceImpl implements CommentBridgeService {
 
         RESTRequest restRequest = RESTRequest.getBuilder()
                 .method(RequestMethod.GET)
-                .path(Path.COMMENTS_BY_ID)
+                .path(LeafletPath.COMMENTS_BY_ID)
                 .addPathParameter(ID, String.valueOf(commentID))
                 .authenticated()
                 .build();
@@ -93,7 +93,7 @@ class CommentBridgeServiceImpl implements CommentBridgeService {
 
         RESTRequest restRequest = RESTRequest.getBuilder()
                 .method(RequestMethod.POST)
-                .path(Path.COMMENTS)
+                .path(LeafletPath.COMMENTS)
                 .requestBody(commentCreateRequestModel)
                 .authenticated()
                 .build();
@@ -106,7 +106,7 @@ class CommentBridgeServiceImpl implements CommentBridgeService {
 
         RESTRequest restRequest = RESTRequest.getBuilder()
                 .method(RequestMethod.PUT)
-                .path(Path.COMMENTS_BY_ID)
+                .path(LeafletPath.COMMENTS_BY_ID)
                 .addPathParameter(ID, String.valueOf(commentID))
                 .requestBody(commentUpdateRequestModel)
                 .authenticated()
@@ -120,7 +120,7 @@ class CommentBridgeServiceImpl implements CommentBridgeService {
 
         RESTRequest restRequest = RESTRequest.getBuilder()
                 .method(RequestMethod.PUT)
-                .path(Path.COMMENTS_STATUS)
+                .path(LeafletPath.COMMENTS_STATUS)
                 .addPathParameter(ID, String.valueOf(commentID))
                 .authenticated()
                 .build();
@@ -133,7 +133,7 @@ class CommentBridgeServiceImpl implements CommentBridgeService {
 
         RESTRequest restRequest = RESTRequest.getBuilder()
                 .method(RequestMethod.DELETE)
-                .path(Path.COMMENTS_BY_ID)
+                .path(LeafletPath.COMMENTS_BY_ID)
                 .addPathParameter(ID, String.valueOf(commentID))
                 .authenticated()
                 .build();
@@ -146,7 +146,7 @@ class CommentBridgeServiceImpl implements CommentBridgeService {
 
         RESTRequest restRequest = RESTRequest.getBuilder()
                 .method(RequestMethod.DELETE)
-                .path(Path.COMMENTS_DELETE_PERMANENT)
+                .path(LeafletPath.COMMENTS_DELETE_PERMANENT)
                 .addPathParameter(ID, String.valueOf(commentID))
                 .authenticated()
                 .build();

@@ -1,0 +1,152 @@
+package hu.psprog.leaflet.tlp.api.client.impl;
+
+import com.github.tomakehurst.wiremock.client.ResponseDefinitionBuilder;
+import com.github.tomakehurst.wiremock.junit.WireMockClassRule;
+import com.github.tomakehurst.wiremock.matching.EqualToPattern;
+import hu.psprog.leaflet.bridge.client.exception.CommunicationFailureException;
+import hu.psprog.leaflet.bridge.client.request.RequestAuthentication;
+import hu.psprog.leaflet.tlp.api.client.TLPClient;
+import hu.psprog.leaflet.tlp.api.client.config.TLPPath;
+import hu.psprog.leaflet.tlp.api.domain.LogEventPage;
+import hu.psprog.leaflet.tlp.api.domain.LogRequest;
+import hu.psprog.leaflet.tlp.api.domain.LoggingEvent;
+import hu.psprog.leaflet.tlp.api.domain.OrderBy;
+import hu.psprog.leaflet.tlp.api.domain.OrderDirection;
+import org.junit.ClassRule;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.boot.test.context.ConfigFileApplicationContextInitializer;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+
+import static com.github.tomakehurst.wiremock.client.WireMock.get;
+import static com.github.tomakehurst.wiremock.client.WireMock.getRequestedFor;
+import static com.github.tomakehurst.wiremock.client.WireMock.givenThat;
+import static com.github.tomakehurst.wiremock.client.WireMock.urlPathEqualTo;
+import static com.github.tomakehurst.wiremock.client.WireMock.verify;
+import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.options;
+import static hu.psprog.leaflet.tlp.api.client.impl.TLPClientImplTest.TLPClientTestConfiguration.TLP_CLIENT_INTEGRATION_TEST_PROFILE;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.MatcherAssert.assertThat;
+
+/**
+ * Integration tests for {@link TLPClientImpl}.
+ *
+ * @author Peter Smith
+ */
+@RunWith(SpringJUnit4ClassRunner.class)
+@ActiveProfiles(TLP_CLIENT_INTEGRATION_TEST_PROFILE)
+@ContextConfiguration(
+        classes = TLPClientImplTest.TLPClientTestConfiguration.class,
+        initializers = ConfigFileApplicationContextInitializer.class)
+public class TLPClientImplTest {
+
+    private static final String QUERY_PARAM_PAGE = "page";
+    private static final String QUERY_PARAM_LIMIT = "limit";
+    private static final String QUERY_PARAM_ORDER_BY = "orderBy";
+    private static final String QUERY_PARAM_ORDER_DIRECTION = "orderDirection";
+    private static final String QUERY_PARAM_SOURCE = "source";
+    private static final String QUERY_PARAM_LEVEL = "level";
+    private static final String QUERY_PARAM_FROM = "from";
+    private static final String QUERY_PARAM_TO = "to";
+    private static final String QUERY_PARAM_CONTENT = "content";
+
+    private static final LogEventPage LOG_EVENT_PAGE = LogEventPage.getBuilder()
+            .withEntitiesOnPage(Collections.singletonList(LoggingEvent.getBuilder()
+                    .withLevel("INFO")
+                    .build()))
+            .withEntityCount(1L)
+            .build();
+
+    private static final LogRequest LOG_REQUEST = new LogRequest();
+
+    static {
+        LOG_REQUEST.setContent("content");
+        LOG_REQUEST.setFrom("from");
+        LOG_REQUEST.setLevel("level");
+        LOG_REQUEST.setLimit(10);
+        LOG_REQUEST.setOrderBy(OrderBy.CONTENT);
+        LOG_REQUEST.setOrderDirection(OrderDirection.ASC);
+        LOG_REQUEST.setPage(2);
+        LOG_REQUEST.setSource("source");
+        LOG_REQUEST.setTo("to");
+    }
+
+    @ClassRule
+    public static WireMockClassRule wireMockRule = new WireMockClassRule(options().port(9999));
+
+    @Rule
+    public WireMockClassRule wireMockInstanceRule = wireMockRule;
+
+    @Autowired
+    private TLPClient tlpClient;
+
+    @Test
+    public void shouldGetLogs() throws CommunicationFailureException {
+
+        // given
+        givenThat(get(urlPathEqualTo(TLPPath.LOGS.getURI()))
+                .willReturn(ResponseDefinitionBuilder.okForJson(LOG_EVENT_PAGE)));
+
+        // when
+        LogEventPage result = tlpClient.getLogs(LOG_REQUEST);
+
+        // then
+        assertThat(result, equalTo(LOG_EVENT_PAGE));
+        verify(getRequestedFor(urlPathEqualTo(TLPPath.LOGS.getURI()))
+                .withQueryParam(QUERY_PARAM_PAGE, new EqualToPattern(String.valueOf(LOG_REQUEST.getPage())))
+                .withQueryParam(QUERY_PARAM_LIMIT, new EqualToPattern(String.valueOf(LOG_REQUEST.getLimit())))
+                .withQueryParam(QUERY_PARAM_ORDER_BY, new EqualToPattern(LOG_REQUEST.getOrderBy().name()))
+                .withQueryParam(QUERY_PARAM_ORDER_DIRECTION, new EqualToPattern(LOG_REQUEST.getOrderDirection().name()))
+                .withQueryParam(QUERY_PARAM_SOURCE, new EqualToPattern(LOG_REQUEST.getSource()))
+                .withQueryParam(QUERY_PARAM_LEVEL, new EqualToPattern(LOG_REQUEST.getLevel()))
+                .withQueryParam(QUERY_PARAM_FROM, new EqualToPattern(LOG_REQUEST.getFrom()))
+                .withQueryParam(QUERY_PARAM_TO, new EqualToPattern(LOG_REQUEST.getTo()))
+                .withQueryParam(QUERY_PARAM_CONTENT, new EqualToPattern(LOG_REQUEST.getContent())));
+    }
+
+    @Profile(TLP_CLIENT_INTEGRATION_TEST_PROFILE)
+    @Configuration
+    @EnableConfigurationProperties
+    @ComponentScan(basePackages = {
+            "hu.psprog.leaflet.tlp.api.client.impl",
+            "hu.psprog.leaflet.bridge"})
+    public static class TLPClientTestConfiguration {
+
+        static final String TLP_CLIENT_INTEGRATION_TEST_PROFILE = "it";
+
+        @Bean
+        public RequestAuthentication requestAuthenticationStub() {
+            return () -> {
+                Map<String, String> auth = new HashMap<>();
+                auth.put("Authorization", "Bearer token");
+                return auth;
+            };
+        }
+
+        @Bean
+        public HttpServletRequest httpServletRequestStub() {
+            return Mockito.mock(HttpServletRequest.class);
+        }
+
+        @Bean
+        public HttpServletResponse httpServletResponseStub() {
+            return Mockito.mock(HttpServletResponse.class);
+        }
+    }
+}

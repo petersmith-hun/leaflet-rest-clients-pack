@@ -11,17 +11,14 @@ import hu.psprog.leaflet.api.rest.response.file.DirectoryListDataModel;
 import hu.psprog.leaflet.api.rest.response.file.FileDataModel;
 import hu.psprog.leaflet.api.rest.response.file.FileListDataModel;
 import hu.psprog.leaflet.bridge.client.exception.CommunicationFailureException;
-import hu.psprog.leaflet.bridge.client.request.Path;
+import hu.psprog.leaflet.bridge.config.LeafletPath;
 import hu.psprog.leaflet.bridge.it.config.BridgeITSuite;
-import hu.psprog.leaflet.bridge.it.config.LeafletBridgeITContextConfig;
 import hu.psprog.leaflet.bridge.service.FileBridgeService;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.IOException;
@@ -61,7 +58,7 @@ public class FileBridgeServiceImplIT extends WireMockBaseTest {
 
         // given
         FileListDataModel fileListDataModel = prepareFileListDataModel();
-        givenThat(get(Path.FILES.getURI()).willReturn(ResponseDefinitionBuilder
+        givenThat(get(LeafletPath.FILES.getURI()).willReturn(ResponseDefinitionBuilder
                 .okForJson(fileListDataModel)));
 
         // when
@@ -69,7 +66,7 @@ public class FileBridgeServiceImplIT extends WireMockBaseTest {
 
         // then
         assertThat(result, equalTo(fileListDataModel));
-        verify(getRequestedFor(urlEqualTo(Path.FILES.getURI()))
+        verify(getRequestedFor(urlEqualTo(LeafletPath.FILES.getURI()))
                 .withHeader(AUTHORIZATION_HEADER, VALUE_PATTERN_BEARER_TOKEN));
     }
 
@@ -79,7 +76,7 @@ public class FileBridgeServiceImplIT extends WireMockBaseTest {
         // given
         UUID fileIdentifier = UUID.randomUUID();
         String filename = "filename";
-        String uri = prepareURI(Path.FILES_BY_ID.getURI(), fileIdentifier, filename);
+        String uri = prepareURI(LeafletPath.FILES_BY_ID.getURI(), fileIdentifier, filename);
         String responseBody = "responseBody";
         givenThat(get(uri)
                 .willReturn(ResponseDefinitionBuilder.responseDefinition().withBody(responseBody.getBytes())));
@@ -98,7 +95,7 @@ public class FileBridgeServiceImplIT extends WireMockBaseTest {
         // given
         FileDataModel fileDataModel = prepareFileDataModel();
         UUID fileIdentifier = UUID.randomUUID();
-        String uri = prepareURI(Path.FILES_ONLY_UUID.getURI(), fileIdentifier);
+        String uri = prepareURI(LeafletPath.FILES_ONLY_UUID.getURI(), fileIdentifier);
         givenThat(get(uri)
                 .willReturn(ResponseDefinitionBuilder.okForJson(fileDataModel)));
 
@@ -117,7 +114,7 @@ public class FileBridgeServiceImplIT extends WireMockBaseTest {
         // given
         FileUploadRequestModel fileUploadRequestModel = prepareFileUploadRequestModel();
         FileDataModel fileDataModel = prepareFileDataModel();
-        givenThat(post(Path.FILES.getURI())
+        givenThat(post(LeafletPath.FILES.getURI())
                 .willReturn(ResponseDefinitionBuilder.okForJson(fileDataModel)));
 
         // when
@@ -125,7 +122,7 @@ public class FileBridgeServiceImplIT extends WireMockBaseTest {
 
         // then
         assertThat(result, equalTo(fileDataModel));
-        verify(postRequestedFor(urlEqualTo(Path.FILES.getURI()))
+        verify(postRequestedFor(urlEqualTo(LeafletPath.FILES.getURI()))
                 .withHeader(AUTHORIZATION_HEADER, VALUE_PATTERN_BEARER_TOKEN));
     }
 
@@ -134,7 +131,7 @@ public class FileBridgeServiceImplIT extends WireMockBaseTest {
 
         // given
         UUID fileIdentifier = UUID.randomUUID();
-        String uri = prepareURI(Path.FILES_ONLY_UUID.getURI(), fileIdentifier);
+        String uri = prepareURI(LeafletPath.FILES_ONLY_UUID.getURI(), fileIdentifier);
         givenThat(delete(uri));
 
         // when
@@ -151,14 +148,14 @@ public class FileBridgeServiceImplIT extends WireMockBaseTest {
         // given
         DirectoryCreationRequestModel directoryCreationRequestModel = prepareDirectoryCreationRequestModel();
         StringValuePattern requestBody = equalToJson(OBJECT_MAPPER.writeValueAsString(directoryCreationRequestModel));
-        givenThat(post(Path.FILES_DIRECTORIES.getURI())
+        givenThat(post(LeafletPath.FILES_DIRECTORIES.getURI())
                 .withRequestBody(requestBody));
 
         // when
         fileBridgeService.createDirectory(directoryCreationRequestModel);
 
         // then
-        verify(postRequestedFor(urlEqualTo(Path.FILES_DIRECTORIES.getURI()))
+        verify(postRequestedFor(urlEqualTo(LeafletPath.FILES_DIRECTORIES.getURI()))
                 .withRequestBody(requestBody)
                 .withHeader(AUTHORIZATION_HEADER, VALUE_PATTERN_BEARER_TOKEN));
     }
@@ -168,7 +165,7 @@ public class FileBridgeServiceImplIT extends WireMockBaseTest {
 
         // given
         UUID fileIdentifier = UUID.randomUUID();
-        String uri = prepareURI(Path.FILES_ONLY_UUID.getURI(), fileIdentifier);
+        String uri = prepareURI(LeafletPath.FILES_ONLY_UUID.getURI(), fileIdentifier);
         UpdateFileMetaInfoRequestModel updateFileMetaInfoRequestModel = prepareUpdateFileMetaInfoRequestModel();
         StringValuePattern requestBody = equalToJson(OBJECT_MAPPER.writeValueAsString(updateFileMetaInfoRequestModel));
         givenThat(put(uri)
@@ -187,7 +184,7 @@ public class FileBridgeServiceImplIT extends WireMockBaseTest {
     public void shouldGetDirectories() throws CommunicationFailureException {
 
         // given
-        String uri = Path.FILES_DIRECTORIES.getURI();
+        String uri = LeafletPath.FILES_DIRECTORIES.getURI();
         DirectoryListDataModel directoryListDataModel = prepareDirectoryListDataModel();
         givenThat(get(uri)
                 .willReturn(ResponseDefinitionBuilder.okForJson(directoryListDataModel)));

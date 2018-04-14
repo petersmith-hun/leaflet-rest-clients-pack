@@ -10,7 +10,7 @@ import hu.psprog.leaflet.bridge.adapter.impl.FileUploadMultipartRequestBodyAdapt
 import hu.psprog.leaflet.bridge.client.BridgeClient;
 import hu.psprog.leaflet.bridge.client.domain.BridgeService;
 import hu.psprog.leaflet.bridge.client.exception.CommunicationFailureException;
-import hu.psprog.leaflet.bridge.client.request.Path;
+import hu.psprog.leaflet.bridge.config.LeafletPath;
 import hu.psprog.leaflet.bridge.client.request.RESTRequest;
 import hu.psprog.leaflet.bridge.client.request.RequestMethod;
 import hu.psprog.leaflet.bridge.service.FileBridgeService;
@@ -44,7 +44,7 @@ class FileBridgeServiceImpl implements FileBridgeService {
 
         RESTRequest restRequest = RESTRequest.getBuilder()
                 .method(RequestMethod.GET)
-                .path(Path.FILES)
+                .path(LeafletPath.FILES)
                 .authenticated()
                 .build();
 
@@ -56,7 +56,7 @@ class FileBridgeServiceImpl implements FileBridgeService {
 
         RESTRequest restRequest = RESTRequest.getBuilder()
                 .method(RequestMethod.GET)
-                .path(Path.FILES_BY_ID)
+                .path(LeafletPath.FILES_BY_ID)
                 .addPathParameter(FILE_IDENTIFIER, fileIdentifier.toString())
                 .addPathParameter(STORED_FILENAME, storedFilename)
                 .build();
@@ -69,7 +69,7 @@ class FileBridgeServiceImpl implements FileBridgeService {
 
         RESTRequest restRequest = RESTRequest.getBuilder()
                 .method(RequestMethod.GET)
-                .path(Path.FILES_ONLY_UUID)
+                .path(LeafletPath.FILES_ONLY_UUID)
                 .addPathParameter(FILE_IDENTIFIER, fileIdentifier.toString())
                 .authenticated()
                 .build();
@@ -82,7 +82,7 @@ class FileBridgeServiceImpl implements FileBridgeService {
 
         RESTRequest restRequest = RESTRequest.getBuilder()
                 .method(RequestMethod.POST)
-                .path(Path.FILES)
+                .path(LeafletPath.FILES)
                 .requestBody(fileUploadRequestModel)
                 .multipart()
                 .adapter(multipartAdapter)
@@ -97,7 +97,7 @@ class FileBridgeServiceImpl implements FileBridgeService {
 
         RESTRequest restRequest = RESTRequest.getBuilder()
                 .method(RequestMethod.DELETE)
-                .path(Path.FILES_ONLY_UUID)
+                .path(LeafletPath.FILES_ONLY_UUID)
                 .addPathParameter(FILE_IDENTIFIER, fileIdentifier.toString())
                 .authenticated()
                 .build();
@@ -110,7 +110,7 @@ class FileBridgeServiceImpl implements FileBridgeService {
 
         RESTRequest restRequest = RESTRequest.getBuilder()
                 .method(RequestMethod.POST)
-                .path(Path.FILES_DIRECTORIES)
+                .path(LeafletPath.FILES_DIRECTORIES)
                 .requestBody(directoryCreationRequestModel)
                 .authenticated()
                 .build();
@@ -124,7 +124,7 @@ class FileBridgeServiceImpl implements FileBridgeService {
 
         RESTRequest restRequest = RESTRequest.getBuilder()
                 .method(RequestMethod.PUT)
-                .path(Path.FILES_ONLY_UUID)
+                .path(LeafletPath.FILES_ONLY_UUID)
                 .requestBody(updateFileMetaInfoRequestModel)
                 .addPathParameter(FILE_IDENTIFIER, fileIdentifier.toString())
                 .authenticated()
@@ -138,7 +138,7 @@ class FileBridgeServiceImpl implements FileBridgeService {
 
         RESTRequest restRequest = RESTRequest.getBuilder()
                 .method(RequestMethod.GET)
-                .path(Path.FILES_DIRECTORIES)
+                .path(LeafletPath.FILES_DIRECTORIES)
                 .authenticated()
                 .build();
 

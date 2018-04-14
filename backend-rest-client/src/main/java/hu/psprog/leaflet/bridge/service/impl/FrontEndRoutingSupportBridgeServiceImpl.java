@@ -6,7 +6,7 @@ import hu.psprog.leaflet.api.rest.response.routing.ExtendedFrontEndRouteListData
 import hu.psprog.leaflet.bridge.client.BridgeClient;
 import hu.psprog.leaflet.bridge.client.domain.BridgeService;
 import hu.psprog.leaflet.bridge.client.exception.CommunicationFailureException;
-import hu.psprog.leaflet.bridge.client.request.Path;
+import hu.psprog.leaflet.bridge.config.LeafletPath;
 import hu.psprog.leaflet.bridge.client.request.RESTRequest;
 import hu.psprog.leaflet.bridge.client.request.RequestMethod;
 import hu.psprog.leaflet.bridge.service.FrontEndRoutingSupportBridgeService;
@@ -34,7 +34,7 @@ public class FrontEndRoutingSupportBridgeServiceImpl implements FrontEndRoutingS
 
         RESTRequest restRequest = RESTRequest.getBuilder()
                 .method(RequestMethod.GET)
-                .path(Path.ROUTES)
+                .path(LeafletPath.ROUTES)
                 .authenticated()
                 .build();
 
@@ -46,7 +46,7 @@ public class FrontEndRoutingSupportBridgeServiceImpl implements FrontEndRoutingS
 
         RESTRequest restRequest = RESTRequest.getBuilder()
                 .method(RequestMethod.GET)
-                .path(Path.ROUTES_BY_ID)
+                .path(LeafletPath.ROUTES_BY_ID)
                 .authenticated()
                 .addPathParameter(ID, String.valueOf(routeID))
                 .build();
@@ -59,7 +59,7 @@ public class FrontEndRoutingSupportBridgeServiceImpl implements FrontEndRoutingS
 
         RESTRequest restRequest = RESTRequest.getBuilder()
                 .method(RequestMethod.POST)
-                .path(Path.ROUTES)
+                .path(LeafletPath.ROUTES)
                 .authenticated()
                 .requestBody(frontEndRouteUpdateRequestModel)
                 .build();
@@ -72,7 +72,7 @@ public class FrontEndRoutingSupportBridgeServiceImpl implements FrontEndRoutingS
 
         RESTRequest restRequest = RESTRequest.getBuilder()
                 .method(RequestMethod.PUT)
-                .path(Path.ROUTES_BY_ID)
+                .path(LeafletPath.ROUTES_BY_ID)
                 .authenticated()
                 .addPathParameter(ID, String.valueOf(routeID))
                 .requestBody(frontEndRouteUpdateRequestModel)
@@ -86,7 +86,7 @@ public class FrontEndRoutingSupportBridgeServiceImpl implements FrontEndRoutingS
 
         RESTRequest restRequest = RESTRequest.getBuilder()
                 .method(RequestMethod.PUT)
-                .path(Path.ROUTES_STATUS)
+                .path(LeafletPath.ROUTES_STATUS)
                 .authenticated()
                 .addPathParameter(ID, String.valueOf(routeID))
                 .build();
@@ -99,7 +99,7 @@ public class FrontEndRoutingSupportBridgeServiceImpl implements FrontEndRoutingS
 
         RESTRequest restRequest = RESTRequest.getBuilder()
                 .method(RequestMethod.DELETE)
-                .path(Path.ROUTES_BY_ID)
+                .path(LeafletPath.ROUTES_BY_ID)
                 .authenticated()
                 .addPathParameter(ID, String.valueOf(routeID))
                 .build();
