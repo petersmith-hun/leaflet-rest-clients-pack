@@ -16,6 +16,7 @@
         <module>tlp-rest-client</module>
         <module>failover-rest-api</module>
         <module>tlp-rest-api</module>
+        <module>tms-rest-api</module>
     </modules>
 
     <properties>
@@ -30,13 +31,13 @@
 
         <!-- dependency versions -->
         <leaflet.rest-api.version>1.3.0</leaflet.rest-api.version>
-        <leaflet.translation-api.version>2.0.0</leaflet.translation-api.version>
         <leaflet.bridge.version>2.0.0</leaflet.bridge.version>
         <spring.framework.version>4.3.9.RELEASE</spring.framework.version>
         <spring-boot-starter-test.version>1.5.4.RELEASE</spring-boot-starter-test.version>
         <commons-io.version>2.6</commons-io.version>
         <logback.version>1.2.3</logback.version>
         <slf4j.version>1.7.25</slf4j.version>
+        <hibernate-validator.version>5.2.4.Final</hibernate-validator.version>
 
         <!-- test framework versions -->
         <junit.version>4.12</junit.version>
@@ -57,11 +58,6 @@
             </dependency>
             <dependency>
                 <groupId>hu.psprog.leaflet</groupId>
-                <artifactId>translation-api</artifactId>
-                <version>${leaflet.translation-api.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>hu.psprog.leaflet</groupId>
                 <artifactId>leaflet-bridge</artifactId>
                 <version>${leaflet.bridge.version}</version>
             </dependency>
@@ -69,6 +65,12 @@
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-web</artifactId>
                 <version>${spring.framework.version}</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.hibernate</groupId>
+                <artifactId>hibernate-validator</artifactId>
+                <version>${hibernate-validator.version}</version>
                 <scope>provided</scope>
             </dependency>
             <dependency>
@@ -146,6 +148,10 @@
         <dependency>
             <groupId>hu.psprog.leaflet</groupId>
             <artifactId>leaflet-bridge</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-validator</artifactId>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>

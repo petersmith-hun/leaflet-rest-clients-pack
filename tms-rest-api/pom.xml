@@ -9,14 +9,6 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>tms-rest-client</artifactId>
-
-    <dependencies>
-        <dependency>
-            <groupId>hu.psprog.leaflet</groupId>
-            <artifactId>tms-rest-api</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-    </dependencies>
+    <artifactId>tms-rest-api</artifactId>
 
 </project>
