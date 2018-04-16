@@ -7,15 +7,12 @@ import hu.psprog.leaflet.api.rest.request.category.CategoryCreateRequestModel;
 import hu.psprog.leaflet.api.rest.response.category.CategoryDataModel;
 import hu.psprog.leaflet.api.rest.response.category.CategoryListDataModel;
 import hu.psprog.leaflet.bridge.client.exception.CommunicationFailureException;
-import hu.psprog.leaflet.bridge.client.request.Path;
+import hu.psprog.leaflet.bridge.config.LeafletPath;
 import hu.psprog.leaflet.bridge.it.config.BridgeITSuite;
-import hu.psprog.leaflet.bridge.it.config.LeafletBridgeITContextConfig;
 import hu.psprog.leaflet.bridge.service.CategoryBridgeService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.delete;
@@ -51,14 +48,14 @@ public class CategoryBridgeServiceImplIT extends WireMockBaseTest {
 
         // given
         CategoryListDataModel categoryListDataModel = prepareCategoryListDataModel();
-        givenThat(get(Path.CATEGORIES.getURI())
+        givenThat(get(LeafletPath.CATEGORIES.getURI())
                 .willReturn(ResponseDefinitionBuilder.okForJson(categoryListDataModel)));
 
         // when
         CategoryListDataModel result = categoryBridgeService.getAllCategories();
 
         // then
-        verify(getRequestedFor(urlEqualTo(Path.CATEGORIES.getURI()))
+        verify(getRequestedFor(urlEqualTo(LeafletPath.CATEGORIES.getURI()))
                 .withHeader(AUTHORIZATION_HEADER, VALUE_PATTERN_BEARER_TOKEN));
         assertThat(result, equalTo(categoryListDataModel));
 
@@ -69,14 +66,14 @@ public class CategoryBridgeServiceImplIT extends WireMockBaseTest {
 
         // given
         CategoryListDataModel categoryListDataModel = prepareCategoryListDataModel();
-        givenThat(get(Path.CATEGORIES_PUBLIC.getURI())
+        givenThat(get(LeafletPath.CATEGORIES_PUBLIC.getURI())
                 .willReturn(ResponseDefinitionBuilder.okForJson(categoryListDataModel)));
 
         // when
         CategoryListDataModel result = categoryBridgeService.getPublicCategories();
 
         // then
-        verify(getRequestedFor(urlEqualTo(Path.CATEGORIES_PUBLIC.getURI())));
+        verify(getRequestedFor(urlEqualTo(LeafletPath.CATEGORIES_PUBLIC.getURI())));
         assertThat(result, equalTo(categoryListDataModel));
 
     }
@@ -87,7 +84,7 @@ public class CategoryBridgeServiceImplIT extends WireMockBaseTest {
         // given
         Long categoryID = 1L;
         CategoryDataModel categoryDataModel = prepareCategoryDataModel(categoryID);
-        String uri = prepareURI(Path.CATEGORIES_BY_ID.getURI(), categoryID);
+        String uri = prepareURI(LeafletPath.CATEGORIES_BY_ID.getURI(), categoryID);
         givenThat(get(uri)
                 .willReturn(ResponseDefinitionBuilder.okForJson(categoryDataModel)));
 
@@ -107,7 +104,7 @@ public class CategoryBridgeServiceImplIT extends WireMockBaseTest {
         CategoryDataModel categoryDataModel = prepareCategoryDataModel(1L);
         CategoryCreateRequestModel categoryCreateRequestModel = prepareCategoryCreateRequestModel();
         StringValuePattern requestBody = equalToJson(OBJECT_MAPPER.writeValueAsString(categoryCreateRequestModel));
-        givenThat(post(Path.CATEGORIES.getURI())
+        givenThat(post(LeafletPath.CATEGORIES.getURI())
                 .withRequestBody(requestBody)
                 .willReturn(ResponseDefinitionBuilder.like(ResponseDefinitionBuilder
                         .jsonResponse(categoryDataModel, 201))));
@@ -116,7 +113,7 @@ public class CategoryBridgeServiceImplIT extends WireMockBaseTest {
         CategoryDataModel result = categoryBridgeService.createCategory(categoryCreateRequestModel);
 
         // then
-        verify(postRequestedFor(urlEqualTo(Path.CATEGORIES.getURI()))
+        verify(postRequestedFor(urlEqualTo(LeafletPath.CATEGORIES.getURI()))
                 .withRequestBody(requestBody)
                 .withHeader(AUTHORIZATION_HEADER, VALUE_PATTERN_BEARER_TOKEN));
         assertThat(result, equalTo(categoryDataModel));
@@ -130,7 +127,7 @@ public class CategoryBridgeServiceImplIT extends WireMockBaseTest {
         CategoryDataModel categoryDataModel = prepareCategoryDataModel(1L);
         CategoryCreateRequestModel categoryCreateRequestModel = prepareCategoryCreateRequestModel();
         StringValuePattern requestBody = equalToJson(OBJECT_MAPPER.writeValueAsString(categoryCreateRequestModel));
-        String uri = prepareURI(Path.CATEGORIES_BY_ID.getURI(), categoryID);
+        String uri = prepareURI(LeafletPath.CATEGORIES_BY_ID.getURI(), categoryID);
         givenThat(put(uri)
                 .withRequestBody(requestBody)
                 .willReturn(ResponseDefinitionBuilder.like(ResponseDefinitionBuilder
@@ -151,7 +148,7 @@ public class CategoryBridgeServiceImplIT extends WireMockBaseTest {
 
         // given
         Long categoryID = 1L;
-        String uri = prepareURI(Path.CATEGORIES_STATUS.getURI(), categoryID);
+        String uri = prepareURI(LeafletPath.CATEGORIES_STATUS.getURI(), categoryID);
         CategoryDataModel categoryDataModel = prepareCategoryDataModel(1L);
         givenThat(put(uri)
                 .willReturn(ResponseDefinitionBuilder.like(ResponseDefinitionBuilder
@@ -171,7 +168,7 @@ public class CategoryBridgeServiceImplIT extends WireMockBaseTest {
 
         // given
         Long categoryID = 1L;
-        String uri = prepareURI(Path.CATEGORIES_BY_ID.getURI(), categoryID);
+        String uri = prepareURI(LeafletPath.CATEGORIES_BY_ID.getURI(), categoryID);
         givenThat(delete(uri).willReturn(ok()));
 
         // then

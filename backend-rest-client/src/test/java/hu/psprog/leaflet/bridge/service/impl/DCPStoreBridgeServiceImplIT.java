@@ -7,15 +7,12 @@ import hu.psprog.leaflet.api.rest.request.dcp.DCPRequestModel;
 import hu.psprog.leaflet.api.rest.response.dcp.DCPDataModel;
 import hu.psprog.leaflet.api.rest.response.dcp.DCPListDataModel;
 import hu.psprog.leaflet.bridge.client.exception.CommunicationFailureException;
-import hu.psprog.leaflet.bridge.client.request.Path;
+import hu.psprog.leaflet.bridge.config.LeafletPath;
 import hu.psprog.leaflet.bridge.it.config.BridgeITSuite;
-import hu.psprog.leaflet.bridge.it.config.LeafletBridgeITContextConfig;
 import hu.psprog.leaflet.bridge.service.DCPStoreBridgeService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.delete;
@@ -50,7 +47,7 @@ public class DCPStoreBridgeServiceImplIT extends WireMockBaseTest {
 
         // given
         DCPListDataModel dcpListDataModel = prepareDCPListDataModel();
-        givenThat(get(Path.DCP.getURI())
+        givenThat(get(LeafletPath.DCP.getURI())
                 .willReturn(ResponseDefinitionBuilder.okForJson(dcpListDataModel)));
 
         // when
@@ -58,7 +55,7 @@ public class DCPStoreBridgeServiceImplIT extends WireMockBaseTest {
 
         // then
         assertThat(result, equalTo(dcpListDataModel));
-        verify(getRequestedFor(urlEqualTo(Path.DCP.getURI()))
+        verify(getRequestedFor(urlEqualTo(LeafletPath.DCP.getURI()))
                 .withHeader(AUTHORIZATION_HEADER, VALUE_PATTERN_BEARER_TOKEN));
     }
 
@@ -68,14 +65,14 @@ public class DCPStoreBridgeServiceImplIT extends WireMockBaseTest {
         // given
         DCPRequestModel dcpRequestModel = prepareDCPRequestModel();
         StringValuePattern requestBody = equalToJson(OBJECT_MAPPER.writeValueAsString(dcpRequestModel));
-        givenThat(post(Path.DCP.getURI())
+        givenThat(post(LeafletPath.DCP.getURI())
                 .withRequestBody(requestBody));
 
         // when
         dcpStoreBridgeService.createDCPEntry(dcpRequestModel);
 
         // then
-        verify(postRequestedFor(urlEqualTo(Path.DCP.getURI()))
+        verify(postRequestedFor(urlEqualTo(LeafletPath.DCP.getURI()))
                 .withRequestBody(requestBody)
                 .withHeader(AUTHORIZATION_HEADER, VALUE_PATTERN_BEARER_TOKEN));
     }
@@ -86,14 +83,14 @@ public class DCPStoreBridgeServiceImplIT extends WireMockBaseTest {
         // given
         DCPRequestModel dcpRequestModel = prepareDCPRequestModel();
         StringValuePattern requestBody = equalToJson(OBJECT_MAPPER.writeValueAsString(dcpRequestModel));
-        givenThat(put(Path.DCP.getURI())
+        givenThat(put(LeafletPath.DCP.getURI())
                 .withRequestBody(requestBody));
 
         // when
         dcpStoreBridgeService.updateDCPEntry(dcpRequestModel);
 
         // then
-        verify(putRequestedFor(urlEqualTo(Path.DCP.getURI()))
+        verify(putRequestedFor(urlEqualTo(LeafletPath.DCP.getURI()))
                 .withRequestBody(requestBody)
                 .withHeader(AUTHORIZATION_HEADER, VALUE_PATTERN_BEARER_TOKEN));
     }
@@ -103,7 +100,7 @@ public class DCPStoreBridgeServiceImplIT extends WireMockBaseTest {
 
         // given
         String dcpKey = "dcp";
-        String uri = prepareURI(Path.DCP_BY_KEY.getURI(), dcpKey);
+        String uri = prepareURI(LeafletPath.DCP_BY_KEY.getURI(), dcpKey);
         givenThat(delete(uri));
 
         // when

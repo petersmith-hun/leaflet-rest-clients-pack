@@ -9,7 +9,7 @@ import hu.psprog.leaflet.api.rest.response.document.EditDocumentDataModel;
 import hu.psprog.leaflet.bridge.client.BridgeClient;
 import hu.psprog.leaflet.bridge.client.domain.BridgeService;
 import hu.psprog.leaflet.bridge.client.exception.CommunicationFailureException;
-import hu.psprog.leaflet.bridge.client.request.Path;
+import hu.psprog.leaflet.bridge.config.LeafletPath;
 import hu.psprog.leaflet.bridge.client.request.RESTRequest;
 import hu.psprog.leaflet.bridge.client.request.RequestMethod;
 import hu.psprog.leaflet.bridge.service.DocumentBridgeService;
@@ -40,7 +40,7 @@ class DocumentBridgeServiceImpl implements DocumentBridgeService {
 
         RESTRequest restRequest = RESTRequest.getBuilder()
                 .method(RequestMethod.GET)
-                .path(Path.DOCUMENTS)
+                .path(LeafletPath.DOCUMENTS)
                 .authenticated()
                 .build();
 
@@ -52,7 +52,7 @@ class DocumentBridgeServiceImpl implements DocumentBridgeService {
 
         RESTRequest restRequest = RESTRequest.getBuilder()
                 .method(RequestMethod.GET)
-                .path(Path.DOCUMENTS_PUBLIC)
+                .path(LeafletPath.DOCUMENTS_PUBLIC)
                 .build();
 
         return bridgeClient.call(restRequest, DocumentListDataModel.class);
@@ -63,7 +63,7 @@ class DocumentBridgeServiceImpl implements DocumentBridgeService {
 
         RESTRequest restRequest = RESTRequest.getBuilder()
                 .method(RequestMethod.GET)
-                .path(Path.DOCUMENTS_BY_ID)
+                .path(LeafletPath.DOCUMENTS_BY_ID)
                 .addPathParameter(ID, String.valueOf(documentID))
                 .authenticated()
                 .build();
@@ -76,7 +76,7 @@ class DocumentBridgeServiceImpl implements DocumentBridgeService {
 
         RESTRequest restRequest = RESTRequest.getBuilder()
                 .method(RequestMethod.GET)
-                .path(Path.DOCUMENTS_BY_LINK)
+                .path(LeafletPath.DOCUMENTS_BY_LINK)
                 .addPathParameter(LINK, link)
                 .build();
 
@@ -88,7 +88,7 @@ class DocumentBridgeServiceImpl implements DocumentBridgeService {
 
         RESTRequest restRequest = RESTRequest.getBuilder()
                 .method(RequestMethod.POST)
-                .path(Path.DOCUMENTS)
+                .path(LeafletPath.DOCUMENTS)
                 .requestBody(documentCreateRequestModel)
                 .authenticated()
                 .build();
@@ -101,7 +101,7 @@ class DocumentBridgeServiceImpl implements DocumentBridgeService {
 
         RESTRequest restRequest = RESTRequest.getBuilder()
                 .method(RequestMethod.PUT)
-                .path(Path.DOCUMENTS_BY_ID)
+                .path(LeafletPath.DOCUMENTS_BY_ID)
                 .addPathParameter(ID, String.valueOf(documentID))
                 .requestBody(documentUpdateRequestModel)
                 .authenticated()
@@ -115,7 +115,7 @@ class DocumentBridgeServiceImpl implements DocumentBridgeService {
 
         RESTRequest restRequest = RESTRequest.getBuilder()
                 .method(RequestMethod.PUT)
-                .path(Path.DOCUMENTS_STATUS)
+                .path(LeafletPath.DOCUMENTS_STATUS)
                 .addPathParameter(ID, String.valueOf(documentID))
                 .authenticated()
                 .build();
@@ -128,7 +128,7 @@ class DocumentBridgeServiceImpl implements DocumentBridgeService {
 
         RESTRequest restRequest = RESTRequest.getBuilder()
                 .method(RequestMethod.DELETE)
-                .path(Path.DOCUMENTS_BY_ID)
+                .path(LeafletPath.DOCUMENTS_BY_ID)
                 .addPathParameter(ID, String.valueOf(documentID))
                 .authenticated()
                 .build();

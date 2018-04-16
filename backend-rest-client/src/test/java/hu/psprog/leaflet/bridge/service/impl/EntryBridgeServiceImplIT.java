@@ -13,15 +13,12 @@ import hu.psprog.leaflet.api.rest.response.entry.ExtendedEntryDataModel;
 import hu.psprog.leaflet.bridge.client.domain.OrderBy;
 import hu.psprog.leaflet.bridge.client.domain.OrderDirection;
 import hu.psprog.leaflet.bridge.client.exception.CommunicationFailureException;
-import hu.psprog.leaflet.bridge.client.request.Path;
+import hu.psprog.leaflet.bridge.config.LeafletPath;
 import hu.psprog.leaflet.bridge.it.config.BridgeITSuite;
-import hu.psprog.leaflet.bridge.it.config.LeafletBridgeITContextConfig;
 import hu.psprog.leaflet.bridge.service.EntryBridgeService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.delete;
@@ -57,7 +54,7 @@ public class EntryBridgeServiceImplIT extends WireMockBaseTest {
 
         // given
         EntryListDataModel entryListDataModel = prepareEntryListDataModel();
-        givenThat(get(Path.ENTRIES.getURI())
+        givenThat(get(LeafletPath.ENTRIES.getURI())
                 .willReturn(ResponseDefinitionBuilder.okForJson(entryListDataModel)));
 
         // when
@@ -65,7 +62,7 @@ public class EntryBridgeServiceImplIT extends WireMockBaseTest {
 
         // then
         assertThat(result, equalTo(entryListDataModel));
-        verify(getRequestedFor(urlEqualTo(Path.ENTRIES.getURI()))
+        verify(getRequestedFor(urlEqualTo(LeafletPath.ENTRIES.getURI()))
                 .withHeader(AUTHORIZATION_HEADER, VALUE_PATTERN_BEARER_TOKEN));
     }
 
@@ -79,7 +76,7 @@ public class EntryBridgeServiceImplIT extends WireMockBaseTest {
         int limit = 10;
         OrderBy.Entry orderBy = OrderBy.Entry.CREATED;
         OrderDirection orderDirection = OrderDirection.ASC;
-        String uri = prepareURI(Path.ENTRIES_PAGE.getURI(), page);
+        String uri = prepareURI(LeafletPath.ENTRIES_PAGE.getURI(), page);
         givenThat(get(urlPathEqualTo(uri))
                 .willReturn(ResponseDefinitionBuilder.okForJson(wrappedEntryListDataModel)));
 
@@ -104,7 +101,7 @@ public class EntryBridgeServiceImplIT extends WireMockBaseTest {
         int limit = 10;
         OrderBy.Entry orderBy = OrderBy.Entry.CREATED;
         OrderDirection orderDirection = OrderDirection.ASC;
-        String uri = prepareURI(Path.ENTRIES_PAGE_ALL.getURI(), page);
+        String uri = prepareURI(LeafletPath.ENTRIES_PAGE_ALL.getURI(), page);
         givenThat(get(urlPathEqualTo(uri))
                 .willReturn(ResponseDefinitionBuilder.okForJson(wrappedEntryListDataModel)));
 
@@ -131,7 +128,7 @@ public class EntryBridgeServiceImplIT extends WireMockBaseTest {
         int limit = 10;
         OrderBy.Entry orderBy = OrderBy.Entry.CREATED;
         OrderDirection orderDirection = OrderDirection.ASC;
-        String uri = prepareURI(Path.ENTRIES_CATEGORY_PAGE.getURI(), categoryID, page);
+        String uri = prepareURI(LeafletPath.ENTRIES_CATEGORY_PAGE.getURI(), categoryID, page);
         givenThat(get(urlPathEqualTo(uri))
                 .willReturn(ResponseDefinitionBuilder.okForJson(wrappedEntryListDataModel)));
 
@@ -153,7 +150,7 @@ public class EntryBridgeServiceImplIT extends WireMockBaseTest {
         ExtendedEntryDataModel extendedEntryDataModel = prepareExtendedEntryDataModel(1L);
         WrapperBodyDataModel<ExtendedEntryDataModel> wrappedEntryDataModel = prepareWrappedListDataModel(extendedEntryDataModel);
         String link = "entry-1";
-        String uri = prepareURI(Path.ENTRIES_BY_LINK.getURI(), link);
+        String uri = prepareURI(LeafletPath.ENTRIES_BY_LINK.getURI(), link);
         givenThat(get(uri)
                 .willReturn(ResponseDefinitionBuilder.okForJson(wrappedEntryDataModel)));
 
@@ -172,7 +169,7 @@ public class EntryBridgeServiceImplIT extends WireMockBaseTest {
         EditEntryDataModel extendedEntryDataModel = prepareEditEntryDataModel(1L);
         WrapperBodyDataModel<EditEntryDataModel> wrappedEntryDataModel = prepareWrappedListDataModel(extendedEntryDataModel);
         Long entryID = 1L;
-        String uri = prepareURI(Path.ENTRIES_BY_ID.getURI(), entryID);
+        String uri = prepareURI(LeafletPath.ENTRIES_BY_ID.getURI(), entryID);
         givenThat(get(uri)
                 .willReturn(ResponseDefinitionBuilder.okForJson(wrappedEntryDataModel)));
 
@@ -192,7 +189,7 @@ public class EntryBridgeServiceImplIT extends WireMockBaseTest {
         EntryCreateRequestModel entryCreateRequestModel = prepareEntryCreateRequestModel();
         EditEntryDataModel extendedEntryDataModel = prepareEditEntryDataModel(1L);
         StringValuePattern requestBody = equalToJson(OBJECT_MAPPER.writeValueAsString(entryCreateRequestModel));
-        givenThat(post(Path.ENTRIES.getURI())
+        givenThat(post(LeafletPath.ENTRIES.getURI())
                 .withRequestBody(requestBody)
                 .willReturn(ResponseDefinitionBuilder.okForJson(extendedEntryDataModel)));
 
@@ -201,7 +198,7 @@ public class EntryBridgeServiceImplIT extends WireMockBaseTest {
 
         // then
         assertThat(result, equalTo(extendedEntryDataModel));
-        verify(postRequestedFor(urlEqualTo(Path.ENTRIES.getURI()))
+        verify(postRequestedFor(urlEqualTo(LeafletPath.ENTRIES.getURI()))
                 .withHeader(AUTHORIZATION_HEADER, VALUE_PATTERN_BEARER_TOKEN));
     }
 
@@ -213,7 +210,7 @@ public class EntryBridgeServiceImplIT extends WireMockBaseTest {
         EditEntryDataModel extendedEntryDataModel = prepareEditEntryDataModel(1L);
         StringValuePattern requestBody = equalToJson(OBJECT_MAPPER.writeValueAsString(entryCreateRequestModel));
         Long entryID = 1L;
-        String uri = prepareURI(Path.ENTRIES_BY_ID.getURI(), entryID);
+        String uri = prepareURI(LeafletPath.ENTRIES_BY_ID.getURI(), entryID);
         givenThat(put(uri)
                 .withRequestBody(requestBody)
                 .willReturn(ResponseDefinitionBuilder.okForJson(extendedEntryDataModel)));
@@ -233,7 +230,7 @@ public class EntryBridgeServiceImplIT extends WireMockBaseTest {
         // given
         EditEntryDataModel extendedEntryDataModel = prepareEditEntryDataModel(1L);
         Long entryID = 1L;
-        String uri = prepareURI(Path.ENTRIES_STATUS.getURI(), entryID);
+        String uri = prepareURI(LeafletPath.ENTRIES_STATUS.getURI(), entryID);
         givenThat(put(uri)
                 .willReturn(ResponseDefinitionBuilder.okForJson(extendedEntryDataModel)));
 
@@ -251,7 +248,7 @@ public class EntryBridgeServiceImplIT extends WireMockBaseTest {
 
         // given
         Long entryID = 1L;
-        String uri = prepareURI(Path.ENTRIES_BY_ID.getURI(), entryID);
+        String uri = prepareURI(LeafletPath.ENTRIES_BY_ID.getURI(), entryID);
         givenThat(delete(uri));
 
         // when

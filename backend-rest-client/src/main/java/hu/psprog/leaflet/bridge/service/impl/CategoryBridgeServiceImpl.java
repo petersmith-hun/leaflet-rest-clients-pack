@@ -6,7 +6,7 @@ import hu.psprog.leaflet.api.rest.response.category.CategoryListDataModel;
 import hu.psprog.leaflet.bridge.client.BridgeClient;
 import hu.psprog.leaflet.bridge.client.domain.BridgeService;
 import hu.psprog.leaflet.bridge.client.exception.CommunicationFailureException;
-import hu.psprog.leaflet.bridge.client.request.Path;
+import hu.psprog.leaflet.bridge.config.LeafletPath;
 import hu.psprog.leaflet.bridge.client.request.RESTRequest;
 import hu.psprog.leaflet.bridge.client.request.RequestMethod;
 import hu.psprog.leaflet.bridge.service.CategoryBridgeService;
@@ -34,7 +34,7 @@ class CategoryBridgeServiceImpl implements CategoryBridgeService {
 
         RESTRequest restRequest = RESTRequest.getBuilder()
                 .method(RequestMethod.GET)
-                .path(Path.CATEGORIES)
+                .path(LeafletPath.CATEGORIES)
                 .authenticated()
                 .build();
 
@@ -46,7 +46,7 @@ class CategoryBridgeServiceImpl implements CategoryBridgeService {
 
         RESTRequest restRequest = RESTRequest.getBuilder()
                 .method(RequestMethod.GET)
-                .path(Path.CATEGORIES_PUBLIC)
+                .path(LeafletPath.CATEGORIES_PUBLIC)
                 .build();
 
         return bridgeClient.call(restRequest, CategoryListDataModel.class);
@@ -57,7 +57,7 @@ class CategoryBridgeServiceImpl implements CategoryBridgeService {
 
         RESTRequest restRequest = RESTRequest.getBuilder()
                 .method(RequestMethod.GET)
-                .path(Path.CATEGORIES_BY_ID)
+                .path(LeafletPath.CATEGORIES_BY_ID)
                 .addPathParameter(ID, String.valueOf(categoryID))
                 .authenticated()
                 .build();
@@ -70,7 +70,7 @@ class CategoryBridgeServiceImpl implements CategoryBridgeService {
 
         RESTRequest restRequest = RESTRequest.getBuilder()
                 .method(RequestMethod.POST)
-                .path(Path.CATEGORIES)
+                .path(LeafletPath.CATEGORIES)
                 .requestBody(categoryCreateRequestModel)
                 .authenticated()
                 .build();
@@ -83,7 +83,7 @@ class CategoryBridgeServiceImpl implements CategoryBridgeService {
 
         RESTRequest restRequest = RESTRequest.getBuilder()
                 .method(RequestMethod.PUT)
-                .path(Path.CATEGORIES_BY_ID)
+                .path(LeafletPath.CATEGORIES_BY_ID)
                 .addPathParameter(ID, String.valueOf(categoryID))
                 .requestBody(categoryCreateRequestModel)
                 .authenticated()
@@ -97,7 +97,7 @@ class CategoryBridgeServiceImpl implements CategoryBridgeService {
 
         RESTRequest restRequest = RESTRequest.getBuilder()
                 .method(RequestMethod.PUT)
-                .path(Path.CATEGORIES_STATUS)
+                .path(LeafletPath.CATEGORIES_STATUS)
                 .addPathParameter(ID, String.valueOf(categoryID))
                 .authenticated()
                 .build();
@@ -110,7 +110,7 @@ class CategoryBridgeServiceImpl implements CategoryBridgeService {
 
         RESTRequest restRequest = RESTRequest.getBuilder()
                 .method(RequestMethod.DELETE)
-                .path(Path.CATEGORIES_BY_ID)
+                .path(LeafletPath.CATEGORIES_BY_ID)
                 .addPathParameter(ID, String.valueOf(categoryID))
                 .authenticated()
                 .build();

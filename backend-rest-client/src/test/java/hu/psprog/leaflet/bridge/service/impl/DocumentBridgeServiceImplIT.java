@@ -9,15 +9,12 @@ import hu.psprog.leaflet.api.rest.response.document.DocumentDataModel;
 import hu.psprog.leaflet.api.rest.response.document.DocumentListDataModel;
 import hu.psprog.leaflet.api.rest.response.document.EditDocumentDataModel;
 import hu.psprog.leaflet.bridge.client.exception.CommunicationFailureException;
-import hu.psprog.leaflet.bridge.client.request.Path;
+import hu.psprog.leaflet.bridge.config.LeafletPath;
 import hu.psprog.leaflet.bridge.it.config.BridgeITSuite;
-import hu.psprog.leaflet.bridge.it.config.LeafletBridgeITContextConfig;
 import hu.psprog.leaflet.bridge.service.DocumentBridgeService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.delete;
@@ -52,7 +49,7 @@ public class DocumentBridgeServiceImplIT extends WireMockBaseTest {
 
         // given
         DocumentListDataModel documentListDataModel = prepareDocumentListDataModel();
-        givenThat(get(Path.DOCUMENTS.getURI())
+        givenThat(get(LeafletPath.DOCUMENTS.getURI())
                 .willReturn(ResponseDefinitionBuilder.okForJson(documentListDataModel)));
 
         // when
@@ -60,7 +57,7 @@ public class DocumentBridgeServiceImplIT extends WireMockBaseTest {
 
         // then
         assertThat(result, equalTo(documentListDataModel));
-        verify(getRequestedFor(urlEqualTo(Path.DOCUMENTS.getURI()))
+        verify(getRequestedFor(urlEqualTo(LeafletPath.DOCUMENTS.getURI()))
                 .withHeader(AUTHORIZATION_HEADER, VALUE_PATTERN_BEARER_TOKEN));
     }
 
@@ -69,7 +66,7 @@ public class DocumentBridgeServiceImplIT extends WireMockBaseTest {
 
         // given
         DocumentListDataModel documentListDataModel = prepareDocumentListDataModel();
-        givenThat(get(Path.DOCUMENTS_PUBLIC.getURI())
+        givenThat(get(LeafletPath.DOCUMENTS_PUBLIC.getURI())
                 .willReturn(ResponseDefinitionBuilder.okForJson(documentListDataModel)));
 
         // when
@@ -77,7 +74,7 @@ public class DocumentBridgeServiceImplIT extends WireMockBaseTest {
 
         // then
         assertThat(result, equalTo(documentListDataModel));
-        verify(getRequestedFor(urlEqualTo(Path.DOCUMENTS_PUBLIC.getURI())));
+        verify(getRequestedFor(urlEqualTo(LeafletPath.DOCUMENTS_PUBLIC.getURI())));
     }
 
     @Test
@@ -87,7 +84,7 @@ public class DocumentBridgeServiceImplIT extends WireMockBaseTest {
         EditDocumentDataModel editDocumentDataModel = prepareEditDocumentDataModel(1L);
         WrapperBodyDataModel<EditDocumentDataModel> wrappedEditDocumentDataModel = prepareWrappedListDataModel(editDocumentDataModel);
         Long documentID = 1L;
-        String uri = prepareURI(Path.DOCUMENTS_BY_ID.getURI(), documentID);
+        String uri = prepareURI(LeafletPath.DOCUMENTS_BY_ID.getURI(), documentID);
         givenThat(get(uri)
                 .willReturn(ResponseDefinitionBuilder.okForJson(wrappedEditDocumentDataModel)));
 
@@ -107,7 +104,7 @@ public class DocumentBridgeServiceImplIT extends WireMockBaseTest {
         DocumentDataModel documentDataModel = prepareDocumentDataModel(1L);
         WrapperBodyDataModel<DocumentDataModel> wrappedDocumentDataModel = prepareWrappedListDataModel(documentDataModel);
         String link = "document-1";
-        String uri = prepareURI(Path.DOCUMENTS_BY_LINK.getURI(), link);
+        String uri = prepareURI(LeafletPath.DOCUMENTS_BY_LINK.getURI(), link);
         givenThat(get(uri)
                 .willReturn(ResponseDefinitionBuilder.okForJson(wrappedDocumentDataModel)));
 
@@ -126,7 +123,7 @@ public class DocumentBridgeServiceImplIT extends WireMockBaseTest {
         DocumentCreateRequestModel documentCreateRequestModel = prepareDocumentCreateRequestModel();
         EditDocumentDataModel editDocumentDataModel = prepareEditDocumentDataModel(1L);
         StringValuePattern requestBody = equalToJson(OBJECT_MAPPER.writeValueAsString(documentCreateRequestModel));
-        givenThat(post(Path.DOCUMENTS.getURI())
+        givenThat(post(LeafletPath.DOCUMENTS.getURI())
                 .withRequestBody(requestBody)
                 .willReturn(ResponseDefinitionBuilder.okForJson(editDocumentDataModel)));
 
@@ -135,7 +132,7 @@ public class DocumentBridgeServiceImplIT extends WireMockBaseTest {
 
         // then
         assertThat(result, equalTo(editDocumentDataModel));
-        verify(postRequestedFor(urlEqualTo(Path.DOCUMENTS.getURI()))
+        verify(postRequestedFor(urlEqualTo(LeafletPath.DOCUMENTS.getURI()))
                 .withRequestBody(requestBody)
                 .withHeader(AUTHORIZATION_HEADER, VALUE_PATTERN_BEARER_TOKEN));
     }
@@ -148,7 +145,7 @@ public class DocumentBridgeServiceImplIT extends WireMockBaseTest {
         EditDocumentDataModel editDocumentDataModel = prepareEditDocumentDataModel(1L);
         StringValuePattern requestBody = equalToJson(OBJECT_MAPPER.writeValueAsString(documentCreateRequestModel));
         Long documentID = 1L;
-        String uri = prepareURI(Path.DOCUMENTS_BY_ID.getURI(), documentID);
+        String uri = prepareURI(LeafletPath.DOCUMENTS_BY_ID.getURI(), documentID);
         givenThat(put(uri)
                 .withRequestBody(requestBody)
                 .willReturn(ResponseDefinitionBuilder.okForJson(editDocumentDataModel)));
@@ -168,7 +165,7 @@ public class DocumentBridgeServiceImplIT extends WireMockBaseTest {
 
         // given
         Long documentID = 1L;
-        String uri = prepareURI(Path.DOCUMENTS_STATUS.getURI(), documentID);
+        String uri = prepareURI(LeafletPath.DOCUMENTS_STATUS.getURI(), documentID);
         EditDocumentDataModel editDocumentDataModel = prepareEditDocumentDataModel(1L);
         givenThat(put(uri)
                 .willReturn(ResponseDefinitionBuilder.okForJson(editDocumentDataModel)));
@@ -187,7 +184,7 @@ public class DocumentBridgeServiceImplIT extends WireMockBaseTest {
 
         // given
         Long documentID = 1L;
-        String uri = prepareURI(Path.DOCUMENTS_BY_ID.getURI(), documentID);
+        String uri = prepareURI(LeafletPath.DOCUMENTS_BY_ID.getURI(), documentID);
         givenThat(delete(uri));
 
         // when

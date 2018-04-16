@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.github.tomakehurst.wiremock.matching.StringValuePattern;
 import hu.psprog.leaflet.api.rest.request.attachment.AttachmentRequestModel;
 import hu.psprog.leaflet.bridge.client.exception.CommunicationFailureException;
-import hu.psprog.leaflet.bridge.client.request.Path;
+import hu.psprog.leaflet.bridge.config.LeafletPath;
 import hu.psprog.leaflet.bridge.it.config.BridgeITSuite;
 import hu.psprog.leaflet.bridge.service.AttachmentBridgeService;
 import org.junit.Before;
@@ -52,7 +52,7 @@ public class AttachmentBridgeServiceImplIT extends WireMockBaseTest {
     public void shouldAttach() throws CommunicationFailureException, JsonProcessingException {
 
         // given
-        givenThat(post(Path.ATTACHMENTS.getURI())
+        givenThat(post(LeafletPath.ATTACHMENTS.getURI())
                 .withRequestBody(requestBody)
                 .willReturn(aResponse().withStatus(201)));
 
@@ -60,7 +60,7 @@ public class AttachmentBridgeServiceImplIT extends WireMockBaseTest {
         attachmentBridgeService.attach(attachmentRequestModel);
 
         // then
-        verify(postRequestedFor(urlEqualTo(Path.ATTACHMENTS.getURI()))
+        verify(postRequestedFor(urlEqualTo(LeafletPath.ATTACHMENTS.getURI()))
                 .withRequestBody(requestBody)
                 .withHeader(AUTHORIZATION_HEADER, VALUE_PATTERN_BEARER_TOKEN));
     }
@@ -69,7 +69,7 @@ public class AttachmentBridgeServiceImplIT extends WireMockBaseTest {
     public void shouldDetach() throws CommunicationFailureException, JsonProcessingException {
 
         // given
-        givenThat(put(Path.ATTACHMENTS.getURI())
+        givenThat(put(LeafletPath.ATTACHMENTS.getURI())
                 .withRequestBody(requestBody)
                 .willReturn(aResponse().withStatus(204)));
 
@@ -77,7 +77,7 @@ public class AttachmentBridgeServiceImplIT extends WireMockBaseTest {
         attachmentBridgeService.detach(attachmentRequestModel);
 
         // then
-        verify(putRequestedFor(urlEqualTo(Path.ATTACHMENTS.getURI()))
+        verify(putRequestedFor(urlEqualTo(LeafletPath.ATTACHMENTS.getURI()))
                 .withRequestBody(requestBody)
                 .withHeader(AUTHORIZATION_HEADER, VALUE_PATTERN_BEARER_TOKEN));
     }

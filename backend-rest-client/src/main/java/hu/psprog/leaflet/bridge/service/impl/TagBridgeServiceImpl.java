@@ -8,7 +8,7 @@ import hu.psprog.leaflet.api.rest.response.tag.TagListDataModel;
 import hu.psprog.leaflet.bridge.client.BridgeClient;
 import hu.psprog.leaflet.bridge.client.domain.BridgeService;
 import hu.psprog.leaflet.bridge.client.exception.CommunicationFailureException;
-import hu.psprog.leaflet.bridge.client.request.Path;
+import hu.psprog.leaflet.bridge.config.LeafletPath;
 import hu.psprog.leaflet.bridge.client.request.RESTRequest;
 import hu.psprog.leaflet.bridge.client.request.RequestMethod;
 import hu.psprog.leaflet.bridge.service.TagBridgeService;
@@ -38,7 +38,7 @@ class TagBridgeServiceImpl implements TagBridgeService {
 
         RESTRequest restRequest = RESTRequest.getBuilder()
                 .method(RequestMethod.GET)
-                .path(Path.TAGS)
+                .path(LeafletPath.TAGS)
                 .authenticated()
                 .build();
 
@@ -50,7 +50,7 @@ class TagBridgeServiceImpl implements TagBridgeService {
 
         RESTRequest restRequest = RESTRequest.getBuilder()
                 .method(RequestMethod.GET)
-                .path(Path.TAGS_PUBLIC)
+                .path(LeafletPath.TAGS_PUBLIC)
                 .build();
 
         return bridgeClient.call(restRequest, new GenericType<WrapperBodyDataModel<TagListDataModel>>() {});
@@ -61,7 +61,7 @@ class TagBridgeServiceImpl implements TagBridgeService {
 
         RESTRequest restRequest = RESTRequest.getBuilder()
                 .method(RequestMethod.GET)
-                .path(Path.TAGS_BY_ID)
+                .path(LeafletPath.TAGS_BY_ID)
                 .addPathParameter(ID, String.valueOf(tagID))
                 .authenticated()
                 .build();
@@ -74,7 +74,7 @@ class TagBridgeServiceImpl implements TagBridgeService {
 
         RESTRequest restRequest = RESTRequest.getBuilder()
                 .method(RequestMethod.POST)
-                .path(Path.TAGS)
+                .path(LeafletPath.TAGS)
                 .requestBody(tagCreateRequestModel)
                 .authenticated()
                 .build();
@@ -87,7 +87,7 @@ class TagBridgeServiceImpl implements TagBridgeService {
 
         RESTRequest restRequest = RESTRequest.getBuilder()
                 .method(RequestMethod.PUT)
-                .path(Path.TAGS_BY_ID)
+                .path(LeafletPath.TAGS_BY_ID)
                 .requestBody(tagCreateRequestModel)
                 .addPathParameter(ID, String.valueOf(tagID))
                 .authenticated()
@@ -101,7 +101,7 @@ class TagBridgeServiceImpl implements TagBridgeService {
 
         RESTRequest restRequest = RESTRequest.getBuilder()
                 .method(RequestMethod.DELETE)
-                .path(Path.TAGS_BY_ID)
+                .path(LeafletPath.TAGS_BY_ID)
                 .addPathParameter(ID, String.valueOf(tagID))
                 .authenticated()
                 .build();
@@ -114,7 +114,7 @@ class TagBridgeServiceImpl implements TagBridgeService {
 
         RESTRequest restRequest = RESTRequest.getBuilder()
                 .method(RequestMethod.PUT)
-                .path(Path.TAGS_STATUS)
+                .path(LeafletPath.TAGS_STATUS)
                 .addPathParameter(ID, String.valueOf(tagID))
                 .authenticated()
                 .build();
@@ -127,7 +127,7 @@ class TagBridgeServiceImpl implements TagBridgeService {
 
         RESTRequest restRequest = RESTRequest.getBuilder()
                 .method(RequestMethod.POST)
-                .path(Path.TAGS_ASSIGN)
+                .path(LeafletPath.TAGS_ASSIGN)
                 .requestBody(tagAssignmentRequestModel)
                 .authenticated()
                 .build();
@@ -140,7 +140,7 @@ class TagBridgeServiceImpl implements TagBridgeService {
 
         RESTRequest restRequest = RESTRequest.getBuilder()
                 .method(RequestMethod.PUT)
-                .path(Path.TAGS_ASSIGN)
+                .path(LeafletPath.TAGS_ASSIGN)
                 .requestBody(tagAssignmentRequestModel)
                 .authenticated()
                 .build();

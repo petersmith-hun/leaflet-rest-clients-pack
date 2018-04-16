@@ -11,7 +11,7 @@ import hu.psprog.leaflet.bridge.client.domain.BridgeService;
 import hu.psprog.leaflet.bridge.client.domain.OrderBy;
 import hu.psprog.leaflet.bridge.client.domain.OrderDirection;
 import hu.psprog.leaflet.bridge.client.exception.CommunicationFailureException;
-import hu.psprog.leaflet.bridge.client.request.Path;
+import hu.psprog.leaflet.bridge.config.LeafletPath;
 import hu.psprog.leaflet.bridge.client.request.RESTRequest;
 import hu.psprog.leaflet.bridge.client.request.RequestMethod;
 import hu.psprog.leaflet.bridge.service.EntryBridgeService;
@@ -46,7 +46,7 @@ class EntryBridgeServiceImpl implements EntryBridgeService {
 
         RESTRequest request = RESTRequest.getBuilder()
                 .method(RequestMethod.GET)
-                .path(Path.ENTRIES)
+                .path(LeafletPath.ENTRIES)
                 .authenticated()
                 .build();
 
@@ -59,7 +59,7 @@ class EntryBridgeServiceImpl implements EntryBridgeService {
 
         RESTRequest restRequest = RESTRequest.getBuilder()
                 .method(RequestMethod.GET)
-                .path(Path.ENTRIES_PAGE)
+                .path(LeafletPath.ENTRIES_PAGE)
                 .addPathParameter(PAGE, String.valueOf(page))
                 .addRequestParameters(LIMIT, String.valueOf(limit))
                 .addRequestParameters(ORDER_BY, orderBy.name())
@@ -75,7 +75,7 @@ class EntryBridgeServiceImpl implements EntryBridgeService {
 
         RESTRequest restRequest = RESTRequest.getBuilder()
                 .method(RequestMethod.GET)
-                .path(Path.ENTRIES_PAGE_ALL)
+                .path(LeafletPath.ENTRIES_PAGE_ALL)
                 .addPathParameter(PAGE, String.valueOf(page))
                 .addRequestParameters(LIMIT, String.valueOf(limit))
                 .addRequestParameters(ORDER_BY, orderBy.name())
@@ -92,7 +92,7 @@ class EntryBridgeServiceImpl implements EntryBridgeService {
 
         RESTRequest restRequest = RESTRequest.getBuilder()
                 .method(RequestMethod.GET)
-                .path(Path.ENTRIES_CATEGORY_PAGE)
+                .path(LeafletPath.ENTRIES_CATEGORY_PAGE)
                 .addPathParameter(ID, String.valueOf(categoryID))
                 .addPathParameter(PAGE, String.valueOf(page))
                 .addRequestParameters(LIMIT, String.valueOf(limit))
@@ -108,7 +108,7 @@ class EntryBridgeServiceImpl implements EntryBridgeService {
 
         RESTRequest request = RESTRequest.getBuilder()
                 .method(RequestMethod.GET)
-                .path(Path.ENTRIES_BY_LINK)
+                .path(LeafletPath.ENTRIES_BY_LINK)
                 .addPathParameter(LINK, link)
                 .build();
 
@@ -120,7 +120,7 @@ class EntryBridgeServiceImpl implements EntryBridgeService {
 
         RESTRequest request = RESTRequest.getBuilder()
                 .method(RequestMethod.GET)
-                .path(Path.ENTRIES_BY_ID)
+                .path(LeafletPath.ENTRIES_BY_ID)
                 .addPathParameter(ID, String.valueOf(entryID))
                 .authenticated()
                 .build();
@@ -133,7 +133,7 @@ class EntryBridgeServiceImpl implements EntryBridgeService {
 
         RESTRequest restRequest = RESTRequest.getBuilder()
                 .method(RequestMethod.POST)
-                .path(Path.ENTRIES)
+                .path(LeafletPath.ENTRIES)
                 .requestBody(entryCreateRequestModel)
                 .authenticated()
                 .build();
@@ -146,7 +146,7 @@ class EntryBridgeServiceImpl implements EntryBridgeService {
 
         RESTRequest restRequest = RESTRequest.getBuilder()
                 .method(RequestMethod.PUT)
-                .path(Path.ENTRIES_BY_ID)
+                .path(LeafletPath.ENTRIES_BY_ID)
                 .addPathParameter(ID, String.valueOf(entryID))
                 .requestBody(entryUpdateRequestModel)
                 .authenticated()
@@ -160,7 +160,7 @@ class EntryBridgeServiceImpl implements EntryBridgeService {
 
         RESTRequest restRequest = RESTRequest.getBuilder()
                 .method(RequestMethod.PUT)
-                .path(Path.ENTRIES_STATUS)
+                .path(LeafletPath.ENTRIES_STATUS)
                 .addPathParameter(ID, String.valueOf(entryID))
                 .authenticated()
                 .build();
@@ -173,7 +173,7 @@ class EntryBridgeServiceImpl implements EntryBridgeService {
 
         RESTRequest restRequest = RESTRequest.getBuilder()
                 .method(RequestMethod.DELETE)
-                .path(Path.ENTRIES_BY_ID)
+                .path(LeafletPath.ENTRIES_BY_ID)
                 .addPathParameter(ID, String.valueOf(entryID))
                 .authenticated()
                 .build();

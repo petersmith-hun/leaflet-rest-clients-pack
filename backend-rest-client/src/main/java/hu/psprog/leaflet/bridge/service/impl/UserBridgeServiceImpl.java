@@ -13,7 +13,7 @@ import hu.psprog.leaflet.api.rest.response.user.UserListDataModel;
 import hu.psprog.leaflet.bridge.client.BridgeClient;
 import hu.psprog.leaflet.bridge.client.domain.BridgeService;
 import hu.psprog.leaflet.bridge.client.exception.CommunicationFailureException;
-import hu.psprog.leaflet.bridge.client.request.Path;
+import hu.psprog.leaflet.bridge.config.LeafletPath;
 import hu.psprog.leaflet.bridge.client.request.RESTRequest;
 import hu.psprog.leaflet.bridge.client.request.RequestMethod;
 import hu.psprog.leaflet.bridge.service.UserBridgeService;
@@ -41,7 +41,7 @@ class UserBridgeServiceImpl implements UserBridgeService {
 
         RESTRequest restRequest = RESTRequest.getBuilder()
                 .method(RequestMethod.GET)
-                .path(Path.USERS)
+                .path(LeafletPath.USERS)
                 .authenticated()
                 .build();
 
@@ -53,7 +53,7 @@ class UserBridgeServiceImpl implements UserBridgeService {
 
         RESTRequest restRequest = RESTRequest.getBuilder()
                 .method(RequestMethod.POST)
-                .path(Path.USERS)
+                .path(LeafletPath.USERS)
                 .authenticated()
                 .requestBody(userCreateRequestModel)
                 .build();
@@ -66,7 +66,7 @@ class UserBridgeServiceImpl implements UserBridgeService {
 
         RESTRequest restRequest = RESTRequest.getBuilder()
                 .method(RequestMethod.POST)
-                .path(Path.USERS_INIT)
+                .path(LeafletPath.USERS_INIT)
                 .requestBody(userInitializeRequestModel)
                 .build();
 
@@ -78,7 +78,7 @@ class UserBridgeServiceImpl implements UserBridgeService {
 
         RESTRequest restRequest = RESTRequest.getBuilder()
                 .method(RequestMethod.GET)
-                .path(Path.USERS_ID)
+                .path(LeafletPath.USERS_ID)
                 .authenticated()
                 .addPathParameter(ID, String.valueOf(userID))
                 .build();
@@ -91,7 +91,7 @@ class UserBridgeServiceImpl implements UserBridgeService {
 
         RESTRequest restRequest = RESTRequest.getBuilder()
                 .method(RequestMethod.DELETE)
-                .path(Path.USERS_ID)
+                .path(LeafletPath.USERS_ID)
                 .authenticated()
                 .addPathParameter(ID, String.valueOf(userID))
                 .build();
@@ -104,7 +104,7 @@ class UserBridgeServiceImpl implements UserBridgeService {
 
         RESTRequest restRequest = RESTRequest.getBuilder()
                 .method(RequestMethod.PUT)
-                .path(Path.USERS_ROLE)
+                .path(LeafletPath.USERS_ROLE)
                 .authenticated()
                 .addPathParameter(ID, String.valueOf(userID))
                 .requestBody(updateRoleRequestModel)
@@ -118,7 +118,7 @@ class UserBridgeServiceImpl implements UserBridgeService {
 
         RESTRequest restRequest = RESTRequest.getBuilder()
                 .method(RequestMethod.PUT)
-                .path(Path.USERS_PROFILE)
+                .path(LeafletPath.USERS_PROFILE)
                 .authenticated()
                 .addPathParameter(ID, String.valueOf(userID))
                 .requestBody(updateProfileRequestModel)
@@ -132,7 +132,7 @@ class UserBridgeServiceImpl implements UserBridgeService {
 
         RESTRequest restRequest = RESTRequest.getBuilder()
                 .method(RequestMethod.PUT)
-                .path(Path.USERS_PASSWORD)
+                .path(LeafletPath.USERS_PASSWORD)
                 .authenticated()
                 .addPathParameter(ID, String.valueOf(userID))
                 .requestBody(userPasswordRequestModel)
@@ -146,7 +146,7 @@ class UserBridgeServiceImpl implements UserBridgeService {
 
         RESTRequest restRequest = RESTRequest.getBuilder()
                 .method(RequestMethod.POST)
-                .path(Path.USERS_CLAIM)
+                .path(LeafletPath.USERS_CLAIM)
                 .requestBody(loginRequestModel)
                 .build();
 
@@ -158,7 +158,7 @@ class UserBridgeServiceImpl implements UserBridgeService {
 
         RESTRequest restRequest = RESTRequest.getBuilder()
                 .method(RequestMethod.POST)
-                .path(Path.USERS_REGISTER)
+                .path(LeafletPath.USERS_REGISTER)
                 .requestBody(userInitializeRequestModel)
                 .build();
 
@@ -170,7 +170,7 @@ class UserBridgeServiceImpl implements UserBridgeService {
 
         RESTRequest restRequest = RESTRequest.getBuilder()
                 .method(RequestMethod.POST)
-                .path(Path.USERS_REVOKE)
+                .path(LeafletPath.USERS_REVOKE)
                 .authenticated()
                 .build();
 
@@ -182,7 +182,7 @@ class UserBridgeServiceImpl implements UserBridgeService {
 
         RESTRequest restRequest = RESTRequest.getBuilder()
                 .method(RequestMethod.POST)
-                .path(Path.USERS_RECLAIM)
+                .path(LeafletPath.USERS_RECLAIM)
                 .requestBody(passwordResetDemandRequestModel)
                 .build();
 
@@ -194,7 +194,7 @@ class UserBridgeServiceImpl implements UserBridgeService {
 
         RESTRequest restRequest = RESTRequest.getBuilder()
                 .method(RequestMethod.PUT)
-                .path(Path.USERS_RECLAIM)
+                .path(LeafletPath.USERS_RECLAIM)
                 .requestBody(userPasswordRequestModel)
                 .authenticated()
                 .build();
@@ -207,7 +207,7 @@ class UserBridgeServiceImpl implements UserBridgeService {
 
         RESTRequest restRequest = RESTRequest.getBuilder()
                 .method(RequestMethod.PUT)
-                .path(Path.USERS_RENEW)
+                .path(LeafletPath.USERS_RENEW)
                 .authenticated()
                 .build();
 

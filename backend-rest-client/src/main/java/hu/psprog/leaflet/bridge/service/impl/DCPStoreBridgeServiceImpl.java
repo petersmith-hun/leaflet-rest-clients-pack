@@ -5,7 +5,7 @@ import hu.psprog.leaflet.api.rest.response.dcp.DCPListDataModel;
 import hu.psprog.leaflet.bridge.client.BridgeClient;
 import hu.psprog.leaflet.bridge.client.domain.BridgeService;
 import hu.psprog.leaflet.bridge.client.exception.CommunicationFailureException;
-import hu.psprog.leaflet.bridge.client.request.Path;
+import hu.psprog.leaflet.bridge.config.LeafletPath;
 import hu.psprog.leaflet.bridge.client.request.RESTRequest;
 import hu.psprog.leaflet.bridge.client.request.RequestMethod;
 import hu.psprog.leaflet.bridge.service.DCPStoreBridgeService;
@@ -33,7 +33,7 @@ class DCPStoreBridgeServiceImpl implements DCPStoreBridgeService {
 
         RESTRequest restRequest = RESTRequest.getBuilder()
                 .method(RequestMethod.GET)
-                .path(Path.DCP)
+                .path(LeafletPath.DCP)
                 .authenticated()
                 .build();
 
@@ -45,7 +45,7 @@ class DCPStoreBridgeServiceImpl implements DCPStoreBridgeService {
 
         RESTRequest restRequest = RESTRequest.getBuilder()
                 .method(RequestMethod.POST)
-                .path(Path.DCP)
+                .path(LeafletPath.DCP)
                 .requestBody(dcpRequestModel)
                 .authenticated()
                 .build();
@@ -58,7 +58,7 @@ class DCPStoreBridgeServiceImpl implements DCPStoreBridgeService {
 
         RESTRequest restRequest = RESTRequest.getBuilder()
                 .method(RequestMethod.PUT)
-                .path(Path.DCP)
+                .path(LeafletPath.DCP)
                 .requestBody(dcpRequestModel)
                 .authenticated()
                 .build();
@@ -71,7 +71,7 @@ class DCPStoreBridgeServiceImpl implements DCPStoreBridgeService {
 
         RESTRequest restRequest = RESTRequest.getBuilder()
                 .method(RequestMethod.DELETE)
-                .path(Path.DCP_BY_KEY)
+                .path(LeafletPath.DCP_BY_KEY)
                 .addPathParameter(KEY, dcpKey)
                 .authenticated()
                 .build();

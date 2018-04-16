@@ -13,15 +13,12 @@ import hu.psprog.leaflet.api.rest.response.user.UserDataModel;
 import hu.psprog.leaflet.bridge.client.domain.OrderBy;
 import hu.psprog.leaflet.bridge.client.domain.OrderDirection;
 import hu.psprog.leaflet.bridge.client.exception.CommunicationFailureException;
-import hu.psprog.leaflet.bridge.client.request.Path;
+import hu.psprog.leaflet.bridge.config.LeafletPath;
 import hu.psprog.leaflet.bridge.it.config.BridgeITSuite;
-import hu.psprog.leaflet.bridge.it.config.LeafletBridgeITContextConfig;
 import hu.psprog.leaflet.bridge.service.CommentBridgeService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.delete;
@@ -61,7 +58,7 @@ public class CommentBridgeServiceImplIT extends WireMockBaseTest {
         int limit = 10;
         OrderBy.Comment orderBy = OrderBy.Comment.CREATED;
         OrderDirection orderDirection = OrderDirection.ASC;
-        String uri = prepareURI(Path.COMMENTS_PUBLIC_PAGE_BY_ENTRY.getURI(), entryID, page);
+        String uri = prepareURI(LeafletPath.COMMENTS_PUBLIC_PAGE_BY_ENTRY.getURI(), entryID, page);
         WrapperBodyDataModel<CommentListDataModel> wrappedCommentListDataModel = prepareWrappedListDataModel(prepareCommentListDataModel());
         givenThat(get(urlPathEqualTo(uri))
                 .willReturn(ResponseDefinitionBuilder.okForJson(wrappedCommentListDataModel)));
@@ -86,7 +83,7 @@ public class CommentBridgeServiceImplIT extends WireMockBaseTest {
         int limit = 10;
         OrderBy.Comment orderBy = OrderBy.Comment.CREATED;
         OrderDirection orderDirection = OrderDirection.ASC;
-        String uri = prepareURI(Path.COMMENTS_ALL_PAGE_BY_ENTRY.getURI(), entryID, page);
+        String uri = prepareURI(LeafletPath.COMMENTS_ALL_PAGE_BY_ENTRY.getURI(), entryID, page);
         WrapperBodyDataModel<CommentListDataModel> wrappedCommentListDataModel = prepareWrappedListDataModel(prepareCommentListDataModel());
         givenThat(get(urlPathEqualTo(uri))
                 .willReturn(ResponseDefinitionBuilder.okForJson(wrappedCommentListDataModel)));
@@ -108,7 +105,7 @@ public class CommentBridgeServiceImplIT extends WireMockBaseTest {
 
         // given
         Long commentID = 1L;
-        String uri = prepareURI(Path.COMMENTS_BY_ID.getURI(), commentID);
+        String uri = prepareURI(LeafletPath.COMMENTS_BY_ID.getURI(), commentID);
         ExtendedCommentDataModel extendedCommentDataModel = prepareExtendedCommentDataModel(commentID);
         givenThat(get(uri)
                 .willReturn(ResponseDefinitionBuilder.okForJson(extendedCommentDataModel)));
@@ -130,7 +127,7 @@ public class CommentBridgeServiceImplIT extends WireMockBaseTest {
         commentCreateRequestModel.setContent("comment");
         StringValuePattern requestBody = equalToJson(OBJECT_MAPPER.writeValueAsString(commentCreateRequestModel));
         CommentDataModel commentDataModel = prepareCommentDataModel(1L);
-        givenThat(post(Path.COMMENTS.getURI())
+        givenThat(post(LeafletPath.COMMENTS.getURI())
                 .withRequestBody(requestBody)
                 .willReturn(ResponseDefinitionBuilder.okForJson(commentDataModel)));
 
@@ -139,7 +136,7 @@ public class CommentBridgeServiceImplIT extends WireMockBaseTest {
 
         // then
         assertThat(result, equalTo(commentDataModel));
-        verify(postRequestedFor(urlEqualTo(Path.COMMENTS.getURI()))
+        verify(postRequestedFor(urlEqualTo(LeafletPath.COMMENTS.getURI()))
                 .withHeader(AUTHORIZATION_HEADER, VALUE_PATTERN_BEARER_TOKEN));
     }
 
@@ -152,7 +149,7 @@ public class CommentBridgeServiceImplIT extends WireMockBaseTest {
         commentCreateRequestModel.setContent("comment");
         StringValuePattern requestBody = equalToJson(OBJECT_MAPPER.writeValueAsString(commentCreateRequestModel));
         CommentDataModel commentDataModel = prepareCommentDataModel(1L);
-        String uri = prepareURI(Path.COMMENTS_BY_ID.getURI(), commentID);
+        String uri = prepareURI(LeafletPath.COMMENTS_BY_ID.getURI(), commentID);
         givenThat(put(uri)
                 .withRequestBody(requestBody)
                 .willReturn(ResponseDefinitionBuilder.okForJson(commentDataModel)));
@@ -171,7 +168,7 @@ public class CommentBridgeServiceImplIT extends WireMockBaseTest {
 
         // given
         Long commentID = 1L;
-        String uri = prepareURI(Path.COMMENTS_STATUS.getURI(), commentID);
+        String uri = prepareURI(LeafletPath.COMMENTS_STATUS.getURI(), commentID);
         ExtendedCommentDataModel extendedCommentDataModel = prepareExtendedCommentDataModel(commentID);
         givenThat(put(uri)
                 .willReturn(ResponseDefinitionBuilder.okForJson(extendedCommentDataModel)));
@@ -190,7 +187,7 @@ public class CommentBridgeServiceImplIT extends WireMockBaseTest {
 
         // given
         Long commentID = 1L;
-        String uri = prepareURI(Path.COMMENTS_BY_ID.getURI(), commentID);
+        String uri = prepareURI(LeafletPath.COMMENTS_BY_ID.getURI(), commentID);
         givenThat(delete(uri));
 
         // when
@@ -206,7 +203,7 @@ public class CommentBridgeServiceImplIT extends WireMockBaseTest {
 
         // given
         Long commentID = 1L;
-        String uri = prepareURI(Path.COMMENTS_DELETE_PERMANENT.getURI(), commentID);
+        String uri = prepareURI(LeafletPath.COMMENTS_DELETE_PERMANENT.getURI(), commentID);
         givenThat(delete(uri));
 
         // when

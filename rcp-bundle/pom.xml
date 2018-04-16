@@ -18,6 +18,21 @@
             <artifactId>backend-rest-client</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>hu.psprog.leaflet</groupId>
+            <artifactId>tms-rest-client</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>hu.psprog.leaflet</groupId>
+            <artifactId>tlp-rest-client</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>hu.psprog.leaflet</groupId>
+            <artifactId>failover-rest-client</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 
 </project>

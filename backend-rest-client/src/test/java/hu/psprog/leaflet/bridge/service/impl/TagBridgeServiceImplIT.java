@@ -9,15 +9,12 @@ import hu.psprog.leaflet.api.rest.response.common.WrapperBodyDataModel;
 import hu.psprog.leaflet.api.rest.response.tag.TagDataModel;
 import hu.psprog.leaflet.api.rest.response.tag.TagListDataModel;
 import hu.psprog.leaflet.bridge.client.exception.CommunicationFailureException;
-import hu.psprog.leaflet.bridge.client.request.Path;
+import hu.psprog.leaflet.bridge.config.LeafletPath;
 import hu.psprog.leaflet.bridge.it.config.BridgeITSuite;
-import hu.psprog.leaflet.bridge.it.config.LeafletBridgeITContextConfig;
 import hu.psprog.leaflet.bridge.service.TagBridgeService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.delete;
@@ -52,7 +49,7 @@ public class TagBridgeServiceImplIT extends WireMockBaseTest {
 
         // given
         TagListDataModel tagListDataModel = prepareTagListDataModel();
-        givenThat(get(Path.TAGS.getURI())
+        givenThat(get(LeafletPath.TAGS.getURI())
                 .willReturn(ResponseDefinitionBuilder.okForJson(tagListDataModel)));
 
         // when
@@ -60,7 +57,7 @@ public class TagBridgeServiceImplIT extends WireMockBaseTest {
 
         // then
         assertThat(result, equalTo(tagListDataModel));
-        verify(getRequestedFor(urlEqualTo(Path.TAGS.getURI()))
+        verify(getRequestedFor(urlEqualTo(LeafletPath.TAGS.getURI()))
                 .withHeader(AUTHORIZATION_HEADER, VALUE_PATTERN_BEARER_TOKEN));
     }
 
@@ -70,7 +67,7 @@ public class TagBridgeServiceImplIT extends WireMockBaseTest {
         // given
         TagListDataModel tagListDataModel = prepareTagListDataModel();
         WrapperBodyDataModel<TagListDataModel> wrappedTagListDataModel = prepareWrappedListDataModel(tagListDataModel);
-        givenThat(get(Path.TAGS_PUBLIC.getURI())
+        givenThat(get(LeafletPath.TAGS_PUBLIC.getURI())
                 .willReturn(ResponseDefinitionBuilder.okForJson(wrappedTagListDataModel)));
 
         // when
@@ -78,7 +75,7 @@ public class TagBridgeServiceImplIT extends WireMockBaseTest {
 
         // then
         assertThat(result, equalTo(wrappedTagListDataModel));
-        verify(getRequestedFor(urlEqualTo(Path.TAGS_PUBLIC.getURI())));
+        verify(getRequestedFor(urlEqualTo(LeafletPath.TAGS_PUBLIC.getURI())));
     }
 
     @Test
@@ -87,7 +84,7 @@ public class TagBridgeServiceImplIT extends WireMockBaseTest {
         // given
         TagDataModel tagDataModel = prepareTagDataModel(1L);
         Long tagID = 1L;
-        String uri = prepareURI(Path.TAGS_BY_ID.getURI(), tagID);
+        String uri = prepareURI(LeafletPath.TAGS_BY_ID.getURI(), tagID);
         givenThat(get(uri)
                 .willReturn(ResponseDefinitionBuilder.okForJson(tagDataModel)));
 
@@ -107,7 +104,7 @@ public class TagBridgeServiceImplIT extends WireMockBaseTest {
         TagCreateRequestModel tagCreateRequestModel = prepareTagCreateRequestModel();
         TagDataModel tagDataModel = prepareTagDataModel(1L);
         StringValuePattern requestBody = equalToJson(OBJECT_MAPPER.writeValueAsString(tagCreateRequestModel));
-        givenThat(post(Path.TAGS.getURI())
+        givenThat(post(LeafletPath.TAGS.getURI())
                 .withRequestBody(requestBody)
                 .willReturn(ResponseDefinitionBuilder.okForJson(tagDataModel)));
 
@@ -116,7 +113,7 @@ public class TagBridgeServiceImplIT extends WireMockBaseTest {
 
         // then
         assertThat(result, equalTo(tagDataModel));
-        verify(postRequestedFor(urlEqualTo(Path.TAGS.getURI()))
+        verify(postRequestedFor(urlEqualTo(LeafletPath.TAGS.getURI()))
                 .withRequestBody(requestBody)
                 .withHeader(AUTHORIZATION_HEADER, VALUE_PATTERN_BEARER_TOKEN));
     }
@@ -129,7 +126,7 @@ public class TagBridgeServiceImplIT extends WireMockBaseTest {
         TagDataModel tagDataModel = prepareTagDataModel(1L);
         StringValuePattern requestBody = equalToJson(OBJECT_MAPPER.writeValueAsString(tagCreateRequestModel));
         Long tagID = 1L;
-        String uri = prepareURI(Path.TAGS_BY_ID.getURI(), tagID);
+        String uri = prepareURI(LeafletPath.TAGS_BY_ID.getURI(), tagID);
         givenThat(put(uri)
                 .withRequestBody(requestBody)
                 .willReturn(ResponseDefinitionBuilder.okForJson(tagDataModel)));
@@ -149,7 +146,7 @@ public class TagBridgeServiceImplIT extends WireMockBaseTest {
 
         // given
         Long tagID = 1L;
-        String uri = prepareURI(Path.TAGS_BY_ID.getURI(), tagID);
+        String uri = prepareURI(LeafletPath.TAGS_BY_ID.getURI(), tagID);
         givenThat(delete(uri));
 
         // when
@@ -166,7 +163,7 @@ public class TagBridgeServiceImplIT extends WireMockBaseTest {
         // given
         TagDataModel tagDataModel = prepareTagDataModel(1L);
         Long tagID = 1L;
-        String uri = prepareURI(Path.TAGS_STATUS.getURI(), tagID);
+        String uri = prepareURI(LeafletPath.TAGS_STATUS.getURI(), tagID);
         givenThat(put(uri)
                 .willReturn(ResponseDefinitionBuilder.okForJson(tagDataModel)));
 
@@ -185,14 +182,14 @@ public class TagBridgeServiceImplIT extends WireMockBaseTest {
         // given
         TagAssignmentRequestModel tagAssignmentRequestModel = prepareTagAssignmentRequestModel();
         StringValuePattern requestBody = equalToJson(OBJECT_MAPPER.writeValueAsString(tagAssignmentRequestModel));
-        givenThat(post(Path.TAGS_ASSIGN.getURI())
+        givenThat(post(LeafletPath.TAGS_ASSIGN.getURI())
                 .withRequestBody(requestBody));
 
         // when
         tagBridgeService.attachTag(tagAssignmentRequestModel);
 
         // then
-        verify(postRequestedFor(urlEqualTo(Path.TAGS_ASSIGN.getURI()))
+        verify(postRequestedFor(urlEqualTo(LeafletPath.TAGS_ASSIGN.getURI()))
                 .withRequestBody(requestBody)
                 .withHeader(AUTHORIZATION_HEADER, VALUE_PATTERN_BEARER_TOKEN));
     }
@@ -203,14 +200,14 @@ public class TagBridgeServiceImplIT extends WireMockBaseTest {
         // given
         TagAssignmentRequestModel tagAssignmentRequestModel = prepareTagAssignmentRequestModel();
         StringValuePattern requestBody = equalToJson(OBJECT_MAPPER.writeValueAsString(tagAssignmentRequestModel));
-        givenThat(put(Path.TAGS_ASSIGN.getURI())
+        givenThat(put(LeafletPath.TAGS_ASSIGN.getURI())
                 .withRequestBody(requestBody));
 
         // when
         tagBridgeService.detachTag(tagAssignmentRequestModel);
 
         // then
-        verify(putRequestedFor(urlEqualTo(Path.TAGS_ASSIGN.getURI()))
+        verify(putRequestedFor(urlEqualTo(LeafletPath.TAGS_ASSIGN.getURI()))
                 .withRequestBody(requestBody)
                 .withHeader(AUTHORIZATION_HEADER, VALUE_PATTERN_BEARER_TOKEN));
     }

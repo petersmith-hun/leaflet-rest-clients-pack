@@ -7,15 +7,12 @@ import hu.psprog.leaflet.api.rest.request.routing.FrontEndRouteUpdateRequestMode
 import hu.psprog.leaflet.api.rest.response.routing.ExtendedFrontEndRouteDataModel;
 import hu.psprog.leaflet.api.rest.response.routing.ExtendedFrontEndRouteListDataModel;
 import hu.psprog.leaflet.bridge.client.exception.CommunicationFailureException;
-import hu.psprog.leaflet.bridge.client.request.Path;
+import hu.psprog.leaflet.bridge.config.LeafletPath;
 import hu.psprog.leaflet.bridge.it.config.BridgeITSuite;
-import hu.psprog.leaflet.bridge.it.config.LeafletBridgeITContextConfig;
 import hu.psprog.leaflet.bridge.service.FrontEndRoutingSupportBridgeService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.delete;
@@ -59,7 +56,7 @@ public class FrontEndRoutingSupportBridgeServiceImplIT extends WireMockBaseTest 
 
         // given
         ExtendedFrontEndRouteListDataModel listDataModel = prepareExtendedFrontEndRouteListDataModel();
-        givenThat(get(Path.ROUTES.getURI())
+        givenThat(get(LeafletPath.ROUTES.getURI())
                 .willReturn(ResponseDefinitionBuilder.okForJson(listDataModel)));
 
         // when
@@ -67,7 +64,7 @@ public class FrontEndRoutingSupportBridgeServiceImplIT extends WireMockBaseTest 
 
         // then
         assertThat(result, equalTo(listDataModel));
-        verify(getRequestedFor(urlEqualTo(Path.ROUTES.getURI()))
+        verify(getRequestedFor(urlEqualTo(LeafletPath.ROUTES.getURI()))
                 .withHeader(AUTHORIZATION_HEADER, VALUE_PATTERN_BEARER_TOKEN));
     }
 
@@ -76,7 +73,7 @@ public class FrontEndRoutingSupportBridgeServiceImplIT extends WireMockBaseTest 
 
         // given
         ExtendedFrontEndRouteDataModel dataModel = prepareExtendedFrontEndRouteDataModel();
-        String path = prepareURI(Path.ROUTES_BY_ID.getURI(), ROUTE_ID);
+        String path = prepareURI(LeafletPath.ROUTES_BY_ID.getURI(), ROUTE_ID);
         givenThat(get(urlPathEqualTo(path))
                 .willReturn(ResponseDefinitionBuilder.okForJson(dataModel)));
 
@@ -95,7 +92,7 @@ public class FrontEndRoutingSupportBridgeServiceImplIT extends WireMockBaseTest 
         // given
         ExtendedFrontEndRouteDataModel dataModel = prepareExtendedFrontEndRouteDataModel();
         StringValuePattern requestBody = equalToJson(OBJECT_MAPPER.writeValueAsString(FRONT_END_ROUTE_UPDATE_REQUEST_MODEL));
-        givenThat(post(Path.ROUTES.getURI())
+        givenThat(post(LeafletPath.ROUTES.getURI())
                 .withRequestBody(requestBody)
                 .willReturn(ResponseDefinitionBuilder.okForJson(dataModel)));
 
@@ -104,7 +101,7 @@ public class FrontEndRoutingSupportBridgeServiceImplIT extends WireMockBaseTest 
 
         // then
         assertThat(result, equalTo(dataModel));
-        verify(postRequestedFor(urlEqualTo(Path.ROUTES.getURI()))
+        verify(postRequestedFor(urlEqualTo(LeafletPath.ROUTES.getURI()))
                 .withRequestBody(requestBody)
                 .withHeader(AUTHORIZATION_HEADER, VALUE_PATTERN_BEARER_TOKEN));
     }
@@ -115,7 +112,7 @@ public class FrontEndRoutingSupportBridgeServiceImplIT extends WireMockBaseTest 
         // given
         ExtendedFrontEndRouteDataModel dataModel = prepareExtendedFrontEndRouteDataModel();
         StringValuePattern requestBody = equalToJson(OBJECT_MAPPER.writeValueAsString(FRONT_END_ROUTE_UPDATE_REQUEST_MODEL));
-        String path = prepareURI(Path.ROUTES_BY_ID.getURI(), ROUTE_ID);
+        String path = prepareURI(LeafletPath.ROUTES_BY_ID.getURI(), ROUTE_ID);
         givenThat(put(urlPathEqualTo(path))
                 .withRequestBody(requestBody)
                 .willReturn(ResponseDefinitionBuilder.okForJson(dataModel)));
@@ -135,7 +132,7 @@ public class FrontEndRoutingSupportBridgeServiceImplIT extends WireMockBaseTest 
 
         // given
         ExtendedFrontEndRouteDataModel dataModel = prepareExtendedFrontEndRouteDataModel();
-        String path = prepareURI(Path.ROUTES_STATUS.getURI(), ROUTE_ID);
+        String path = prepareURI(LeafletPath.ROUTES_STATUS.getURI(), ROUTE_ID);
         givenThat(put(urlPathEqualTo(path))
                 .willReturn(ResponseDefinitionBuilder.okForJson(dataModel)));
 
@@ -152,7 +149,7 @@ public class FrontEndRoutingSupportBridgeServiceImplIT extends WireMockBaseTest 
     public void shouldDeleteRoute() throws CommunicationFailureException {
 
         // given
-        String path = prepareURI(Path.ROUTES_BY_ID.getURI(), ROUTE_ID);
+        String path = prepareURI(LeafletPath.ROUTES_BY_ID.getURI(), ROUTE_ID);
         givenThat(delete(urlPathEqualTo(path)));
 
         // when

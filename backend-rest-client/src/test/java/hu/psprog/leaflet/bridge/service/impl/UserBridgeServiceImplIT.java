@@ -14,15 +14,12 @@ import hu.psprog.leaflet.api.rest.response.user.ExtendedUserDataModel;
 import hu.psprog.leaflet.api.rest.response.user.LoginResponseDataModel;
 import hu.psprog.leaflet.api.rest.response.user.UserListDataModel;
 import hu.psprog.leaflet.bridge.client.exception.CommunicationFailureException;
-import hu.psprog.leaflet.bridge.client.request.Path;
+import hu.psprog.leaflet.bridge.config.LeafletPath;
 import hu.psprog.leaflet.bridge.it.config.BridgeITSuite;
-import hu.psprog.leaflet.bridge.it.config.LeafletBridgeITContextConfig;
 import hu.psprog.leaflet.bridge.service.UserBridgeService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.Locale;
@@ -60,7 +57,7 @@ public class UserBridgeServiceImplIT extends WireMockBaseTest {
 
         // given
         UserListDataModel userListDataModel = prepareUserListDataModel();
-        givenThat(get(Path.USERS.getURI())
+        givenThat(get(LeafletPath.USERS.getURI())
                 .willReturn(ResponseDefinitionBuilder.okForJson(userListDataModel)));
 
         // when
@@ -68,7 +65,7 @@ public class UserBridgeServiceImplIT extends WireMockBaseTest {
 
         // then
         assertThat(result, equalTo(userListDataModel));
-        verify(getRequestedFor(urlEqualTo(Path.USERS.getURI()))
+        verify(getRequestedFor(urlEqualTo(LeafletPath.USERS.getURI()))
                 .withHeader(AUTHORIZATION_HEADER, VALUE_PATTERN_BEARER_TOKEN));
     }
 
@@ -79,7 +76,7 @@ public class UserBridgeServiceImplIT extends WireMockBaseTest {
         UserCreateRequestModel userCreateRequestModel = prepareUserCreateRequestModel();
         ExtendedUserDataModel extendedUserDataModel = prepareExtendedUserDataModel(1L);
         StringValuePattern requestBody = equalToJson(OBJECT_MAPPER.writeValueAsString(userCreateRequestModel));
-        givenThat(post(Path.USERS.getURI())
+        givenThat(post(LeafletPath.USERS.getURI())
                 .withRequestBody(requestBody)
                 .willReturn(ResponseDefinitionBuilder.okForJson(extendedUserDataModel)));
 
@@ -88,7 +85,7 @@ public class UserBridgeServiceImplIT extends WireMockBaseTest {
 
         // then
         assertThat(result, equalTo(extendedUserDataModel));
-        verify(postRequestedFor(urlEqualTo(Path.USERS.getURI()))
+        verify(postRequestedFor(urlEqualTo(LeafletPath.USERS.getURI()))
                 .withRequestBody(requestBody)
                 .withHeader(AUTHORIZATION_HEADER, VALUE_PATTERN_BEARER_TOKEN));
     }
@@ -100,7 +97,7 @@ public class UserBridgeServiceImplIT extends WireMockBaseTest {
         UserInitializeRequestModel userInitializeRequestModel = prepareUserInitializeRequestModel();
         ExtendedUserDataModel extendedUserDataModel = prepareExtendedUserDataModel(1L);
         StringValuePattern requestBody = equalToJson(OBJECT_MAPPER.writeValueAsString(userInitializeRequestModel));
-        givenThat(post(Path.USERS_INIT.getURI())
+        givenThat(post(LeafletPath.USERS_INIT.getURI())
                 .withRequestBody(requestBody)
                 .willReturn(ResponseDefinitionBuilder.okForJson(extendedUserDataModel)));
 
@@ -109,7 +106,7 @@ public class UserBridgeServiceImplIT extends WireMockBaseTest {
 
         // then
         assertThat(result, equalTo(extendedUserDataModel));
-        verify(postRequestedFor(urlEqualTo(Path.USERS_INIT.getURI()))
+        verify(postRequestedFor(urlEqualTo(LeafletPath.USERS_INIT.getURI()))
                 .withRequestBody(requestBody));
     }
 
@@ -118,7 +115,7 @@ public class UserBridgeServiceImplIT extends WireMockBaseTest {
 
         // given
         Long userID = 1L;
-        String uri = prepareURI(Path.USERS_ID.getURI(), userID);
+        String uri = prepareURI(LeafletPath.USERS_ID.getURI(), userID);
         ExtendedUserDataModel extendedUserDataModel = prepareExtendedUserDataModel(userID);
         givenThat(get(uri)
                 .willReturn(ResponseDefinitionBuilder.okForJson(extendedUserDataModel)));
@@ -137,7 +134,7 @@ public class UserBridgeServiceImplIT extends WireMockBaseTest {
 
         // given
         Long userID = 1L;
-        String uri = prepareURI(Path.USERS_ID.getURI(), userID);
+        String uri = prepareURI(LeafletPath.USERS_ID.getURI(), userID);
         givenThat(delete(uri));
 
         // when
@@ -153,7 +150,7 @@ public class UserBridgeServiceImplIT extends WireMockBaseTest {
 
         // given
         Long userID = 1L;
-        String uri = prepareURI(Path.USERS_ROLE.getURI(), userID);
+        String uri = prepareURI(LeafletPath.USERS_ROLE.getURI(), userID);
         UpdateRoleRequestModel updateRoleRequestModel = prepareUpdateRoleRequestModel();
         StringValuePattern requestBody = equalToJson(OBJECT_MAPPER.writeValueAsString(updateRoleRequestModel));
         ExtendedUserDataModel extendedUserDataModel = prepareExtendedUserDataModel(1L);
@@ -176,7 +173,7 @@ public class UserBridgeServiceImplIT extends WireMockBaseTest {
 
         // given
         Long userID = 1L;
-        String uri = prepareURI(Path.USERS_PROFILE.getURI(), userID);
+        String uri = prepareURI(LeafletPath.USERS_PROFILE.getURI(), userID);
         UpdateProfileRequestModel updateProfileRequestModel = prepareUpdateProfileRequestModel();
         StringValuePattern requestBody = equalToJson(OBJECT_MAPPER.writeValueAsString(updateProfileRequestModel));
         ExtendedUserDataModel extendedUserDataModel = prepareExtendedUserDataModel(1L);
@@ -199,7 +196,7 @@ public class UserBridgeServiceImplIT extends WireMockBaseTest {
 
         // given
         Long userID = 1L;
-        String uri = prepareURI(Path.USERS_PASSWORD.getURI(), userID);
+        String uri = prepareURI(LeafletPath.USERS_PASSWORD.getURI(), userID);
         UserPasswordRequestModel userPasswordRequestModel = prepareUserPasswordRequestModel();
         StringValuePattern requestBody = equalToJson(OBJECT_MAPPER.writeValueAsString(userPasswordRequestModel));
         ExtendedUserDataModel extendedUserDataModel = prepareExtendedUserDataModel(1L);
@@ -224,7 +221,7 @@ public class UserBridgeServiceImplIT extends WireMockBaseTest {
         LoginRequestModel loginRequestModel = prepareLoginRequestModel();
         LoginResponseDataModel loginResponseDataModel = prepareLoginResponseDataModel();
         StringValuePattern requestBody = equalToJson(OBJECT_MAPPER.writeValueAsString(loginRequestModel));
-        givenThat(post(Path.USERS_CLAIM.getURI())
+        givenThat(post(LeafletPath.USERS_CLAIM.getURI())
                 .withRequestBody(requestBody)
                 .willReturn(ResponseDefinitionBuilder.okForJson(loginResponseDataModel)));
 
@@ -233,7 +230,7 @@ public class UserBridgeServiceImplIT extends WireMockBaseTest {
 
         // then
         assertThat(result, equalTo(loginResponseDataModel));
-        verify(postRequestedFor(urlEqualTo(Path.USERS_CLAIM.getURI()))
+        verify(postRequestedFor(urlEqualTo(LeafletPath.USERS_CLAIM.getURI()))
                 .withRequestBody(requestBody));
     }
 
@@ -244,7 +241,7 @@ public class UserBridgeServiceImplIT extends WireMockBaseTest {
         UserInitializeRequestModel userInitializeRequestModel = prepareUserInitializeRequestModel();
         ExtendedUserDataModel extendedUserDataModel = prepareExtendedUserDataModel(1L);
         StringValuePattern requestBody = equalToJson(OBJECT_MAPPER.writeValueAsString(userInitializeRequestModel));
-        givenThat(post(Path.USERS_REGISTER.getURI())
+        givenThat(post(LeafletPath.USERS_REGISTER.getURI())
                 .withRequestBody(requestBody)
                 .willReturn(ResponseDefinitionBuilder.okForJson(extendedUserDataModel)));
 
@@ -253,7 +250,7 @@ public class UserBridgeServiceImplIT extends WireMockBaseTest {
 
         // then
         assertThat(result, equalTo(extendedUserDataModel));
-        verify(postRequestedFor(urlEqualTo(Path.USERS_REGISTER.getURI()))
+        verify(postRequestedFor(urlEqualTo(LeafletPath.USERS_REGISTER.getURI()))
                 .withRequestBody(requestBody));
     }
 
@@ -261,14 +258,14 @@ public class UserBridgeServiceImplIT extends WireMockBaseTest {
     public void shouldRevokeToken() throws CommunicationFailureException {
 
         // given
-        givenThat(post(Path.USERS_REVOKE.getURI())
+        givenThat(post(LeafletPath.USERS_REVOKE.getURI())
                 .willReturn(aResponse().withStatus(204)));
 
         // when
         userBridgeService.revokeToken();
 
         // then
-        verify(postRequestedFor(urlEqualTo(Path.USERS_REVOKE.getURI()))
+        verify(postRequestedFor(urlEqualTo(LeafletPath.USERS_REVOKE.getURI()))
                 .withHeader(AUTHORIZATION_HEADER, VALUE_PATTERN_BEARER_TOKEN));
     }
 
@@ -278,7 +275,7 @@ public class UserBridgeServiceImplIT extends WireMockBaseTest {
         // given
         PasswordResetDemandRequestModel passwordResetDemandRequestModel = preparePasswordResetDemandRequestModel();
         StringValuePattern requestBody = equalToJson(OBJECT_MAPPER.writeValueAsString(passwordResetDemandRequestModel));
-        givenThat(post(Path.USERS_RECLAIM.getURI())
+        givenThat(post(LeafletPath.USERS_RECLAIM.getURI())
                 .withRequestBody(requestBody)
                 .willReturn(aResponse().withStatus(201)));
 
@@ -286,7 +283,7 @@ public class UserBridgeServiceImplIT extends WireMockBaseTest {
         userBridgeService.demandPasswordReset(passwordResetDemandRequestModel);
 
         // then
-        verify(postRequestedFor(urlEqualTo(Path.USERS_RECLAIM.getURI()))
+        verify(postRequestedFor(urlEqualTo(LeafletPath.USERS_RECLAIM.getURI()))
                 .withRequestBody(requestBody));
     }
 
@@ -296,7 +293,7 @@ public class UserBridgeServiceImplIT extends WireMockBaseTest {
         // given
         UserPasswordRequestModel userPasswordRequestModel = prepareUserPasswordRequestModel();
         StringValuePattern requestBody = equalToJson(OBJECT_MAPPER.writeValueAsString(userPasswordRequestModel));
-        givenThat(put(Path.USERS_RECLAIM.getURI())
+        givenThat(put(LeafletPath.USERS_RECLAIM.getURI())
                 .withRequestBody(requestBody)
                 .willReturn(aResponse().withStatus(201)));
 
@@ -304,7 +301,7 @@ public class UserBridgeServiceImplIT extends WireMockBaseTest {
         userBridgeService.confirmPasswordReset(userPasswordRequestModel);
 
         // then
-        verify(putRequestedFor(urlEqualTo(Path.USERS_RECLAIM.getURI()))
+        verify(putRequestedFor(urlEqualTo(LeafletPath.USERS_RECLAIM.getURI()))
                 .withRequestBody(requestBody)
                 .withHeader(AUTHORIZATION_HEADER, VALUE_PATTERN_BEARER_TOKEN));
     }
@@ -314,7 +311,7 @@ public class UserBridgeServiceImplIT extends WireMockBaseTest {
 
         // given
         LoginResponseDataModel loginResponseDataModel = prepareLoginResponseDataModel();
-        givenThat(put(Path.USERS_RENEW.getURI())
+        givenThat(put(LeafletPath.USERS_RENEW.getURI())
                 .willReturn(ResponseDefinitionBuilder.okForJson(loginResponseDataModel)));
 
         // when
@@ -322,7 +319,7 @@ public class UserBridgeServiceImplIT extends WireMockBaseTest {
 
         // then
         assertThat(result, equalTo(loginResponseDataModel));
-        verify(putRequestedFor(urlEqualTo(Path.USERS_RENEW.getURI())));
+        verify(putRequestedFor(urlEqualTo(LeafletPath.USERS_RENEW.getURI())));
     }
 
     private LoginRequestModel prepareLoginRequestModel() {
