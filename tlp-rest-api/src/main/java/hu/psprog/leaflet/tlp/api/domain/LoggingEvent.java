@@ -1,5 +1,6 @@
 package hu.psprog.leaflet.tlp.api.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -103,6 +104,7 @@ public class LoggingEvent {
     /**
      * Builder for {@link LoggingEvent}.
      */
+    @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class LoggingEventBuilder {
         private String threadName;
         private String loggerName;
