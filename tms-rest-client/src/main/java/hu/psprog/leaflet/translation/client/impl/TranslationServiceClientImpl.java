@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.ws.rs.core.GenericType;
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -26,25 +25,12 @@ import java.util.UUID;
 public class TranslationServiceClientImpl implements TranslationServiceClient {
 
     private static final String PARAMETER_PACK_ID = "packID";
-    private static final String PARAMETER_PACKS = "packs";
 
     private BridgeClient bridgeClient;
 
     @Autowired
     public TranslationServiceClientImpl(BridgeClient bridgeClient) {
         this.bridgeClient = bridgeClient;
-    }
-
-    @Override
-    public Set<TranslationPack> retrievePacks(List<String> packs) throws CommunicationFailureException {
-
-        RESTRequest restRequest = RESTRequest.getBuilder()
-                .method(RequestMethod.GET)
-                .path(TMSPath.TRANSLATIONS)
-                .addRequestParameters(PARAMETER_PACKS, packs)
-                .build();
-
-        return bridgeClient.call(restRequest, new GenericType<Set<TranslationPack>>(){});
     }
 
     @Override
