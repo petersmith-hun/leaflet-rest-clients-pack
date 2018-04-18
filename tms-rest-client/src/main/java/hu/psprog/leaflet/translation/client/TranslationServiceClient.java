@@ -6,7 +6,6 @@ import hu.psprog.leaflet.translation.api.domain.TranslationPackCreationRequest;
 import hu.psprog.leaflet.translation.api.domain.TranslationPackMetaInfo;
 
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -15,14 +14,6 @@ import java.util.UUID;
  * @author Peter Smith
  */
 public interface TranslationServiceClient {
-
-    /**
-     * Calls TMS to retrieve latest enabled translation packs by their names.
-     *
-     * @param packs pack names to retrieve
-     * @return available {@link TranslationPack}s as {@link Set}
-     */
-    Set<TranslationPack> retrievePacks(List<String> packs) throws CommunicationFailureException;
 
     /**
      * Calls TMS to retrieve meta information of all available translation packs.

@@ -15,6 +15,7 @@ import hu.psprog.leaflet.bridge.client.request.RequestAuthentication;
 import hu.psprog.leaflet.translation.api.domain.TranslationPack;
 import hu.psprog.leaflet.translation.api.domain.TranslationPackCreationRequest;
 import hu.psprog.leaflet.translation.api.domain.TranslationPackMetaInfo;
+import hu.psprog.leaflet.translation.client.MessageSourceClient;
 import hu.psprog.leaflet.translation.client.TranslationServiceClient;
 import org.junit.ClassRule;
 import org.junit.Rule;
@@ -117,6 +118,9 @@ public class TranslationServiceClientImplTest {
     @Autowired
     private TranslationServiceClient translationServiceClient;
 
+    @Autowired
+    private MessageSourceClient messageSourceClient;
+
     @Test
     public void shouldRetrievePacks() throws CommunicationFailureException {
 
@@ -126,7 +130,7 @@ public class TranslationServiceClientImplTest {
                 .willReturn(ResponseDefinitionBuilder.okForJson(Collections.singleton(TRANSLATION_PACK))));
 
         // when
-        Set<TranslationPack> result = translationServiceClient.retrievePacks(Collections.singletonList(PACK_NAME));
+        Set<TranslationPack> result = messageSourceClient.retrievePacks(Collections.singletonList(PACK_NAME));
 
         // then
         verify(getRequestedFor(urlPathEqualTo(PATH_TRANSLATIONS))
