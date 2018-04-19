@@ -16,6 +16,10 @@
             <groupId>hu.psprog.leaflet</groupId>
             <artifactId>leaflet-rest-api</artifactId>
         </dependency>
+        <dependency>
+            <groupId>hu.psprog.leaflet</groupId>
+            <artifactId>leaflet-bridge</artifactId>
+        </dependency>
     </dependencies>
 
 </project>
