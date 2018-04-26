@@ -3,6 +3,9 @@ package hu.psprog.leaflet.tlp.api.domain;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.util.Date;
 
 /**
  * Log retrieval request object.
@@ -19,8 +22,12 @@ public class LogRequest {
     private int limit;
     private OrderBy orderBy;
     private OrderDirection orderDirection;
-    private String from;
-    private String to;
+
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    private Date from;
+
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    private Date to;
 
     public boolean isQueried() {
 
@@ -47,19 +54,19 @@ public class LogRequest {
         this.level = level;
     }
 
-    public String getFrom() {
+    public Date getFrom() {
         return from;
     }
 
-    public void setFrom(String from) {
+    public void setFrom(Date from) {
         this.from = from;
     }
 
-    public String getTo() {
+    public Date getTo() {
         return to;
     }
 
-    public void setTo(String to) {
+    public void setTo(Date to) {
         this.to = to;
     }
 

@@ -11,6 +11,10 @@ import hu.psprog.leaflet.tlp.api.domain.LogEventPage;
 import hu.psprog.leaflet.tlp.api.domain.LogRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Optional;
+
 /**
  * Implementation of {@link TLPClient}.
  *
@@ -18,6 +22,8 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 @BridgeService(client = "tlp")
 public class TLPClientImpl implements TLPClient {
+
+    private static final SimpleDateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
 
     private static final String QUERY_PARAM_PAGE = "page";
     private static final String QUERY_PARAM_LIMIT = "limit";
@@ -48,11 +54,17 @@ public class TLPClientImpl implements TLPClient {
                 .addRequestParameters(QUERY_PARAM_ORDER_DIRECTION, logRequest.getOrderDirection().name())
                 .addRequestParameters(QUERY_PARAM_SOURCE, logRequest.getSource())
                 .addRequestParameters(QUERY_PARAM_LEVEL, logRequest.getLevel())
-                .addRequestParameters(QUERY_PARAM_FROM, logRequest.getFrom())
-                .addRequestParameters(QUERY_PARAM_TO, logRequest.getTo())
+                .addRequestParameters(QUERY_PARAM_FROM, formatDateAsString(logRequest.getFrom()))
+                .addRequestParameters(QUERY_PARAM_TO, formatDateAsString(logRequest.getTo()))
                 .addRequestParameters(QUERY_PARAM_CONTENT, logRequest.getContent())
                 .build();
 
         return bridgeClient.call(restRequest, LogEventPage.class);
+    }
+
+    private String formatDateAsString(Date date) {
+        return Optional.ofNullable(date)
+                .map(SIMPLE_DATE_FORMAT::format)
+                .orElse(null);
     }
 }

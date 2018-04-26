@@ -30,7 +30,9 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -65,6 +67,8 @@ public class TLPClientImplTest {
     private static final String QUERY_PARAM_FROM = "from";
     private static final String QUERY_PARAM_TO = "to";
     private static final String QUERY_PARAM_CONTENT = "content";
+    private static final String EXPECTED_FROM_DATE = "2018-04-24";
+    private static final String EXPECTED_TO_DATE = "2018-04-26";
 
     private static final LogEventPage LOG_EVENT_PAGE = LogEventPage.getBuilder()
             .withEntitiesOnPage(Collections.singletonList(LoggingEvent.getBuilder()
@@ -77,14 +81,14 @@ public class TLPClientImplTest {
 
     static {
         LOG_REQUEST.setContent("content");
-        LOG_REQUEST.setFrom("from");
+        LOG_REQUEST.setFrom(prepareDate(24));
         LOG_REQUEST.setLevel("level");
         LOG_REQUEST.setLimit(10);
         LOG_REQUEST.setOrderBy(OrderBy.CONTENT);
         LOG_REQUEST.setOrderDirection(OrderDirection.ASC);
         LOG_REQUEST.setPage(2);
         LOG_REQUEST.setSource("source");
-        LOG_REQUEST.setTo("to");
+        LOG_REQUEST.setTo(prepareDate(26));
     }
 
     @ClassRule
@@ -115,8 +119,8 @@ public class TLPClientImplTest {
                 .withQueryParam(QUERY_PARAM_ORDER_DIRECTION, new EqualToPattern(LOG_REQUEST.getOrderDirection().name()))
                 .withQueryParam(QUERY_PARAM_SOURCE, new EqualToPattern(LOG_REQUEST.getSource()))
                 .withQueryParam(QUERY_PARAM_LEVEL, new EqualToPattern(LOG_REQUEST.getLevel()))
-                .withQueryParam(QUERY_PARAM_FROM, new EqualToPattern(LOG_REQUEST.getFrom()))
-                .withQueryParam(QUERY_PARAM_TO, new EqualToPattern(LOG_REQUEST.getTo()))
+                .withQueryParam(QUERY_PARAM_FROM, new EqualToPattern(EXPECTED_FROM_DATE))
+                .withQueryParam(QUERY_PARAM_TO, new EqualToPattern(EXPECTED_TO_DATE))
                 .withQueryParam(QUERY_PARAM_CONTENT, new EqualToPattern(LOG_REQUEST.getContent())));
     }
 
@@ -148,5 +152,12 @@ public class TLPClientImplTest {
         public HttpServletResponse httpServletResponseStub() {
             return Mockito.mock(HttpServletResponse.class);
         }
+    }
+
+    private static Date prepareDate(int day) {
+        return new Calendar.Builder()
+                .setDate(2018, 3, day)
+                .build()
+                .getTime();
     }
 }
