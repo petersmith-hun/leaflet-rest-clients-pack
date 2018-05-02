@@ -6,6 +6,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
+import java.util.Objects;
 
 /**
  * Log retrieval request object.
@@ -92,6 +93,11 @@ public class LogRequest {
     }
 
     public int getLimit() {
+
+        if (limit == 0) {
+            limit = 50;
+        }
+
         return limit;
     }
 
@@ -100,6 +106,11 @@ public class LogRequest {
     }
 
     public OrderBy getOrderBy() {
+
+        if (Objects.isNull(orderBy)) {
+            orderBy = OrderBy.TIMESTAMP;
+        }
+
         return orderBy;
     }
 
@@ -108,6 +119,11 @@ public class LogRequest {
     }
 
     public OrderDirection getOrderDirection() {
+
+        if (Objects.isNull(orderDirection)) {
+            orderDirection = OrderDirection.DESC;
+        }
+
         return orderDirection;
     }
 
