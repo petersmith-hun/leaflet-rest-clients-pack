@@ -9,6 +9,18 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>failover-rest-api</artifactId>
+    <artifactId>recaptcha-rest-client</artifactId>
+
+    <dependencies>
+        <dependency>
+            <groupId>hu.psprog.leaflet</groupId>
+            <artifactId>recaptcha-rest-api</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>hu.psprog.leaflet</groupId>
+            <artifactId>leaflet-bridge</artifactId>
+        </dependency>
+    </dependencies>
 
 </project>

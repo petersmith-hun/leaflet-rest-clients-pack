@@ -7,7 +7,7 @@
     <groupId>hu.psprog.leaflet</groupId>
     <artifactId>leaflet-rest-clients-pack</artifactId>
     <packaging>pom</packaging>
-    <version>1.0.0</version>
+    <version>1.1.0</version>
     <modules>
         <module>backend-rest-client</module>
         <module>rcp-bundle</module>
@@ -17,6 +17,8 @@
         <module>failover-rest-api</module>
         <module>tlp-rest-api</module>
         <module>tms-rest-api</module>
+        <module>recaptcha-rest-api</module>
+        <module>recaptcha-rest-client</module>
     </modules>
 
     <properties>
@@ -31,7 +33,7 @@
 
         <!-- dependency versions -->
         <leaflet.rest-api.version>1.3.0</leaflet.rest-api.version>
-        <leaflet.bridge.version>2.0.0</leaflet.bridge.version>
+        <leaflet.bridge.version>2.1.0</leaflet.bridge.version>
         <spring.framework.version>4.3.9.RELEASE</spring.framework.version>
         <spring-boot-starter-test.version>1.5.4.RELEASE</spring-boot-starter-test.version>
         <commons-io.version>2.6</commons-io.version>
@@ -45,7 +47,7 @@
         <junit.version>4.12</junit.version>
         <mockito-all.version>1.10.19</mockito-all.version>
         <hamcrest-all.version>1.3</hamcrest-all.version>
-        <wiremock.version>2.6.0</wiremock.version>
+        <wiremock.version>2.18.0</wiremock.version>
         <maven-failsafe-plugin.version>2.20</maven-failsafe-plugin.version>
         <maven-source-plugin.version>3.0.1</maven-source-plugin.version>
     </properties>
