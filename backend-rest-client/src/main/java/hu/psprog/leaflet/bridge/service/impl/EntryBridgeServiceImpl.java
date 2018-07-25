@@ -25,7 +25,7 @@ import javax.ws.rs.core.GenericType;
  * @author Peter Smith
  */
 @BridgeService(client = "leaflet")
-class EntryBridgeServiceImpl implements EntryBridgeService {
+public class EntryBridgeServiceImpl implements EntryBridgeService {
 
     private static final String PAGE = "page";
     private static final String LIMIT = "limit";

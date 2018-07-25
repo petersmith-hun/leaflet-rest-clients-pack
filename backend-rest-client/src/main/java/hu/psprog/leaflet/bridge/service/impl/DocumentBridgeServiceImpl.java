@@ -23,7 +23,7 @@ import javax.ws.rs.core.GenericType;
  * @author Peter Smith
  */
 @BridgeService(client = "leaflet")
-class DocumentBridgeServiceImpl implements DocumentBridgeService {
+public class DocumentBridgeServiceImpl implements DocumentBridgeService {
 
     private static final String ID = "id";
     private static final String LINK = "link";

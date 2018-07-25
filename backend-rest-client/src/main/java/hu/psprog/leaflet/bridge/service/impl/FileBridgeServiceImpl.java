@@ -26,7 +26,7 @@ import java.util.UUID;
  * @author Peter Smith
  */
 @BridgeService(client = "leaflet")
-class FileBridgeServiceImpl implements FileBridgeService {
+public class FileBridgeServiceImpl implements FileBridgeService {
 
     private static final String FILE_IDENTIFIER = "fileIdentifier";
     private static final String STORED_FILENAME = "storedFilename";

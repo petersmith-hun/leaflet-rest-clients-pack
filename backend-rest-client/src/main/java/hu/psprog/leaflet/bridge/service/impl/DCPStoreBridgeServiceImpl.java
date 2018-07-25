@@ -17,7 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @author Peter Smith
  */
 @BridgeService(client = "leaflet")
-class DCPStoreBridgeServiceImpl implements DCPStoreBridgeService {
+public class DCPStoreBridgeServiceImpl implements DCPStoreBridgeService {
 
     private static final String KEY = "key";
 

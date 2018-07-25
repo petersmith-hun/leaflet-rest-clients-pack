@@ -25,7 +25,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @author Peter Smith
  */
 @BridgeService(client = "leaflet")
-class UserBridgeServiceImpl implements UserBridgeService {
+public class UserBridgeServiceImpl implements UserBridgeService {
 
     private static final String ID = "id";
 

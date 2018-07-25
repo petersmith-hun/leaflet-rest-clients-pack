@@ -18,7 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @author Peter Smith
  */
 @BridgeService(client = "leaflet")
-class CategoryBridgeServiceImpl implements CategoryBridgeService {
+public class CategoryBridgeServiceImpl implements CategoryBridgeService {
 
     private static final String ID = "id";
 
