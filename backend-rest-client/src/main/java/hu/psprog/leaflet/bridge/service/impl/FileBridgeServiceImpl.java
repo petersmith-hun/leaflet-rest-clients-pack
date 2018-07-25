@@ -6,15 +6,16 @@ import hu.psprog.leaflet.api.rest.request.file.UpdateFileMetaInfoRequestModel;
 import hu.psprog.leaflet.api.rest.response.file.DirectoryListDataModel;
 import hu.psprog.leaflet.api.rest.response.file.FileDataModel;
 import hu.psprog.leaflet.api.rest.response.file.FileListDataModel;
-import hu.psprog.leaflet.bridge.adapter.impl.FileUploadMultipartRequestBodyAdapter;
+import hu.psprog.leaflet.bridge.adapter.RequestBodyAdapter;
 import hu.psprog.leaflet.bridge.client.BridgeClient;
 import hu.psprog.leaflet.bridge.client.domain.BridgeService;
 import hu.psprog.leaflet.bridge.client.exception.CommunicationFailureException;
-import hu.psprog.leaflet.bridge.config.LeafletPath;
 import hu.psprog.leaflet.bridge.client.request.RESTRequest;
 import hu.psprog.leaflet.bridge.client.request.RequestMethod;
+import hu.psprog.leaflet.bridge.config.LeafletPath;
 import hu.psprog.leaflet.bridge.service.FileBridgeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 import java.io.InputStream;
 import java.util.UUID;
@@ -31,10 +32,10 @@ class FileBridgeServiceImpl implements FileBridgeService {
     private static final String STORED_FILENAME = "storedFilename";
 
     private BridgeClient bridgeClient;
-    private FileUploadMultipartRequestBodyAdapter multipartAdapter;
+    private RequestBodyAdapter multipartAdapter;
 
     @Autowired
-    public FileBridgeServiceImpl(BridgeClient bridgeClient, FileUploadMultipartRequestBodyAdapter multipartAdapter) {
+    public FileBridgeServiceImpl(BridgeClient bridgeClient, @Qualifier("fileUploadMultipartRequestBodyAdapter") RequestBodyAdapter multipartAdapter) {
         this.bridgeClient = bridgeClient;
         this.multipartAdapter = multipartAdapter;
     }
