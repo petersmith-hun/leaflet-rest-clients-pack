@@ -25,7 +25,7 @@ import javax.ws.rs.core.GenericType;
  * @author Peter Smith
  */
 @BridgeService(client = "leaflet")
-class CommentBridgeServiceImpl implements CommentBridgeService {
+public class CommentBridgeServiceImpl implements CommentBridgeService {
 
     private static final String PAGE = "page";
     private static final String LIMIT = "limit";

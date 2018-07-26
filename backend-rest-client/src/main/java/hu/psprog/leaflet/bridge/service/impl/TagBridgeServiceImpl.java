@@ -22,7 +22,7 @@ import javax.ws.rs.core.GenericType;
  * @author Peter Smith
  */
 @BridgeService(client = "leaflet")
-class TagBridgeServiceImpl implements TagBridgeService {
+public class TagBridgeServiceImpl implements TagBridgeService {
 
     private static final String ID = "id";
 

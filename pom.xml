@@ -7,7 +7,7 @@
     <groupId>hu.psprog.leaflet</groupId>
     <artifactId>leaflet-rest-clients-pack</artifactId>
     <packaging>pom</packaging>
-    <version>1.1.0</version>
+    <version>1.2.0</version>
     <modules>
         <module>backend-rest-client</module>
         <module>rcp-bundle</module>
@@ -19,6 +19,7 @@
         <module>tms-rest-api</module>
         <module>recaptcha-rest-api</module>
         <module>recaptcha-rest-client</module>
+        <module>request-adapters</module>
     </modules>
 
     <properties>
@@ -33,7 +34,7 @@
 
         <!-- dependency versions -->
         <leaflet.rest-api.version>1.3.0</leaflet.rest-api.version>
-        <leaflet.bridge.version>2.1.0</leaflet.bridge.version>
+        <leaflet.bridge.version>3.0.0</leaflet.bridge.version>
         <spring.framework.version>4.3.9.RELEASE</spring.framework.version>
         <spring-boot-starter-test.version>1.5.4.RELEASE</spring-boot-starter-test.version>
         <commons-io.version>2.6</commons-io.version>
@@ -48,8 +49,10 @@
         <mockito-all.version>1.10.19</mockito-all.version>
         <hamcrest-all.version>1.3</hamcrest-all.version>
         <wiremock.version>2.18.0</wiremock.version>
+        <maven-surefire-plugin.version>2.20</maven-surefire-plugin.version>
         <maven-failsafe-plugin.version>2.20</maven-failsafe-plugin.version>
         <maven-source-plugin.version>3.0.1</maven-source-plugin.version>
+        <jacoco-maven-plugin.version>0.7.9</jacoco-maven-plugin.version>
     </properties>
 
     <dependencyManagement>
@@ -61,13 +64,19 @@
             </dependency>
             <dependency>
                 <groupId>hu.psprog.leaflet</groupId>
-                <artifactId>leaflet-bridge</artifactId>
+                <artifactId>bridge-implementation</artifactId>
                 <version>${leaflet.bridge.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-web</artifactId>
                 <version>${spring.framework.version}</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter</artifactId>
+                <version>${spring-boot-starter-test.version}</version>
                 <scope>provided</scope>
             </dependency>
             <dependency>
@@ -95,7 +104,7 @@
                 <groupId>org.slf4j</groupId>
                 <artifactId>slf4j-api</artifactId>
                 <version>${slf4j.version}</version>
-                <scope>test</scope>
+                <scope>provided</scope>
             </dependency>
             <dependency>
                 <groupId>org.slf4j</groupId>
@@ -115,8 +124,19 @@
                 <version>${logback.version}</version>
                 <scope>test</scope>
             </dependency>
+            <dependency>
+                <groupId>commons-io</groupId>
+                <artifactId>commons-io</artifactId>
+                <version>${commons-io.version}</version>
+            </dependency>
 
             <!-- test dependencies -->
+            <dependency>
+                <groupId>hu.psprog.leaflet</groupId>
+                <artifactId>bridge-spring-integration</artifactId>
+                <version>${leaflet.bridge.version}</version>
+                <scope>test</scope>
+            </dependency>
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-test</artifactId>
@@ -151,12 +171,6 @@
                 <groupId>com.github.tomakehurst</groupId>
                 <artifactId>wiremock-standalone</artifactId>
                 <version>${wiremock.version}</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>commons-io</groupId>
-                <artifactId>commons-io</artifactId>
-                <version>${commons-io.version}</version>
                 <scope>test</scope>
             </dependency>
         </dependencies>
@@ -232,9 +246,60 @@
     <build>
         <plugins>
             <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>${jacoco-maven-plugin.version}</version>
+                <configuration>
+                    <excludes>
+                        <exclude>**/domain/**</exclude>
+                        <exclude>**/config/**</exclude>
+                    </excludes>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>it-pre</id>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                        <configuration>
+                            <destFile>${project.build.directory}/coverage/jacoco-it.exec</destFile>
+                            <propertyName>argLine.failsafe</propertyName>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>it-post</id>
+                        <phase>post-integration-test</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                        <configuration>
+                            <dataFile>${project.build.directory}/coverage/jacoco-it.exec</dataFile>
+                            <outputDirectory>${project.reporting.outputDirectory}/jacoco-it</outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>${maven-surefire-plugin.version}</version>
+                <configuration>
+                    <excludes>
+                        <exclude>*</exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
                 <version>${maven-failsafe-plugin.version}</version>
+                <configuration>
+                    <argLine>${argLine.failsafe}</argLine>
+                    <includes>
+                        <include>**/*IT.*</include>
+                        <include>**/*Test.*</include>
+                    </includes>
+                </configuration>
                 <executions>
                     <execution>
                         <id>integration-tests</id>
