@@ -261,7 +261,7 @@ public class EntryBridgeServiceImplIT extends WireMockBaseTest {
 
     private EntryCreateRequestModel prepareEntryCreateRequestModel() {
         EntryCreateRequestModel entryCreateRequestModel = new EntryCreateRequestModel();
-        entryCreateRequestModel.setContent("entry");
+        entryCreateRequestModel.setRawContent("entry");
         return entryCreateRequestModel;
     }
 
