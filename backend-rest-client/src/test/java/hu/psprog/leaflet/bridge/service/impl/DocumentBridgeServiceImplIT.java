@@ -197,7 +197,7 @@ public class DocumentBridgeServiceImplIT extends WireMockBaseTest {
 
     private DocumentCreateRequestModel prepareDocumentCreateRequestModel() {
         DocumentCreateRequestModel documentCreateRequestModel = new DocumentCreateRequestModel();
-        documentCreateRequestModel.setContent("content");
+        documentCreateRequestModel.setRawContent("content");
         return documentCreateRequestModel;
     }
 
@@ -211,7 +211,6 @@ public class DocumentBridgeServiceImplIT extends WireMockBaseTest {
     private EditDocumentDataModel prepareEditDocumentDataModel(Long documentID) {
         return EditDocumentDataModel.getExtendedBuilder()
                 .withId(documentID)
-                .withContent("Content")
                 .withCreated("Creation date")
                 .withLink("document-" + documentID.toString())
                 .withTitle("Document #" + documentID)
@@ -225,7 +224,7 @@ public class DocumentBridgeServiceImplIT extends WireMockBaseTest {
     private DocumentDataModel prepareDocumentDataModel(Long documentID) {
         return DocumentDataModel.getBuilder()
                 .withId(documentID)
-                .withContent("Content")
+                .withRawContent("Content")
                 .withCreated("Creation date")
                 .withLink("document-" + documentID.toString())
                 .withTitle("Document #" + documentID)
