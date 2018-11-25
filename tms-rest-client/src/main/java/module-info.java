@@ -6,4 +6,6 @@ module leaflet.component.rest.tms.client {
     requires spring.boot;
     requires spring.context;
     requires leaflet.component.rest.tms.api;
+
+    exports hu.psprog.leaflet.translation.client;
 }
