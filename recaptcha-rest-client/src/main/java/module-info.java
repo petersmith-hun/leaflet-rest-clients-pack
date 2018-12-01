@@ -1,4 +1,4 @@
-module leaflet.component.rest.recaptcha.client {
+open module leaflet.component.rest.recaptcha.client {
     requires leaflet.component.bridge.api;
     requires leaflet.component.bridge.implementation;
     requires spring.beans;

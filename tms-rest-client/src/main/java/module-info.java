@@ -1,4 +1,4 @@
-module leaflet.component.rest.tms.client {
+open module leaflet.component.rest.tms.client {
     requires java.ws.rs;
     requires leaflet.component.bridge.api;
     requires leaflet.component.bridge.implementation;

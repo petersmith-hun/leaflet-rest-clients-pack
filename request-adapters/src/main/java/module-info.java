@@ -1,4 +1,4 @@
-module leaflet.component.rest.request.adapters {
+open module leaflet.component.rest.request.adapters {
     requires java.ws.rs;
     requires jersey.media.multipart;
     requires leaflet.component.bridge.api;

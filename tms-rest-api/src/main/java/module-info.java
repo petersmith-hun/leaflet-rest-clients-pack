@@ -1,4 +1,4 @@
-module leaflet.component.rest.tms.api {
+open module leaflet.component.rest.tms.api {
     requires java.validation;
     requires org.apache.commons.lang3;
 
