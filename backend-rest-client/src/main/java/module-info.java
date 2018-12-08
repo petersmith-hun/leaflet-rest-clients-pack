@@ -7,4 +7,5 @@ open module leaflet.component.rest.backend.client {
     requires spring.context;
 
     exports hu.psprog.leaflet.bridge.service;
+    exports hu.psprog.leaflet.bridge.service.impl;
 }
