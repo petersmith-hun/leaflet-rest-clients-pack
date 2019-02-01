@@ -53,18 +53,18 @@ public class CommentBridgeServiceImplIT extends WireMockBaseTest {
     public void shouldGetPageOfPublicCommentsForEntry() throws CommunicationFailureException {
 
         // given
-        Long entryID = 1L;
+        String entryLink = "entry-link";
         int page = 1;
         int limit = 10;
         OrderBy.Comment orderBy = OrderBy.Comment.CREATED;
         OrderDirection orderDirection = OrderDirection.ASC;
-        String uri = prepareURI(LeafletPath.COMMENTS_PUBLIC_PAGE_BY_ENTRY.getURI(), entryID, page);
+        String uri = prepareURI(LeafletPath.COMMENTS_PUBLIC_PAGE_BY_ENTRY.getURI(), entryLink, page);
         WrapperBodyDataModel<CommentListDataModel> wrappedCommentListDataModel = prepareWrappedListDataModel(prepareCommentListDataModel());
         givenThat(get(urlPathEqualTo(uri))
                 .willReturn(ResponseDefinitionBuilder.okForJson(wrappedCommentListDataModel)));
 
         // when
-        WrapperBodyDataModel<CommentListDataModel> result = commentBridgeService.getPageOfPublicCommentsForEntry(entryID, page, limit, orderBy, orderDirection);
+        WrapperBodyDataModel<CommentListDataModel> result = commentBridgeService.getPageOfPublicCommentsForEntry(entryLink, page, limit, orderBy, orderDirection);
 
         // then
         assertThat(result, equalTo(wrappedCommentListDataModel));
