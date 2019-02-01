@@ -20,7 +20,7 @@ public enum LeafletPath implements Path {
 
     // comment related paths
     COMMENTS("/comments"),
-    COMMENTS_PUBLIC_PAGE_BY_ENTRY("/comments/entry/{id}/{page}"),
+    COMMENTS_PUBLIC_PAGE_BY_ENTRY("/comments/entry/{link}/{page}"),
     COMMENTS_ALL_PAGE_BY_ENTRY("/comments/entry/{id}/{page}/all"),
     COMMENTS_BY_ID("/comments/{id}"),
     COMMENTS_STATUS("/comments/{id}/status"),

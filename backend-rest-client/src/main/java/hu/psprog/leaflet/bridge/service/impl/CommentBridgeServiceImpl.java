@@ -32,6 +32,7 @@ public class CommentBridgeServiceImpl implements CommentBridgeService {
     private static final String ORDER_BY = "orderBy";
     private static final String ORDER_DIRECTION = "orderDirection";
     private static final String ID = "id";
+    private static final String LINK = "link";
 
     private BridgeClient bridgeClient;
 
@@ -41,13 +42,13 @@ public class CommentBridgeServiceImpl implements CommentBridgeService {
     }
 
     @Override
-    public WrapperBodyDataModel<CommentListDataModel> getPageOfPublicCommentsForEntry(Long entryID, int page, int limit, OrderBy.Comment orderBy, OrderDirection orderDirection)
+    public WrapperBodyDataModel<CommentListDataModel> getPageOfPublicCommentsForEntry(String entryLink, int page, int limit, OrderBy.Comment orderBy, OrderDirection orderDirection)
             throws CommunicationFailureException {
 
         RESTRequest restRequest = RESTRequest.getBuilder()
                 .method(RequestMethod.GET)
                 .path(LeafletPath.COMMENTS_PUBLIC_PAGE_BY_ENTRY)
-                .addPathParameter(ID, String.valueOf(entryID))
+                .addPathParameter(LINK, entryLink)
                 .addPathParameter(PAGE, String.valueOf(page))
                 .addRequestParameters(LIMIT, String.valueOf(limit))
                 .addRequestParameters(ORDER_BY, orderBy.name())

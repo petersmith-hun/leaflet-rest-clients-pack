@@ -21,7 +21,7 @@ public interface CommentBridgeService {
      * Retrieves given page of public comments for given entry.
      * Should only be used for retrieving page > 1 of comments as first page will be automatically loaded for entry.
      *
-     * @param entryID ID of entry to retrieve comments for
+     * @param entryLink link of entry to retrieve comments for
      * @param page page number
      * @param limit number of comments on one page
      * @param orderBy order by {@link OrderBy.Comment} options
@@ -29,7 +29,7 @@ public interface CommentBridgeService {
      * @return list of comments
      * @throws CommunicationFailureException if client fails to reach backend application
      */
-    WrapperBodyDataModel<CommentListDataModel> getPageOfPublicCommentsForEntry(Long entryID, int page, int limit, OrderBy.Comment orderBy, OrderDirection orderDirection)
+    WrapperBodyDataModel<CommentListDataModel> getPageOfPublicCommentsForEntry(String entryLink, int page, int limit, OrderBy.Comment orderBy, OrderDirection orderDirection)
             throws CommunicationFailureException;
 
     /**
