@@ -66,6 +66,34 @@ public interface EntryBridgeService {
             throws CommunicationFailureException;
 
     /**
+     * Returns basic information of given page of public entries filtered by given tag ID.
+     *
+     * @param tagID tag ID to filter by
+     * @param page page number (page indexing starts at 1)
+     * @param limit number of entries on one page
+     * @param orderBy order by {@link OrderBy} options
+     * @param orderDirection order direction (ASC|DESC)
+     * @return page of public entries under given tag
+     * @throws CommunicationFailureException if client fails to reach backend application
+     */
+    WrapperBodyDataModel<EntryListDataModel> getPageOfPublicEntriesByTag(Long tagID, int page, int limit, OrderBy.Entry orderBy, OrderDirection orderDirection)
+            throws CommunicationFailureException;
+
+    /**
+     * Returns basic information of given page of public entries filtered by given content expression.
+     *
+     * @param content content expression to filter by
+     * @param page page number (page indexing starts at 1)
+     * @param limit number of entries on one page
+     * @param orderBy order by {@link OrderBy} options
+     * @param orderDirection order direction (ASC|DESC)
+     * @return page of public entries filtered by given content expression
+     * @throws CommunicationFailureException if client fails to reach backend application
+     */
+    WrapperBodyDataModel<EntryListDataModel> getPageOfPublicEntriesByContent(String content, int page, int limit, OrderBy.Entry orderBy, OrderDirection orderDirection)
+            throws CommunicationFailureException;
+
+    /**
      * Returns entry identified by given link.
      *
      * @param link link to identify entry

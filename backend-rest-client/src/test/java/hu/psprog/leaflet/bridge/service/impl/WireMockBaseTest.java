@@ -22,6 +22,7 @@ public abstract class WireMockBaseTest {
 
     static final String AUTHORIZATION_HEADER = "Authorization";
     static final StringValuePattern VALUE_PATTERN_BEARER_TOKEN = equalTo("Bearer token");
+    static final String CONTENT = "content";
     static final String LIMIT = "limit";
     static final String ORDER_BY = "orderBy";
     static final String ORDER_DIRECTION = "orderDirection";
