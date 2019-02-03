@@ -28,6 +28,7 @@ import javax.ws.rs.core.GenericType;
 public class EntryBridgeServiceImpl implements EntryBridgeService {
 
     private static final String PAGE = "page";
+    private static final String CONTENT = "content";
     private static final String LIMIT = "limit";
     private static final String ORDER_BY = "orderBy";
     private static final String ORDER_DIRECTION = "orderDirection";
@@ -95,6 +96,40 @@ public class EntryBridgeServiceImpl implements EntryBridgeService {
                 .path(LeafletPath.ENTRIES_CATEGORY_PAGE)
                 .addPathParameter(ID, String.valueOf(categoryID))
                 .addPathParameter(PAGE, String.valueOf(page))
+                .addRequestParameters(LIMIT, String.valueOf(limit))
+                .addRequestParameters(ORDER_BY, orderBy.name())
+                .addRequestParameters(ORDER_DIRECTION, orderDirection.name())
+                .build();
+
+        return bridgeClient.call(restRequest, new GenericType<WrapperBodyDataModel<EntryListDataModel>>() {});
+    }
+
+    @Override
+    public WrapperBodyDataModel<EntryListDataModel> getPageOfPublicEntriesByTag(Long tagID, int page, int limit, OrderBy.Entry orderBy, OrderDirection orderDirection)
+            throws CommunicationFailureException {
+
+        RESTRequest restRequest = RESTRequest.getBuilder()
+                .method(RequestMethod.GET)
+                .path(LeafletPath.ENTRIES_TAG_PAGE)
+                .addPathParameter(ID, String.valueOf(tagID))
+                .addPathParameter(PAGE, String.valueOf(page))
+                .addRequestParameters(LIMIT, String.valueOf(limit))
+                .addRequestParameters(ORDER_BY, orderBy.name())
+                .addRequestParameters(ORDER_DIRECTION, orderDirection.name())
+                .build();
+
+        return bridgeClient.call(restRequest, new GenericType<WrapperBodyDataModel<EntryListDataModel>>() {});
+    }
+
+    @Override
+    public WrapperBodyDataModel<EntryListDataModel> getPageOfPublicEntriesByContent(String content, int page, int limit, OrderBy.Entry orderBy, OrderDirection orderDirection)
+            throws CommunicationFailureException {
+
+        RESTRequest restRequest = RESTRequest.getBuilder()
+                .method(RequestMethod.GET)
+                .path(LeafletPath.ENTRIES_CONTENT_PAGE)
+                .addPathParameter(PAGE, String.valueOf(page))
+                .addRequestParameters(CONTENT, content)
                 .addRequestParameters(LIMIT, String.valueOf(limit))
                 .addRequestParameters(ORDER_BY, orderBy.name())
                 .addRequestParameters(ORDER_DIRECTION, orderDirection.name())

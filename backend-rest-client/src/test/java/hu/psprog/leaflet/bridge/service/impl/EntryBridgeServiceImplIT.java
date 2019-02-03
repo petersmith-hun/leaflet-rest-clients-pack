@@ -144,6 +144,59 @@ public class EntryBridgeServiceImplIT extends WireMockBaseTest {
     }
 
     @Test
+    public void shouldGetPageOfPublicEntriesByTag() throws CommunicationFailureException {
+
+        // given
+        EntryListDataModel entryListDataModel = prepareEntryListDataModel();
+        WrapperBodyDataModel<EntryListDataModel> wrappedEntryListDataModel = prepareWrappedListDataModel(entryListDataModel);
+        Long tagID = 1L;
+        int page = 1;
+        int limit = 10;
+        OrderBy.Entry orderBy = OrderBy.Entry.CREATED;
+        OrderDirection orderDirection = OrderDirection.ASC;
+        String uri = prepareURI(LeafletPath.ENTRIES_TAG_PAGE.getURI(), tagID, page);
+        givenThat(get(urlPathEqualTo(uri))
+                .willReturn(ResponseDefinitionBuilder.okForJson(wrappedEntryListDataModel)));
+
+        // when
+        WrapperBodyDataModel<EntryListDataModel> result = entryBridgeService.getPageOfPublicEntriesByTag(tagID, page, limit, orderBy, orderDirection);
+
+        // then
+        assertThat(result, equalTo(wrappedEntryListDataModel));
+        verify(getRequestedFor(urlPathEqualTo(uri))
+                .withQueryParam(LIMIT, WireMock.equalTo(String.valueOf(limit)))
+                .withQueryParam(ORDER_BY, WireMock.equalTo(orderBy.name()))
+                .withQueryParam(ORDER_DIRECTION, WireMock.equalTo(String.valueOf(orderDirection))));
+    }
+
+    @Test
+    public void shouldGetPageOfPublicEntriesByContent() throws CommunicationFailureException {
+
+        // given
+        EntryListDataModel entryListDataModel = prepareEntryListDataModel();
+        WrapperBodyDataModel<EntryListDataModel> wrappedEntryListDataModel = prepareWrappedListDataModel(entryListDataModel);
+        String content = "content";
+        int page = 1;
+        int limit = 10;
+        OrderBy.Entry orderBy = OrderBy.Entry.CREATED;
+        OrderDirection orderDirection = OrderDirection.ASC;
+        String uri = prepareURI(LeafletPath.ENTRIES_CONTENT_PAGE.getURI(), page);
+        givenThat(get(urlPathEqualTo(uri))
+                .willReturn(ResponseDefinitionBuilder.okForJson(wrappedEntryListDataModel)));
+
+        // when
+        WrapperBodyDataModel<EntryListDataModel> result = entryBridgeService.getPageOfPublicEntriesByContent(content, page, limit, orderBy, orderDirection);
+
+        // then
+        assertThat(result, equalTo(wrappedEntryListDataModel));
+        verify(getRequestedFor(urlPathEqualTo(uri))
+                .withQueryParam(CONTENT, WireMock.equalTo(content))
+                .withQueryParam(LIMIT, WireMock.equalTo(String.valueOf(limit)))
+                .withQueryParam(ORDER_BY, WireMock.equalTo(orderBy.name()))
+                .withQueryParam(ORDER_DIRECTION, WireMock.equalTo(String.valueOf(orderDirection))));
+    }
+
+    @Test
     public void shouldGetEntryByLink() throws CommunicationFailureException {
 
         // given
