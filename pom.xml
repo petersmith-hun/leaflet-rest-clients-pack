@@ -33,8 +33,8 @@
         <skip.it>false</skip.it>
 
         <!-- dependency versions -->
-        <leaflet.rest-api.version>1.5.0</leaflet.rest-api.version>
-        <leaflet.bridge.version>3.1.0</leaflet.bridge.version>
+        <leaflet.rest-api.version>1.6.0</leaflet.rest-api.version>
+        <leaflet.bridge.version>3.2.0</leaflet.bridge.version>
         <spring.framework.version>5.1.3.RELEASE</spring.framework.version>
         <spring-boot-starter-test.version>2.1.1.RELEASE</spring-boot-starter-test.version>
         <commons-io.version>2.6</commons-io.version>
