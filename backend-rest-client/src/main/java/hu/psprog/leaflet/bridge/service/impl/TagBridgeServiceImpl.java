@@ -1,5 +1,6 @@
 package hu.psprog.leaflet.bridge.service.impl;
 
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import hu.psprog.leaflet.api.rest.request.tag.TagAssignmentRequestModel;
 import hu.psprog.leaflet.api.rest.request.tag.TagCreateRequestModel;
 import hu.psprog.leaflet.api.rest.response.common.WrapperBodyDataModel;
@@ -46,6 +47,7 @@ public class TagBridgeServiceImpl implements TagBridgeService {
     }
 
     @Override
+    @HystrixCommand(groupKey = "leaflet.content", commandKey = "getAllPublicTags")
     public WrapperBodyDataModel<TagListDataModel> getAllPublicTags() throws CommunicationFailureException {
 
         RESTRequest restRequest = RESTRequest.getBuilder()
