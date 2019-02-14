@@ -149,6 +149,16 @@
                 <groupId>com.netflix.hystrix</groupId>
                 <artifactId>hystrix-javanica</artifactId>
                 <version>${hystrix-javanica.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>com.google.code.findbugs</groupId>
+                        <artifactId>jsr305</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>commons-logging</groupId>
+                        <artifactId>commons-logging</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
             <dependency>
                 <groupId>org.apache.tomcat.embed</groupId>
