@@ -1,6 +1,7 @@
 package hu.psprog.leaflet.rcp.hystrix.support.config;
 
 import com.netflix.hystrix.contrib.javanica.aop.aspectj.HystrixCommandAspect;
+import com.netflix.hystrix.contrib.servopublisher.HystrixServoMetricsPublisher;
 import com.netflix.hystrix.strategy.HystrixPlugins;
 import hu.psprog.leaflet.rcp.hystrix.support.execution.hook.BridgeSupportHystrixCommandExecutionHook;
 import hu.psprog.leaflet.rcp.hystrix.support.filter.HystrixContextFilter;
@@ -42,5 +43,6 @@ public class RCPHystrixSupportConfiguration implements InitializingBean {
 
     private void initHystrix() {
         HystrixPlugins.getInstance().registerCommandExecutionHook(new BridgeSupportHystrixCommandExecutionHook());
+        HystrixPlugins.getInstance().registerMetricsPublisher(HystrixServoMetricsPublisher.getInstance());
     }
 }

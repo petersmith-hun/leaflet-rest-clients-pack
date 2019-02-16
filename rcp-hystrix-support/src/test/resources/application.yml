@@ -1,0 +1,22 @@
+spring:
+  profiles: hystrix-enabled
+
+bridge.hystrix.enabled: true
+
+---
+
+spring:
+  profiles: hystrix-disabled
+
+bridge.hystrix.enabled: false
+
+---
+
+spring:
+  profiles: hystrix-broken
+
+bridge.hystrix.enabled: false
+
+---
+
+server.port: 9998

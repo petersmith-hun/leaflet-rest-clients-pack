@@ -1,5 +1,6 @@
 package hu.psprog.leaflet.failover.api.client.impl;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.tomakehurst.wiremock.client.ResponseDefinitionBuilder;
 import com.github.tomakehurst.wiremock.junit.WireMockClassRule;
 import hu.psprog.leaflet.bridge.client.exception.CommunicationFailureException;
@@ -88,6 +89,11 @@ public class FailoverClientImplTest {
     public static class FailoverClientTestConfiguration {
 
         static final String FAILOVER_CLIENT_INTEGRATION_TEST_PROFILE = "it";
+
+        @Bean
+        public ObjectMapper objectMapper() {
+            return new ObjectMapper();
+        }
 
         @Bean
         public RequestAuthentication requestAuthenticationStub() {

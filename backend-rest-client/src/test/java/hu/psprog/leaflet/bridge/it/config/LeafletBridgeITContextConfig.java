@@ -1,5 +1,6 @@
 package hu.psprog.leaflet.bridge.it.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import hu.psprog.leaflet.bridge.client.request.RequestAuthentication;
 import org.mockito.Mockito;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -29,13 +30,17 @@ public class LeafletBridgeITContextConfig {
 
     public static final String INTEGRATION_TEST_CONFIG_PROFILE = "it";
     static final String COMPONENT_SCAN_PACKAGE = "hu.psprog.leaflet.bridge";
-    private static final String WIRE_MOCK_SERVER_ADDRESS = "http://localhost:9999";
 
     private RequestAuthentication requestAuthentication = () -> {
         Map<String, String> auth = new HashMap<>();
         auth.put("Authorization", "Bearer token");
         return auth;
     };
+
+    @Bean
+    public ObjectMapper objectMapper() {
+        return new ObjectMapper();
+    }
 
     @Bean
     public RequestAuthentication requestAuthenticationStub() {

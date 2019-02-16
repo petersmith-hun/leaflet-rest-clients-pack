@@ -1,5 +1,6 @@
 package hu.psprog.leaflet.tlp.api.client.impl;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.tomakehurst.wiremock.client.ResponseDefinitionBuilder;
 import com.github.tomakehurst.wiremock.junit.WireMockClassRule;
 import com.github.tomakehurst.wiremock.matching.EqualToPattern;
@@ -133,6 +134,11 @@ public class TLPClientImplTest {
     public static class TLPClientTestConfiguration {
 
         static final String TLP_CLIENT_INTEGRATION_TEST_PROFILE = "it";
+
+        @Bean
+        public ObjectMapper objectMapper() {
+            return new ObjectMapper();
+        }
 
         @Bean
         public RequestAuthentication requestAuthenticationStub() {

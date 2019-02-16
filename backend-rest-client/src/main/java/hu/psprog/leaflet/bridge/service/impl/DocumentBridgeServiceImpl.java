@@ -1,5 +1,7 @@
 package hu.psprog.leaflet.bridge.service.impl;
 
+import com.netflix.hystrix.contrib.javanica.annotation.DefaultProperties;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import hu.psprog.leaflet.api.rest.request.document.DocumentCreateRequestModel;
 import hu.psprog.leaflet.api.rest.request.document.DocumentUpdateRequestModel;
 import hu.psprog.leaflet.api.rest.response.common.WrapperBodyDataModel;
@@ -23,7 +25,8 @@ import javax.ws.rs.core.GenericType;
  * @author Peter Smith
  */
 @BridgeService(client = "leaflet")
-public class DocumentBridgeServiceImpl implements DocumentBridgeService {
+@DefaultProperties(groupKey = "leaflet.content")
+public class DocumentBridgeServiceImpl extends HystrixDefaultConfiguration implements DocumentBridgeService {
 
     private static final String ID = "id";
     private static final String LINK = "link";
@@ -48,6 +51,7 @@ public class DocumentBridgeServiceImpl implements DocumentBridgeService {
     }
 
     @Override
+    @HystrixCommand
     public DocumentListDataModel getPublicDocuments() throws CommunicationFailureException {
 
         RESTRequest restRequest = RESTRequest.getBuilder()
@@ -72,6 +76,7 @@ public class DocumentBridgeServiceImpl implements DocumentBridgeService {
     }
 
     @Override
+    @HystrixCommand
     public WrapperBodyDataModel<DocumentDataModel> getDocumentByLink(String link) throws CommunicationFailureException {
 
         RESTRequest restRequest = RESTRequest.getBuilder()

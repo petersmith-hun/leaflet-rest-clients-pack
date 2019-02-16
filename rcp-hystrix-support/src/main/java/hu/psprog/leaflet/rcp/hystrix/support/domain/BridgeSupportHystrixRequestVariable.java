@@ -10,7 +10,7 @@ import org.springframework.web.context.request.RequestAttributes;
  */
 public final class BridgeSupportHystrixRequestVariable {
 
-    private static final HystrixRequestVariableDefault<RequestAttributes> HTTP_SERVLET_REQUEST = new HystrixRequestVariableDefault<>();
+    private static final HystrixRequestVariableDefault<RequestAttributes> REQUEST_ATTRIBUTES = new HystrixRequestVariableDefault<>();
 
     private BridgeSupportHystrixRequestVariable() {
     }
@@ -21,6 +21,6 @@ public final class BridgeSupportHystrixRequestVariable {
      * @return stored {@link RequestAttributes} wrapped as {@link HystrixRequestVariableDefault}
      */
     public static HystrixRequestVariableDefault<RequestAttributes> getInstance() {
-        return HTTP_SERVLET_REQUEST;
+        return REQUEST_ATTRIBUTES;
     }
 }

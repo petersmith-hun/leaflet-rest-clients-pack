@@ -1,5 +1,7 @@
 package hu.psprog.leaflet.bridge.service.impl;
 
+import com.netflix.hystrix.contrib.javanica.annotation.DefaultProperties;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import hu.psprog.leaflet.api.rest.request.comment.CommentCreateRequestModel;
 import hu.psprog.leaflet.api.rest.request.comment.CommentUpdateRequestModel;
 import hu.psprog.leaflet.api.rest.response.comment.CommentDataModel;
@@ -25,7 +27,8 @@ import javax.ws.rs.core.GenericType;
  * @author Peter Smith
  */
 @BridgeService(client = "leaflet")
-public class CommentBridgeServiceImpl implements CommentBridgeService {
+@DefaultProperties(groupKey = "leaflet.comments")
+public class CommentBridgeServiceImpl extends HystrixDefaultConfiguration implements CommentBridgeService {
 
     private static final String PAGE = "page";
     private static final String LIMIT = "limit";
@@ -42,6 +45,7 @@ public class CommentBridgeServiceImpl implements CommentBridgeService {
     }
 
     @Override
+    @HystrixCommand
     public WrapperBodyDataModel<CommentListDataModel> getPageOfPublicCommentsForEntry(String entryLink, int page, int limit, OrderBy.Comment orderBy, OrderDirection orderDirection)
             throws CommunicationFailureException {
 

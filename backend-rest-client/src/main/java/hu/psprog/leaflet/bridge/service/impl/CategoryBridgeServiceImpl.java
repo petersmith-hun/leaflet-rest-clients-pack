@@ -1,5 +1,6 @@
 package hu.psprog.leaflet.bridge.service.impl;
 
+import com.netflix.hystrix.contrib.javanica.annotation.DefaultProperties;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import hu.psprog.leaflet.api.rest.request.category.CategoryCreateRequestModel;
 import hu.psprog.leaflet.api.rest.response.category.CategoryDataModel;
@@ -19,7 +20,8 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @author Peter Smith
  */
 @BridgeService(client = "leaflet")
-public class CategoryBridgeServiceImpl implements CategoryBridgeService {
+@DefaultProperties(groupKey = "leaflet.content")
+public class CategoryBridgeServiceImpl extends HystrixDefaultConfiguration implements CategoryBridgeService {
 
     private static final String ID = "id";
 
@@ -43,7 +45,7 @@ public class CategoryBridgeServiceImpl implements CategoryBridgeService {
     }
 
     @Override
-    @HystrixCommand(groupKey = "leaflet.content", commandKey = "getPublicCategories")
+    @HystrixCommand
     public CategoryListDataModel getPublicCategories() throws CommunicationFailureException {
 
         RESTRequest restRequest = RESTRequest.getBuilder()

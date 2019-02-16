@@ -1,5 +1,6 @@
 package hu.psprog.leaflet.bridge.service.impl;
 
+import com.netflix.hystrix.contrib.javanica.annotation.DefaultProperties;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import hu.psprog.leaflet.api.rest.request.entry.EntryCreateRequestModel;
 import hu.psprog.leaflet.api.rest.request.entry.EntryUpdateRequestModel;
@@ -26,7 +27,8 @@ import javax.ws.rs.core.GenericType;
  * @author Peter Smith
  */
 @BridgeService(client = "leaflet")
-public class EntryBridgeServiceImpl implements EntryBridgeService {
+@DefaultProperties(groupKey = "leaflet.content")
+public class EntryBridgeServiceImpl extends HystrixDefaultConfiguration implements EntryBridgeService {
 
     private static final String PAGE = "page";
     private static final String CONTENT = "content";
@@ -56,7 +58,7 @@ public class EntryBridgeServiceImpl implements EntryBridgeService {
     }
 
     @Override
-    @HystrixCommand(groupKey = "leaflet.content", commandKey = "getPageOfPublicEntries")
+    @HystrixCommand
     public WrapperBodyDataModel<EntryListDataModel> getPageOfPublicEntries(int page, int limit, OrderBy.Entry orderBy, OrderDirection orderDirection)
             throws CommunicationFailureException {
 
@@ -90,6 +92,7 @@ public class EntryBridgeServiceImpl implements EntryBridgeService {
     }
 
     @Override
+    @HystrixCommand
     public WrapperBodyDataModel<EntryListDataModel> getPageOfPublicEntriesByCategory(Long categoryID, int page, int limit, OrderBy.Entry orderBy, OrderDirection orderDirection)
             throws CommunicationFailureException {
 
@@ -107,6 +110,7 @@ public class EntryBridgeServiceImpl implements EntryBridgeService {
     }
 
     @Override
+    @HystrixCommand
     public WrapperBodyDataModel<EntryListDataModel> getPageOfPublicEntriesByTag(Long tagID, int page, int limit, OrderBy.Entry orderBy, OrderDirection orderDirection)
             throws CommunicationFailureException {
 
@@ -124,6 +128,7 @@ public class EntryBridgeServiceImpl implements EntryBridgeService {
     }
 
     @Override
+    @HystrixCommand
     public WrapperBodyDataModel<EntryListDataModel> getPageOfPublicEntriesByContent(String content, int page, int limit, OrderBy.Entry orderBy, OrderDirection orderDirection)
             throws CommunicationFailureException {
 
@@ -141,6 +146,7 @@ public class EntryBridgeServiceImpl implements EntryBridgeService {
     }
 
     @Override
+    @HystrixCommand
     public WrapperBodyDataModel<ExtendedEntryDataModel> getEntryByLink(String link) throws CommunicationFailureException {
 
         RESTRequest request = RESTRequest.getBuilder()
