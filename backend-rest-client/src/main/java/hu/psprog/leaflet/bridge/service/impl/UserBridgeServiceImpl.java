@@ -1,5 +1,7 @@
 package hu.psprog.leaflet.bridge.service.impl;
 
+import com.netflix.hystrix.contrib.javanica.annotation.DefaultProperties;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import hu.psprog.leaflet.api.rest.request.user.LoginRequestModel;
 import hu.psprog.leaflet.api.rest.request.user.PasswordResetDemandRequestModel;
 import hu.psprog.leaflet.api.rest.request.user.UpdateProfileRequestModel;
@@ -25,7 +27,8 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @author Peter Smith
  */
 @BridgeService(client = "leaflet")
-public class UserBridgeServiceImpl implements UserBridgeService {
+@DefaultProperties(groupKey = "leaflet.user")
+public class UserBridgeServiceImpl extends HystrixDefaultConfiguration implements UserBridgeService {
 
     private static final String ID = "id";
 
@@ -114,6 +117,7 @@ public class UserBridgeServiceImpl implements UserBridgeService {
     }
 
     @Override
+    @HystrixCommand
     public ExtendedUserDataModel updateProfile(Long userID, UpdateProfileRequestModel updateProfileRequestModel) throws CommunicationFailureException {
 
         RESTRequest restRequest = RESTRequest.getBuilder()
@@ -128,6 +132,7 @@ public class UserBridgeServiceImpl implements UserBridgeService {
     }
 
     @Override
+    @HystrixCommand
     public ExtendedUserDataModel updatePassword(Long userID, UserPasswordRequestModel userPasswordRequestModel) throws CommunicationFailureException {
 
         RESTRequest restRequest = RESTRequest.getBuilder()
@@ -142,6 +147,7 @@ public class UserBridgeServiceImpl implements UserBridgeService {
     }
 
     @Override
+    @HystrixCommand
     public LoginResponseDataModel claimToken(LoginRequestModel loginRequestModel) throws CommunicationFailureException {
 
         RESTRequest restRequest = RESTRequest.getBuilder()
@@ -154,6 +160,7 @@ public class UserBridgeServiceImpl implements UserBridgeService {
     }
 
     @Override
+    @HystrixCommand
     public ExtendedUserDataModel signUp(UserInitializeRequestModel userInitializeRequestModel) throws CommunicationFailureException {
 
         RESTRequest restRequest = RESTRequest.getBuilder()
@@ -166,6 +173,7 @@ public class UserBridgeServiceImpl implements UserBridgeService {
     }
 
     @Override
+    @HystrixCommand
     public void revokeToken() throws CommunicationFailureException {
 
         RESTRequest restRequest = RESTRequest.getBuilder()
@@ -178,6 +186,7 @@ public class UserBridgeServiceImpl implements UserBridgeService {
     }
 
     @Override
+    @HystrixCommand
     public void demandPasswordReset(PasswordResetDemandRequestModel passwordResetDemandRequestModel) throws CommunicationFailureException {
 
         RESTRequest restRequest = RESTRequest.getBuilder()
@@ -190,6 +199,7 @@ public class UserBridgeServiceImpl implements UserBridgeService {
     }
 
     @Override
+    @HystrixCommand
     public void confirmPasswordReset(UserPasswordRequestModel userPasswordRequestModel) throws CommunicationFailureException {
 
         RESTRequest restRequest = RESTRequest.getBuilder()
@@ -203,6 +213,7 @@ public class UserBridgeServiceImpl implements UserBridgeService {
     }
 
     @Override
+    @HystrixCommand
     public LoginResponseDataModel renewToken() throws CommunicationFailureException {
 
         RESTRequest restRequest = RESTRequest.getBuilder()

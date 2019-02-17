@@ -87,6 +87,7 @@ public class FileBridgeServiceImplIT extends WireMockBaseTest {
         // then
         verify(getRequestedFor(urlEqualTo(uri)));
         assertThat(new String(IOUtils.toByteArray(result)), equalTo(responseBody));
+        result.close();
     }
 
     @Test

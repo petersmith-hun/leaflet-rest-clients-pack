@@ -1,5 +1,7 @@
 package hu.psprog.leaflet.bridge.service.impl;
 
+import com.netflix.hystrix.contrib.javanica.annotation.DefaultProperties;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import hu.psprog.leaflet.api.rest.request.tag.TagAssignmentRequestModel;
 import hu.psprog.leaflet.api.rest.request.tag.TagCreateRequestModel;
 import hu.psprog.leaflet.api.rest.response.common.WrapperBodyDataModel;
@@ -22,7 +24,8 @@ import javax.ws.rs.core.GenericType;
  * @author Peter Smith
  */
 @BridgeService(client = "leaflet")
-public class TagBridgeServiceImpl implements TagBridgeService {
+@DefaultProperties(groupKey = "leaflet.content")
+public class TagBridgeServiceImpl extends HystrixDefaultConfiguration implements TagBridgeService {
 
     private static final String ID = "id";
 
@@ -46,6 +49,7 @@ public class TagBridgeServiceImpl implements TagBridgeService {
     }
 
     @Override
+    @HystrixCommand
     public WrapperBodyDataModel<TagListDataModel> getAllPublicTags() throws CommunicationFailureException {
 
         RESTRequest restRequest = RESTRequest.getBuilder()

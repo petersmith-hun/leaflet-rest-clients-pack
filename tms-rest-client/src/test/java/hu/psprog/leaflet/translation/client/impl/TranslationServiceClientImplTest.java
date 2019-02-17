@@ -338,6 +338,11 @@ public class TranslationServiceClientImplTest {
         static final String TMS_CLIENT_INTEGRATION_TEST_PROFILE = "it";
 
         @Bean
+        public ObjectMapper objectMapper() {
+            return new ObjectMapper();
+        }
+
+        @Bean
         public RequestAuthentication requestAuthenticationStub() {
             return () -> {
                 Map<String, String> auth = new HashMap<>();
