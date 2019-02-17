@@ -21,8 +21,13 @@ public abstract class AbstractHystrixContextFilterBaseTest {
     public static final String REQUEST_PARAMETER_NAME = "request-parameter-to-be-passed";
     public static final String PASSED_REQUEST_PARAMETER_VALUE = "passed-value";
     public static final String QUERY_ATTRIBUTE = "pass";
+    public static final String CREDENTIAL_ATTRIBUTE = "credential";
     public static final String URL_SOURCE = "http://localhost:9998/hystrix/source";
-    public static final String URL_TARGET_TEMPLATE = "http://localhost:9998/hystrix/target?" + QUERY_ATTRIBUTE + "=%s";
+    public static final String URL_TARGET_TEMPLATE = "http://localhost:9998/hystrix/target?" + QUERY_ATTRIBUTE + "=%s&" + CREDENTIAL_ATTRIBUTE + "=%s";
+    public static final String HYSTRIX_USER = "hystrix-user";
+    public static final String HYSTRIX_PASSWORD = "hystrix-password";
+    public static final String RESPONSE_BODY_PATTERN = "%s/%s";
+    private static final String EXPECTED_RESPONSE = String.format(RESPONSE_BODY_PATTERN, PASSED_REQUEST_PARAMETER_VALUE, HYSTRIX_PASSWORD);
 
     @Autowired
     private TestRestTemplate restTemplate;
@@ -40,7 +45,7 @@ public abstract class AbstractHystrixContextFilterBaseTest {
         // then
         if (assertSuccess) {
             assertThat(result.getStatusCode(), equalTo(HttpStatus.OK));
-            assertThat(result.getBody(), equalTo(PASSED_REQUEST_PARAMETER_VALUE));
+            assertThat(result.getBody(), equalTo(EXPECTED_RESPONSE));
         } else {
             assertThat(result.getStatusCode(), equalTo(HttpStatus.INTERNAL_SERVER_ERROR));
         }

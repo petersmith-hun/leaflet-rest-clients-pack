@@ -1,8 +1,10 @@
 package hu.psprog.leaflet.rcp.hystrix.support.filter;
 
 import com.netflix.hystrix.strategy.concurrency.HystrixRequestContext;
-import hu.psprog.leaflet.rcp.hystrix.support.domain.BridgeSupportHystrixRequestVariable;
+import hu.psprog.leaflet.rcp.hystrix.support.domain.RequestAttributesHystrixRequestVariable;
+import hu.psprog.leaflet.rcp.hystrix.support.domain.SecurityContextHystrixRequestVariable;
 import org.springframework.core.Ordered;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -25,7 +27,8 @@ public class HystrixContextFilter extends OncePerRequestFilter implements Ordere
 
         HystrixRequestContext context = HystrixRequestContext.initializeContext();
         try {
-            BridgeSupportHystrixRequestVariable.getInstance().set(RequestContextHolder.getRequestAttributes());
+            RequestAttributesHystrixRequestVariable.getInstance().set(RequestContextHolder.getRequestAttributes());
+            SecurityContextHystrixRequestVariable.getInstance().set(SecurityContextHolder.getContext());
             filterChain.doFilter(request, response);
         } finally {
             context.shutdown();
@@ -34,6 +37,6 @@ public class HystrixContextFilter extends OncePerRequestFilter implements Ordere
 
     @Override
     public int getOrder() {
-        return HIGHEST_PRECEDENCE + 200;
+        return LOWEST_PRECEDENCE;
     }
 }

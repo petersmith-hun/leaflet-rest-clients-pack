@@ -8,11 +8,11 @@ import org.springframework.web.context.request.RequestAttributes;
  *
  * @author Peter Smith
  */
-public final class BridgeSupportHystrixRequestVariable {
+public final class RequestAttributesHystrixRequestVariable {
 
     private static final HystrixRequestVariableDefault<RequestAttributes> REQUEST_ATTRIBUTES = new HystrixRequestVariableDefault<>();
 
-    private BridgeSupportHystrixRequestVariable() {
+    private RequestAttributesHystrixRequestVariable() {
     }
 
     /**

@@ -1,6 +1,5 @@
 package hu.psprog.leaflet.rcp.hystrix.support.filter.mockapp;
 
-import hu.psprog.leaflet.rcp.hystrix.support.filter.AbstractHystrixContextFilterBaseTest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +8,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+
+import static hu.psprog.leaflet.rcp.hystrix.support.filter.AbstractHystrixContextFilterBaseTest.CREDENTIAL_ATTRIBUTE;
+import static hu.psprog.leaflet.rcp.hystrix.support.filter.AbstractHystrixContextFilterBaseTest.PASSED_REQUEST_PARAMETER_VALUE;
+import static hu.psprog.leaflet.rcp.hystrix.support.filter.AbstractHystrixContextFilterBaseTest.QUERY_ATTRIBUTE;
+import static hu.psprog.leaflet.rcp.hystrix.support.filter.AbstractHystrixContextFilterBaseTest.REQUEST_PARAMETER_NAME;
+import static hu.psprog.leaflet.rcp.hystrix.support.filter.AbstractHystrixContextFilterBaseTest.RESPONSE_BODY_PATTERN;
 
 /**
  * Test controller for simulating Hystrix-controlled client-server communication.
@@ -32,7 +37,7 @@ public class HystrixTestController {
     public ResponseEntity<String> testHystrixRequestContextSource(HttpServletRequest request) {
 
         LOGGER.info("Hystrix source test endpoint called on thread [{}]", Thread.currentThread().getName());
-        request.setAttribute(AbstractHystrixContextFilterBaseTest.REQUEST_PARAMETER_NAME, AbstractHystrixContextFilterBaseTest.PASSED_REQUEST_PARAMETER_VALUE);
+        request.setAttribute(REQUEST_PARAMETER_NAME, PASSED_REQUEST_PARAMETER_VALUE);
 
         ResponseEntity<String> response = hystrixTestClient.hystrixWrappedCall();
 
@@ -42,6 +47,7 @@ public class HystrixTestController {
     @GetMapping("/hystrix/target")
     public ResponseEntity<String> testHystrixRequestContextTarget(HttpServletRequest request) {
         LOGGER.info("Hystrix target test endpoint called on thread [{}]", Thread.currentThread().getName());
-        return ResponseEntity.ok(request.getParameter(AbstractHystrixContextFilterBaseTest.QUERY_ATTRIBUTE));
+        String responseBody = String.format(RESPONSE_BODY_PATTERN, request.getParameter(QUERY_ATTRIBUTE), request.getParameter(CREDENTIAL_ATTRIBUTE));
+        return ResponseEntity.ok(responseBody);
     }
 }

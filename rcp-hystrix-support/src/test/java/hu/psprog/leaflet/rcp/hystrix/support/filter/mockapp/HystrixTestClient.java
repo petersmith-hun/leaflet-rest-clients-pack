@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
@@ -38,11 +39,19 @@ public class HystrixTestClient {
      */
     @HystrixCommand
     public ResponseEntity<String> hystrixWrappedCall() {
-
         LOGGER.info("Calling target test endpoint on thread [{}]", Thread.currentThread().getName());
-        String passedValue = String.valueOf(request.getAttribute(AbstractHystrixContextFilterBaseTest.REQUEST_PARAMETER_NAME));
-        String url = String.format(AbstractHystrixContextFilterBaseTest.URL_TARGET_TEMPLATE, passedValue);
+        return restTemplate.getForEntity(prepareURL(), String.class);
+    }
 
-        return restTemplate.getForEntity(url, String.class);
+    private String prepareURL() {
+        return String.format(AbstractHystrixContextFilterBaseTest.URL_TARGET_TEMPLATE, getPassedValue(), getCredential());
+    }
+
+    private String getCredential() {
+        return SecurityContextHolder.getContext().getAuthentication().getCredentials().toString();
+    }
+
+    private String getPassedValue() {
+        return String.valueOf(request.getAttribute(AbstractHystrixContextFilterBaseTest.REQUEST_PARAMETER_NAME));
     }
 }
