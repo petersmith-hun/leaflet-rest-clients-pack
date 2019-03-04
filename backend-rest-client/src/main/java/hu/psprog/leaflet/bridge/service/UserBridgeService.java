@@ -105,10 +105,11 @@ public interface UserBridgeService {
      * Public registration for visitors.
      *
      * @param userInitializeRequestModel user data
+     * @param recaptchaToken ReCaptcha response token
      * @return response mapped to {@link ExtendedUserDataModel}
      * @throws CommunicationFailureException if client fails to reach backend application
      */
-    ExtendedUserDataModel signUp(UserInitializeRequestModel userInitializeRequestModel) throws CommunicationFailureException;
+    ExtendedUserDataModel signUp(UserInitializeRequestModel userInitializeRequestModel, String recaptchaToken) throws CommunicationFailureException;
 
     /**
      * Logout (token revoke).

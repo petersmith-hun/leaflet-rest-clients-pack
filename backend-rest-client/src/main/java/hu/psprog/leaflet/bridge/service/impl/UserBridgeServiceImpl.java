@@ -161,12 +161,13 @@ public class UserBridgeServiceImpl extends HystrixDefaultConfiguration implement
 
     @Override
     @HystrixCommand
-    public ExtendedUserDataModel signUp(UserInitializeRequestModel userInitializeRequestModel) throws CommunicationFailureException {
+    public ExtendedUserDataModel signUp(UserInitializeRequestModel userInitializeRequestModel, String recaptchaToken) throws CommunicationFailureException {
 
         RESTRequest restRequest = RESTRequest.getBuilder()
                 .method(RequestMethod.POST)
                 .path(LeafletPath.USERS_REGISTER)
                 .requestBody(userInitializeRequestModel)
+                .recaptchaResponse(recaptchaToken)
                 .build();
 
         return bridgeClient.call(restRequest, ExtendedUserDataModel.class);
