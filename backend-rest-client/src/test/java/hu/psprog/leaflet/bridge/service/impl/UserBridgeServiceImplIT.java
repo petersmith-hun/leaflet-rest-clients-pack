@@ -2,6 +2,7 @@ package hu.psprog.leaflet.bridge.service.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.github.tomakehurst.wiremock.client.ResponseDefinitionBuilder;
+import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.matching.StringValuePattern;
 import hu.psprog.leaflet.api.rest.request.user.LoginRequestModel;
 import hu.psprog.leaflet.api.rest.request.user.PasswordResetDemandRequestModel;
@@ -37,6 +38,7 @@ import static com.github.tomakehurst.wiremock.client.WireMock.put;
 import static com.github.tomakehurst.wiremock.client.WireMock.putRequestedFor;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
 import static com.github.tomakehurst.wiremock.client.WireMock.verify;
+import static hu.psprog.leaflet.bridge.client.domain.BridgeConstants.X_CAPTCHA_RESPONSE;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -48,6 +50,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 @RunWith(SpringJUnit4ClassRunner.class)
 @BridgeITSuite
 public class UserBridgeServiceImplIT extends WireMockBaseTest {
+
+    private static final String RECAPTCHA_TOKEN = "recaptcha-token";
 
     @Autowired
     private UserBridgeService userBridgeService;
@@ -246,11 +250,12 @@ public class UserBridgeServiceImplIT extends WireMockBaseTest {
                 .willReturn(ResponseDefinitionBuilder.okForJson(extendedUserDataModel)));
 
         // when
-        ExtendedUserDataModel result = userBridgeService.signUp(userInitializeRequestModel);
+        ExtendedUserDataModel result = userBridgeService.signUp(userInitializeRequestModel, RECAPTCHA_TOKEN);
 
         // then
         assertThat(result, equalTo(extendedUserDataModel));
         verify(postRequestedFor(urlEqualTo(LeafletPath.USERS_REGISTER.getURI()))
+                .withHeader(X_CAPTCHA_RESPONSE, WireMock.equalTo(RECAPTCHA_TOKEN))
                 .withRequestBody(requestBody));
     }
 
