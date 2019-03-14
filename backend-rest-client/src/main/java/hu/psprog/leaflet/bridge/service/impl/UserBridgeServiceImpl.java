@@ -188,12 +188,13 @@ public class UserBridgeServiceImpl extends HystrixDefaultConfiguration implement
 
     @Override
     @HystrixCommand
-    public void demandPasswordReset(PasswordResetDemandRequestModel passwordResetDemandRequestModel) throws CommunicationFailureException {
+    public void demandPasswordReset(PasswordResetDemandRequestModel passwordResetDemandRequestModel, String recaptchaToken) throws CommunicationFailureException {
 
         RESTRequest restRequest = RESTRequest.getBuilder()
                 .method(RequestMethod.POST)
                 .path(LeafletPath.USERS_RECLAIM)
                 .requestBody(passwordResetDemandRequestModel)
+                .recaptchaResponse(recaptchaToken)
                 .build();
 
         bridgeClient.call(restRequest);
@@ -201,12 +202,13 @@ public class UserBridgeServiceImpl extends HystrixDefaultConfiguration implement
 
     @Override
     @HystrixCommand
-    public void confirmPasswordReset(UserPasswordRequestModel userPasswordRequestModel) throws CommunicationFailureException {
+    public void confirmPasswordReset(UserPasswordRequestModel userPasswordRequestModel, String recaptchaToken) throws CommunicationFailureException {
 
         RESTRequest restRequest = RESTRequest.getBuilder()
                 .method(RequestMethod.PUT)
                 .path(LeafletPath.USERS_RECLAIM)
                 .requestBody(userPasswordRequestModel)
+                .recaptchaResponse(recaptchaToken)
                 .authenticated()
                 .build();
 

@@ -285,11 +285,12 @@ public class UserBridgeServiceImplIT extends WireMockBaseTest {
                 .willReturn(aResponse().withStatus(201)));
 
         // when
-        userBridgeService.demandPasswordReset(passwordResetDemandRequestModel);
+        userBridgeService.demandPasswordReset(passwordResetDemandRequestModel, RECAPTCHA_TOKEN);
 
         // then
         verify(postRequestedFor(urlEqualTo(LeafletPath.USERS_RECLAIM.getURI()))
-                .withRequestBody(requestBody));
+                .withRequestBody(requestBody)
+                .withHeader(X_CAPTCHA_RESPONSE, WireMock.equalTo(RECAPTCHA_TOKEN)));
     }
 
     @Test
@@ -303,12 +304,13 @@ public class UserBridgeServiceImplIT extends WireMockBaseTest {
                 .willReturn(aResponse().withStatus(201)));
 
         // when
-        userBridgeService.confirmPasswordReset(userPasswordRequestModel);
+        userBridgeService.confirmPasswordReset(userPasswordRequestModel, RECAPTCHA_TOKEN);
 
         // then
         verify(putRequestedFor(urlEqualTo(LeafletPath.USERS_RECLAIM.getURI()))
                 .withRequestBody(requestBody)
-                .withHeader(AUTHORIZATION_HEADER, VALUE_PATTERN_BEARER_TOKEN));
+                .withHeader(AUTHORIZATION_HEADER, VALUE_PATTERN_BEARER_TOKEN)
+                .withHeader(X_CAPTCHA_RESPONSE, WireMock.equalTo(RECAPTCHA_TOKEN)));
     }
 
     @Test

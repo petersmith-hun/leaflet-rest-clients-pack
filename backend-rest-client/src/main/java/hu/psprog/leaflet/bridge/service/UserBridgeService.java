@@ -122,17 +122,19 @@ public interface UserBridgeService {
      * Starts password reset process.
      *
      * @param passwordResetDemandRequestModel user's email address wrapped in {@link PasswordResetDemandRequestModel} to request password reset for
+     * @param recaptchaToken ReCaptcha response token
      * @throws CommunicationFailureException if client fails to reach backend application
      */
-    void demandPasswordReset(PasswordResetDemandRequestModel passwordResetDemandRequestModel) throws CommunicationFailureException;
+    void demandPasswordReset(PasswordResetDemandRequestModel passwordResetDemandRequestModel, String recaptchaToken) throws CommunicationFailureException;
 
     /**
      * Confirms password reset request by providing the new password.
      *
      * @param userPasswordRequestModel {@link UserPasswordRequestModel} holding the new password and its confirmation
+     * @param recaptchaToken ReCaptcha response token
      * @throws CommunicationFailureException if client fails to reach backend application
      */
-    void confirmPasswordReset(UserPasswordRequestModel userPasswordRequestModel) throws CommunicationFailureException;
+    void confirmPasswordReset(UserPasswordRequestModel userPasswordRequestModel, String recaptchaToken) throws CommunicationFailureException;
 
     /**
      * Claims "session extension" - replaces given token with a new one.
