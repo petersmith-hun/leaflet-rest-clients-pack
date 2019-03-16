@@ -34,6 +34,7 @@ import static com.github.tomakehurst.wiremock.client.WireMock.putRequestedFor;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlPathEqualTo;
 import static com.github.tomakehurst.wiremock.client.WireMock.verify;
+import static hu.psprog.leaflet.bridge.client.domain.BridgeConstants.X_CAPTCHA_RESPONSE;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -45,6 +46,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 @RunWith(SpringJUnit4ClassRunner.class)
 @BridgeITSuite
 public class CommentBridgeServiceImplIT extends WireMockBaseTest {
+
+    private static final String RECAPTCHA_TOKEN = "recaptcha-token";
 
     @Autowired
     private CommentBridgeService commentBridgeService;
@@ -132,12 +135,13 @@ public class CommentBridgeServiceImplIT extends WireMockBaseTest {
                 .willReturn(ResponseDefinitionBuilder.okForJson(commentDataModel)));
 
         // when
-        CommentDataModel result = commentBridgeService.createComment(commentCreateRequestModel);
+        CommentDataModel result = commentBridgeService.createComment(commentCreateRequestModel, RECAPTCHA_TOKEN);
 
         // then
         assertThat(result, equalTo(commentDataModel));
         verify(postRequestedFor(urlEqualTo(LeafletPath.COMMENTS.getURI()))
-                .withHeader(AUTHORIZATION_HEADER, VALUE_PATTERN_BEARER_TOKEN));
+                .withHeader(AUTHORIZATION_HEADER, VALUE_PATTERN_BEARER_TOKEN)
+                .withHeader(X_CAPTCHA_RESPONSE, WireMock.equalTo(RECAPTCHA_TOKEN)));
     }
 
     @Test

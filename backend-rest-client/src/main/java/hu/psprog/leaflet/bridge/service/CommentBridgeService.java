@@ -60,10 +60,11 @@ public interface CommentBridgeService {
      * Creates a new comment.
      *
      * @param commentCreateRequestModel comment data
+     * @param recaptchaToken ReCaptcha response token
      * @return created comment data
      * @throws CommunicationFailureException if client fails to reach backend application
      */
-    CommentDataModel createComment(CommentCreateRequestModel commentCreateRequestModel) throws CommunicationFailureException;
+    CommentDataModel createComment(CommentCreateRequestModel commentCreateRequestModel, String recaptchaToken) throws CommunicationFailureException;
 
     /**
      * Updates given comment.

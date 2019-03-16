@@ -94,12 +94,13 @@ public class CommentBridgeServiceImpl extends HystrixDefaultConfiguration implem
     }
 
     @Override
-    public CommentDataModel createComment(CommentCreateRequestModel commentCreateRequestModel) throws CommunicationFailureException {
+    public CommentDataModel createComment(CommentCreateRequestModel commentCreateRequestModel, String recaptchaToken) throws CommunicationFailureException {
 
         RESTRequest restRequest = RESTRequest.getBuilder()
                 .method(RequestMethod.POST)
                 .path(LeafletPath.COMMENTS)
                 .requestBody(commentCreateRequestModel)
+                .recaptchaResponse(recaptchaToken)
                 .authenticated()
                 .build();
 
