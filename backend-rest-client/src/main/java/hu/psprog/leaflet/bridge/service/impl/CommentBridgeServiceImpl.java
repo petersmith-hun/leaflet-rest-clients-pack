@@ -81,6 +81,25 @@ public class CommentBridgeServiceImpl extends HystrixDefaultConfiguration implem
     }
 
     @Override
+    @HystrixCommand
+    public WrapperBodyDataModel<CommentListDataModel> getPageOfCommentsForUser(Long userID, int page, int limit, OrderBy.Comment orderBy, OrderDirection orderDirection)
+            throws CommunicationFailureException {
+
+        RESTRequest restRequest = RESTRequest.getBuilder()
+                .method(RequestMethod.GET)
+                .path(LeafletPath.COMMENTS_ALL_PAGE_BY_USER)
+                .addPathParameter(ID, String.valueOf(userID))
+                .addPathParameter(PAGE, String.valueOf(page))
+                .addRequestParameters(LIMIT, String.valueOf(limit))
+                .addRequestParameters(ORDER_BY, orderBy.name())
+                .addRequestParameters(ORDER_DIRECTION, orderDirection.name())
+                .authenticated()
+                .build();
+
+        return bridgeClient.call(restRequest, new GenericType<WrapperBodyDataModel<CommentListDataModel>>() {});
+    }
+
+    @Override
     public ExtendedCommentDataModel getComment(Long commentID) throws CommunicationFailureException {
 
         RESTRequest restRequest = RESTRequest.getBuilder()

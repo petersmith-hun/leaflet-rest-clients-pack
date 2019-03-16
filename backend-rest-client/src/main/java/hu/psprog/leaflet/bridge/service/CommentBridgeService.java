@@ -48,6 +48,21 @@ public interface CommentBridgeService {
             throws CommunicationFailureException;
 
     /**
+     * Retrieves given page of comments for given user (public and non-public comments as well).
+     * Should be used for admin and user profile operations.
+     *
+     * @param userID ID of user to retrieve comments for
+     * @param page page number
+     * @param limit number of comments on one page
+     * @param orderBy order by {@link OrderBy.Comment} options
+     * @param orderDirection order direction (ASC|DESC)
+     * @return list of comments
+     * @throws CommunicationFailureException if client fails to reach backend application
+     */
+    WrapperBodyDataModel<CommentListDataModel> getPageOfCommentsForUser(Long userID, int page, int limit, OrderBy.Comment orderBy, OrderDirection orderDirection)
+            throws CommunicationFailureException;
+
+    /**
      * Retrieves comment identified by given ID.
      *
      * @param commentID ID of comment to retrieve

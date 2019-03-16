@@ -105,6 +105,32 @@ public class CommentBridgeServiceImplIT extends WireMockBaseTest {
     }
 
     @Test
+    public void shouldGetPageOfCommentsForUser() throws CommunicationFailureException, JsonProcessingException {
+
+        // given
+        Long userID = 1L;
+        int page = 1;
+        int limit = 10;
+        OrderBy.Comment orderBy = OrderBy.Comment.CREATED;
+        OrderDirection orderDirection = OrderDirection.ASC;
+        String uri = prepareURI(LeafletPath.COMMENTS_ALL_PAGE_BY_USER.getURI(), userID, page);
+        WrapperBodyDataModel<CommentListDataModel> wrappedCommentListDataModel = prepareWrappedListDataModel(prepareCommentListDataModel());
+        givenThat(get(urlPathEqualTo(uri))
+                .willReturn(jsonResponse(wrappedCommentListDataModel)));
+
+        // when
+        WrapperBodyDataModel<CommentListDataModel> result = commentBridgeService.getPageOfCommentsForUser(userID, page, limit, orderBy, orderDirection);
+
+        // then
+        assertThat(result, equalTo(wrappedCommentListDataModel));
+        verify(getRequestedFor(urlPathEqualTo(uri))
+                .withQueryParam(LIMIT, WireMock.equalTo(String.valueOf(limit)))
+                .withQueryParam(ORDER_BY, WireMock.equalTo(orderBy.name()))
+                .withQueryParam(ORDER_DIRECTION, WireMock.equalTo(String.valueOf(orderDirection)))
+                .withHeader(AUTHORIZATION_HEADER, VALUE_PATTERN_BEARER_TOKEN));
+    }
+
+    @Test
     public void shouldGetComment() throws CommunicationFailureException, JsonProcessingException {
 
         // given
