@@ -1,7 +1,6 @@
 package hu.psprog.leaflet.bridge.service.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.github.tomakehurst.wiremock.client.ResponseDefinitionBuilder;
 import com.github.tomakehurst.wiremock.matching.StringValuePattern;
 import hu.psprog.leaflet.api.rest.request.document.DocumentCreateRequestModel;
 import hu.psprog.leaflet.api.rest.response.common.WrapperBodyDataModel;
@@ -16,6 +15,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import java.time.ZonedDateTime;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.delete;
 import static com.github.tomakehurst.wiremock.client.WireMock.deleteRequestedFor;
@@ -45,12 +46,12 @@ public class DocumentBridgeServiceImplIT extends WireMockBaseTest {
     private DocumentBridgeService documentBridgeService;
 
     @Test
-    public void shouldGetAllDocuments() throws CommunicationFailureException {
+    public void shouldGetAllDocuments() throws CommunicationFailureException, JsonProcessingException {
 
         // given
         DocumentListDataModel documentListDataModel = prepareDocumentListDataModel();
         givenThat(get(LeafletPath.DOCUMENTS.getURI())
-                .willReturn(ResponseDefinitionBuilder.okForJson(documentListDataModel)));
+                .willReturn(jsonResponse(documentListDataModel)));
 
         // when
         DocumentListDataModel result = documentBridgeService.getAllDocuments();
@@ -62,12 +63,12 @@ public class DocumentBridgeServiceImplIT extends WireMockBaseTest {
     }
 
     @Test
-    public void shouldGetPublicDocuments() throws CommunicationFailureException {
+    public void shouldGetPublicDocuments() throws CommunicationFailureException, JsonProcessingException {
 
         // given
         DocumentListDataModel documentListDataModel = prepareDocumentListDataModel();
         givenThat(get(LeafletPath.DOCUMENTS_PUBLIC.getURI())
-                .willReturn(ResponseDefinitionBuilder.okForJson(documentListDataModel)));
+                .willReturn(jsonResponse(documentListDataModel)));
 
         // when
         DocumentListDataModel result = documentBridgeService.getPublicDocuments();
@@ -78,7 +79,7 @@ public class DocumentBridgeServiceImplIT extends WireMockBaseTest {
     }
 
     @Test
-    public void shouldGetDocumentByID() throws CommunicationFailureException {
+    public void shouldGetDocumentByID() throws CommunicationFailureException, JsonProcessingException {
 
         // given
         EditDocumentDataModel editDocumentDataModel = prepareEditDocumentDataModel(1L);
@@ -86,7 +87,7 @@ public class DocumentBridgeServiceImplIT extends WireMockBaseTest {
         Long documentID = 1L;
         String uri = prepareURI(LeafletPath.DOCUMENTS_BY_ID.getURI(), documentID);
         givenThat(get(uri)
-                .willReturn(ResponseDefinitionBuilder.okForJson(wrappedEditDocumentDataModel)));
+                .willReturn(jsonResponse(wrappedEditDocumentDataModel)));
 
         // when
         WrapperBodyDataModel<EditDocumentDataModel> result = documentBridgeService.getDocumentByID(documentID);
@@ -98,7 +99,7 @@ public class DocumentBridgeServiceImplIT extends WireMockBaseTest {
     }
 
     @Test
-    public void shouldGetDocumentByLink() throws CommunicationFailureException {
+    public void shouldGetDocumentByLink() throws CommunicationFailureException, JsonProcessingException {
 
         // given
         DocumentDataModel documentDataModel = prepareDocumentDataModel(1L);
@@ -106,7 +107,7 @@ public class DocumentBridgeServiceImplIT extends WireMockBaseTest {
         String link = "document-1";
         String uri = prepareURI(LeafletPath.DOCUMENTS_BY_LINK.getURI(), link);
         givenThat(get(uri)
-                .willReturn(ResponseDefinitionBuilder.okForJson(wrappedDocumentDataModel)));
+                .willReturn(jsonResponse(wrappedDocumentDataModel)));
 
         // when
         WrapperBodyDataModel<DocumentDataModel> result = documentBridgeService.getDocumentByLink(link);
@@ -125,7 +126,7 @@ public class DocumentBridgeServiceImplIT extends WireMockBaseTest {
         StringValuePattern requestBody = equalToJson(OBJECT_MAPPER.writeValueAsString(documentCreateRequestModel));
         givenThat(post(LeafletPath.DOCUMENTS.getURI())
                 .withRequestBody(requestBody)
-                .willReturn(ResponseDefinitionBuilder.okForJson(editDocumentDataModel)));
+                .willReturn(jsonResponse(editDocumentDataModel)));
 
         // when
         EditDocumentDataModel result = documentBridgeService.createDocument(documentCreateRequestModel);
@@ -148,7 +149,7 @@ public class DocumentBridgeServiceImplIT extends WireMockBaseTest {
         String uri = prepareURI(LeafletPath.DOCUMENTS_BY_ID.getURI(), documentID);
         givenThat(put(uri)
                 .withRequestBody(requestBody)
-                .willReturn(ResponseDefinitionBuilder.okForJson(editDocumentDataModel)));
+                .willReturn(jsonResponse(editDocumentDataModel)));
 
         // when
         EditDocumentDataModel result = documentBridgeService.updateDocument(documentID, documentCreateRequestModel);
@@ -161,14 +162,14 @@ public class DocumentBridgeServiceImplIT extends WireMockBaseTest {
     }
 
     @Test
-    public void shouldChangeDocumentStatus() throws CommunicationFailureException {
+    public void shouldChangeDocumentStatus() throws CommunicationFailureException, JsonProcessingException {
 
         // given
         Long documentID = 1L;
         String uri = prepareURI(LeafletPath.DOCUMENTS_STATUS.getURI(), documentID);
         EditDocumentDataModel editDocumentDataModel = prepareEditDocumentDataModel(1L);
         givenThat(put(uri)
-                .willReturn(ResponseDefinitionBuilder.okForJson(editDocumentDataModel)));
+                .willReturn(jsonResponse(editDocumentDataModel)));
 
         // when
         EditDocumentDataModel result = documentBridgeService.changeStatus(documentID);
@@ -211,12 +212,12 @@ public class DocumentBridgeServiceImplIT extends WireMockBaseTest {
     private EditDocumentDataModel prepareEditDocumentDataModel(Long documentID) {
         return EditDocumentDataModel.getExtendedBuilder()
                 .withId(documentID)
-                .withCreated("Creation date")
+                .withCreated(ZonedDateTime.now(ZONE_ID))
                 .withLink("document-" + documentID.toString())
                 .withTitle("Document #" + documentID)
                 .withUser(null)
                 .withEnabled(true)
-                .withLastModified("Last modification date")
+                .withLastModified(ZonedDateTime.now(ZONE_ID))
                 .withRawContent("Raw content")
                 .build();
     }
@@ -225,7 +226,7 @@ public class DocumentBridgeServiceImplIT extends WireMockBaseTest {
         return DocumentDataModel.getBuilder()
                 .withId(documentID)
                 .withRawContent("Content")
-                .withCreated("Creation date")
+                .withCreated(ZonedDateTime.now(ZONE_ID))
                 .withLink("document-" + documentID.toString())
                 .withTitle("Document #" + documentID)
                 .withUser(null)
