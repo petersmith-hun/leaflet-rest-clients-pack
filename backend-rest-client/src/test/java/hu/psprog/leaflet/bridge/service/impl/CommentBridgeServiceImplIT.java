@@ -7,6 +7,7 @@ import hu.psprog.leaflet.api.rest.request.comment.CommentCreateRequestModel;
 import hu.psprog.leaflet.api.rest.response.comment.CommentDataModel;
 import hu.psprog.leaflet.api.rest.response.comment.CommentListDataModel;
 import hu.psprog.leaflet.api.rest.response.comment.ExtendedCommentDataModel;
+import hu.psprog.leaflet.api.rest.response.comment.ExtendedCommentListDataModel;
 import hu.psprog.leaflet.api.rest.response.common.WrapperBodyDataModel;
 import hu.psprog.leaflet.api.rest.response.user.UserDataModel;
 import hu.psprog.leaflet.bridge.client.domain.OrderBy;
@@ -114,12 +115,12 @@ public class CommentBridgeServiceImplIT extends WireMockBaseTest {
         OrderBy.Comment orderBy = OrderBy.Comment.CREATED;
         OrderDirection orderDirection = OrderDirection.ASC;
         String uri = prepareURI(LeafletPath.COMMENTS_ALL_PAGE_BY_USER.getURI(), userID, page);
-        WrapperBodyDataModel<CommentListDataModel> wrappedCommentListDataModel = prepareWrappedListDataModel(prepareCommentListDataModel());
+        WrapperBodyDataModel<ExtendedCommentListDataModel> wrappedCommentListDataModel = prepareWrappedListDataModel(prepareExtendedCommentListDataModel());
         givenThat(get(urlPathEqualTo(uri))
                 .willReturn(jsonResponse(wrappedCommentListDataModel)));
 
         // when
-        WrapperBodyDataModel<CommentListDataModel> result = commentBridgeService.getPageOfCommentsForUser(userID, page, limit, orderBy, orderDirection);
+        WrapperBodyDataModel<ExtendedCommentListDataModel> result = commentBridgeService.getPageOfCommentsForUser(userID, page, limit, orderBy, orderDirection);
 
         // then
         assertThat(result, equalTo(wrappedCommentListDataModel));
@@ -249,6 +250,13 @@ public class CommentBridgeServiceImplIT extends WireMockBaseTest {
         return CommentListDataModel.getBuilder()
                 .withItem(prepareCommentDataModel(1L))
                 .withItem(prepareCommentDataModel(2L))
+                .build();
+    }
+
+    private ExtendedCommentListDataModel prepareExtendedCommentListDataModel() {
+        return ExtendedCommentListDataModel.getBuilder()
+                .withItem(prepareExtendedCommentDataModel(1L))
+                .withItem(prepareExtendedCommentDataModel(2L))
                 .build();
     }
 
