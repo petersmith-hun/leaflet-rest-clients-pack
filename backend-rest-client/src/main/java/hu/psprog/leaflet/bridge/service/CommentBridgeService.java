@@ -5,6 +5,7 @@ import hu.psprog.leaflet.api.rest.request.comment.CommentUpdateRequestModel;
 import hu.psprog.leaflet.api.rest.response.comment.CommentDataModel;
 import hu.psprog.leaflet.api.rest.response.comment.CommentListDataModel;
 import hu.psprog.leaflet.api.rest.response.comment.ExtendedCommentDataModel;
+import hu.psprog.leaflet.api.rest.response.comment.ExtendedCommentListDataModel;
 import hu.psprog.leaflet.api.rest.response.common.WrapperBodyDataModel;
 import hu.psprog.leaflet.bridge.client.domain.OrderBy;
 import hu.psprog.leaflet.bridge.client.domain.OrderDirection;
@@ -48,6 +49,21 @@ public interface CommentBridgeService {
             throws CommunicationFailureException;
 
     /**
+     * Retrieves given page of comments for given user (public and non-public comments as well).
+     * Should be used for admin and user profile operations.
+     *
+     * @param userID ID of user to retrieve comments for
+     * @param page page number
+     * @param limit number of comments on one page
+     * @param orderBy order by {@link OrderBy.Comment} options
+     * @param orderDirection order direction (ASC|DESC)
+     * @return list of comments
+     * @throws CommunicationFailureException if client fails to reach backend application
+     */
+    WrapperBodyDataModel<ExtendedCommentListDataModel> getPageOfCommentsForUser(Long userID, int page, int limit, OrderBy.Comment orderBy, OrderDirection orderDirection)
+            throws CommunicationFailureException;
+
+    /**
      * Retrieves comment identified by given ID.
      *
      * @param commentID ID of comment to retrieve
@@ -60,10 +76,11 @@ public interface CommentBridgeService {
      * Creates a new comment.
      *
      * @param commentCreateRequestModel comment data
+     * @param recaptchaToken ReCaptcha response token
      * @return created comment data
      * @throws CommunicationFailureException if client fails to reach backend application
      */
-    CommentDataModel createComment(CommentCreateRequestModel commentCreateRequestModel) throws CommunicationFailureException;
+    CommentDataModel createComment(CommentCreateRequestModel commentCreateRequestModel, String recaptchaToken) throws CommunicationFailureException;
 
     /**
      * Updates given comment.

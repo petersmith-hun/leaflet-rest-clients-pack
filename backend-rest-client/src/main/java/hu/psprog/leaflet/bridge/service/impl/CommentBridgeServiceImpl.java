@@ -7,15 +7,16 @@ import hu.psprog.leaflet.api.rest.request.comment.CommentUpdateRequestModel;
 import hu.psprog.leaflet.api.rest.response.comment.CommentDataModel;
 import hu.psprog.leaflet.api.rest.response.comment.CommentListDataModel;
 import hu.psprog.leaflet.api.rest.response.comment.ExtendedCommentDataModel;
+import hu.psprog.leaflet.api.rest.response.comment.ExtendedCommentListDataModel;
 import hu.psprog.leaflet.api.rest.response.common.WrapperBodyDataModel;
 import hu.psprog.leaflet.bridge.client.BridgeClient;
 import hu.psprog.leaflet.bridge.client.domain.BridgeService;
 import hu.psprog.leaflet.bridge.client.domain.OrderBy;
 import hu.psprog.leaflet.bridge.client.domain.OrderDirection;
 import hu.psprog.leaflet.bridge.client.exception.CommunicationFailureException;
-import hu.psprog.leaflet.bridge.config.LeafletPath;
 import hu.psprog.leaflet.bridge.client.request.RESTRequest;
 import hu.psprog.leaflet.bridge.client.request.RequestMethod;
+import hu.psprog.leaflet.bridge.config.LeafletPath;
 import hu.psprog.leaflet.bridge.service.CommentBridgeService;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -81,6 +82,25 @@ public class CommentBridgeServiceImpl extends HystrixDefaultConfiguration implem
     }
 
     @Override
+    @HystrixCommand
+    public WrapperBodyDataModel<ExtendedCommentListDataModel> getPageOfCommentsForUser(Long userID, int page, int limit, OrderBy.Comment orderBy, OrderDirection orderDirection)
+            throws CommunicationFailureException {
+
+        RESTRequest restRequest = RESTRequest.getBuilder()
+                .method(RequestMethod.GET)
+                .path(LeafletPath.COMMENTS_ALL_PAGE_BY_USER)
+                .addPathParameter(ID, String.valueOf(userID))
+                .addPathParameter(PAGE, String.valueOf(page))
+                .addRequestParameters(LIMIT, String.valueOf(limit))
+                .addRequestParameters(ORDER_BY, orderBy.name())
+                .addRequestParameters(ORDER_DIRECTION, orderDirection.name())
+                .authenticated()
+                .build();
+
+        return bridgeClient.call(restRequest, new GenericType<WrapperBodyDataModel<ExtendedCommentListDataModel>>() {});
+    }
+
+    @Override
     public ExtendedCommentDataModel getComment(Long commentID) throws CommunicationFailureException {
 
         RESTRequest restRequest = RESTRequest.getBuilder()
@@ -94,12 +114,13 @@ public class CommentBridgeServiceImpl extends HystrixDefaultConfiguration implem
     }
 
     @Override
-    public CommentDataModel createComment(CommentCreateRequestModel commentCreateRequestModel) throws CommunicationFailureException {
+    public CommentDataModel createComment(CommentCreateRequestModel commentCreateRequestModel, String recaptchaToken) throws CommunicationFailureException {
 
         RESTRequest restRequest = RESTRequest.getBuilder()
                 .method(RequestMethod.POST)
                 .path(LeafletPath.COMMENTS)
                 .requestBody(commentCreateRequestModel)
+                .recaptchaResponse(recaptchaToken)
                 .authenticated()
                 .build();
 
