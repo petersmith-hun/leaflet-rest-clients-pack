@@ -63,6 +63,9 @@ public enum LeafletPath implements Path {
     ROUTES_BY_ID("/routes/{id}"),
     ROUTES_STATUS("/routes/{id}/status"),
 
+    // sitemap related paths
+    SITEMAP("/sitemap.xml"),
+
     // tag related paths
     TAGS("/tags"),
     TAGS_PUBLIC("/tags/public"),
