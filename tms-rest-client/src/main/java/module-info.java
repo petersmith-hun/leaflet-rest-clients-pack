@@ -6,6 +6,7 @@ open module leaflet.component.rest.tms.client {
     requires spring.boot;
     requires spring.context;
     requires leaflet.component.rest.tms.api;
+    requires com.fasterxml.jackson.databind;
 
     exports hu.psprog.leaflet.translation.client;
 }

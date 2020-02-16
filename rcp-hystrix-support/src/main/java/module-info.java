@@ -9,8 +9,8 @@ open module leaflet.component.rest.support.hystrix {
     requires spring.context;
     requires spring.security.core;
     requires spring.web;
-    requires slf4j.api;
-    requires tomcat.embed.core;
+    requires org.slf4j;
+    requires org.apache.tomcat.embed.core;
 
     exports hu.psprog.leaflet.rcp.hystrix.support.filter;
 }
