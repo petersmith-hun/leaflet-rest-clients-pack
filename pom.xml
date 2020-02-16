@@ -393,7 +393,7 @@
                         <include>**/*IT.*</include>
                         <include>**/*Test.*</include>
                     </includes>
-                    <useModulePath>true</useModulePath>
+                    <useModulePath>false</useModulePath>
                 </configuration>
                 <executions>
                     <execution>
