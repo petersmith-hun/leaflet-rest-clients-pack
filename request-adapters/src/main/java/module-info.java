@@ -4,7 +4,7 @@ open module leaflet.component.rest.request.adapters {
     requires leaflet.component.bridge.api;
     requires leaflet.component.rest.backend.api;
     requires org.apache.commons.io;
-    requires slf4j.api;
+    requires org.slf4j;
     requires spring.beans;
     requires spring.context;
     requires spring.web;
