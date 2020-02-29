@@ -1,0 +1,38 @@
+version: 2.1
+orbs:
+  jira: circleci/jira@1.1.2
+jobs:
+  build_leaflet-rest-clients-pack:
+    docker:
+      - image: cimg/openjdk:11.0.6
+    steps:
+      - checkout
+      - run:
+          command: mvn clean deploy -s .circleci/settings.xml
+          name: Build and upload to Leaflet Internal repository
+      - store_test_results:
+          path: backend-rest-client/target/failsafe-reports
+      - store_test_results:
+          path: failover-rest-client/target/failsafe-reports
+      - store_test_results:
+          path: recaptcha-rest-client/target/failsafe-reports
+      - store_test_results:
+          path: tlp-rest-client/target/failsafe-reports
+      - store_test_results:
+          path: tms-rest-client/target/failsafe-reports
+      - store_test_results:
+          path: rcp-hystrix-support/target/failsafe-reports
+workflows:
+  build:
+    jobs:
+      - build_leaflet-rest-clients-pack:
+         context: leaflet_ci
+         filters:
+           branches:
+             only:
+               - master
+         post-steps:
+           - jira/notify:
+               environment_type: production
+               job_type: build
+  version: 2.1
