@@ -27,6 +27,10 @@ workflows:
     jobs:
       - build_leaflet-rest-clients-pack:
          context: leaflet_ci
+         filters:
+           branches:
+             only:
+               - master
          post-steps:
            - jira/notify:
                environment_type: production
