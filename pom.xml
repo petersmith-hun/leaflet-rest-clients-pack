@@ -47,7 +47,7 @@
         <slf4j.version>1.7.30</slf4j.version>
         <hibernate-validator.version>6.1.2.Final</hibernate-validator.version>
         <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
-        <tomcat-embed-core.version>9.0.31</tomcat-embed-core.version>
+        <tomcat-embed-core.version>9.0.35</tomcat-embed-core.version>
         <spring-security-core.version>5.2.2.RELEASE</spring-security-core.version>
         <aspectjweaver.version>1.9.5</aspectjweaver.version>
 
