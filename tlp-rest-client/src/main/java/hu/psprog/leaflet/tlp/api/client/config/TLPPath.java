@@ -9,7 +9,8 @@ import hu.psprog.leaflet.bridge.client.request.Path;
  */
 public enum TLPPath implements Path {
 
-    LOGS("/logs");
+    LOGS("/logs"),
+    LOGS_V2("/v2/logs");
 
     private String uri;
 

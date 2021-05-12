@@ -40,6 +40,8 @@ import java.util.Map;
 import static com.github.tomakehurst.wiremock.client.WireMock.get;
 import static com.github.tomakehurst.wiremock.client.WireMock.getRequestedFor;
 import static com.github.tomakehurst.wiremock.client.WireMock.givenThat;
+import static com.github.tomakehurst.wiremock.client.WireMock.post;
+import static com.github.tomakehurst.wiremock.client.WireMock.postRequestedFor;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlPathEqualTo;
 import static com.github.tomakehurst.wiremock.client.WireMock.verify;
 import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.options;
@@ -79,6 +81,7 @@ public class TLPClientImplTest {
             .build();
 
     private static final LogRequest LOG_REQUEST = new LogRequest();
+    private static final String TLQL_LOG_REQUEST = "search with conditions source='leaflet'";
 
     static {
         LOG_REQUEST.setContent("content");
@@ -123,6 +126,22 @@ public class TLPClientImplTest {
                 .withQueryParam(QUERY_PARAM_FROM, new EqualToPattern(EXPECTED_FROM_DATE))
                 .withQueryParam(QUERY_PARAM_TO, new EqualToPattern(EXPECTED_TO_DATE))
                 .withQueryParam(QUERY_PARAM_CONTENT, new EqualToPattern(LOG_REQUEST.getContent())));
+    }
+
+    @Test
+    public void shouldGetLogsV2() throws CommunicationFailureException {
+
+        // given
+        givenThat(post(urlPathEqualTo(TLPPath.LOGS_V2.getURI()))
+                .willReturn(ResponseDefinitionBuilder.okForJson(LOG_EVENT_PAGE)));
+
+        // when
+        LogEventPage result = tlpClient.getLogs(TLQL_LOG_REQUEST);
+
+        // then
+        assertThat(result, equalTo(LOG_EVENT_PAGE));
+        verify(postRequestedFor(urlPathEqualTo(TLPPath.LOGS_V2.getURI()))
+                .withRequestBody(new EqualToPattern(TLQL_LOG_REQUEST)));
     }
 
     @Profile(TLP_CLIENT_INTEGRATION_TEST_PROFILE)

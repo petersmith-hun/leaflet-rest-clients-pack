@@ -35,7 +35,7 @@ public class TLPClientImpl implements TLPClient {
     private static final String QUERY_PARAM_TO = "to";
     private static final String QUERY_PARAM_CONTENT = "content";
     
-    private BridgeClient bridgeClient;
+    private final BridgeClient bridgeClient;
 
     @Autowired
     public TLPClientImpl(BridgeClient bridgeClient) {
@@ -57,6 +57,18 @@ public class TLPClientImpl implements TLPClient {
                 .addRequestParameters(QUERY_PARAM_FROM, formatDateAsString(logRequest.getFrom()))
                 .addRequestParameters(QUERY_PARAM_TO, formatDateAsString(logRequest.getTo()))
                 .addRequestParameters(QUERY_PARAM_CONTENT, logRequest.getContent())
+                .build();
+
+        return bridgeClient.call(restRequest, LogEventPage.class);
+    }
+
+    @Override
+    public LogEventPage getLogs(String logRequest) throws CommunicationFailureException {
+
+        RESTRequest restRequest = RESTRequest.getBuilder()
+                .method(RequestMethod.POST)
+                .path(TLPPath.LOGS_V2)
+                .requestBody(logRequest)
                 .build();
 
         return bridgeClient.call(restRequest, LogEventPage.class);
