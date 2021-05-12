@@ -19,4 +19,13 @@ public interface TLPClient {
      * @throws CommunicationFailureException when the client fails to reach TLP application
      */
     LogEventPage getLogs(LogRequest logRequest) throws CommunicationFailureException;
+
+    /**
+     * Makes an HTTP request for TLP logs retrieval via TLPv2 API.
+     *
+     * @param logRequest TLQL log query string
+     * @return response of TLP logs endpoint as {@link LogEventPage}
+     * @throws CommunicationFailureException when the client fails to reach TLP application
+     */
+    LogEventPage getLogs(String logRequest) throws CommunicationFailureException;
 }
