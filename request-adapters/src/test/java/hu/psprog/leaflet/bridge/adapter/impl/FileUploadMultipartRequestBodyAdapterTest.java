@@ -2,11 +2,11 @@ package hu.psprog.leaflet.bridge.adapter.impl;
 
 import hu.psprog.leaflet.api.rest.request.file.FileUploadRequestModel;
 import org.glassfish.jersey.media.multipart.FormDataMultiPart;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.util.ReflectionUtils;
 
@@ -21,7 +21,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
  *
  * author Peter Smith
  */
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class FileUploadMultipartRequestBodyAdapterTest {
 
     private static final String DESCRIPTION = "Mocked file upload";
@@ -38,7 +38,7 @@ public class FileUploadMultipartRequestBodyAdapterTest {
     @InjectMocks
     private FileUploadMultipartRequestBodyAdapter adapter;
 
-    @Before
+    @BeforeEach
     public void setup() throws IllegalAccessException {
         setBaseDirectory();
     }

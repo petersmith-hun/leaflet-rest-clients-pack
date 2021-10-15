@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.github.tomakehurst.wiremock.client.ResponseDefinitionBuilder;
 import com.github.tomakehurst.wiremock.client.WireMock;
-import com.github.tomakehurst.wiremock.junit.WireMockClassRule;
+import com.github.tomakehurst.wiremock.junit5.WireMockTest;
 import com.github.tomakehurst.wiremock.matching.MultipartValuePattern;
 import hu.psprog.leaflet.bridge.client.exception.CommunicationFailureException;
 import hu.psprog.leaflet.bridge.client.request.RequestAuthentication;
@@ -14,22 +14,17 @@ import hu.psprog.leaflet.recaptcha.api.client.config.ReCaptchaServicePath;
 import hu.psprog.leaflet.recaptcha.api.domain.ReCaptchaErrorCode;
 import hu.psprog.leaflet.recaptcha.api.domain.ReCaptchaRequest;
 import hu.psprog.leaflet.recaptcha.api.domain.ReCaptchaResponse;
-import org.junit.ClassRule;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.boot.test.context.ConfigFileApplicationContextInitializer;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -47,7 +42,6 @@ import static com.github.tomakehurst.wiremock.client.WireMock.post;
 import static com.github.tomakehurst.wiremock.client.WireMock.postRequestedFor;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlPathEqualTo;
 import static com.github.tomakehurst.wiremock.client.WireMock.verify;
-import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.options;
 import static hu.psprog.leaflet.recaptcha.api.client.impl.ReCaptchaClientImplTest.ReCaptchaClientTestConfiguration.RE_CAPTCHA_CLIENT_INTEGRATION_TEST_PROFILE;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -57,11 +51,11 @@ import static org.hamcrest.MatcherAssert.assertThat;
  *
  * @author Peter Smith
  */
-@RunWith(SpringJUnit4ClassRunner.class)
-@ActiveProfiles(RE_CAPTCHA_CLIENT_INTEGRATION_TEST_PROFILE)
-@ContextConfiguration(
+@SpringBootTest(
         classes = ReCaptchaClientImplTest.ReCaptchaClientTestConfiguration.class,
-        initializers = ConfigFileApplicationContextInitializer.class)
+        webEnvironment = SpringBootTest.WebEnvironment.NONE)
+@WireMockTest(httpPort = 9999)
+@ActiveProfiles(RE_CAPTCHA_CLIENT_INTEGRATION_TEST_PROFILE)
 public class ReCaptchaClientImplTest {
 
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper()
@@ -89,12 +83,6 @@ public class ReCaptchaClientImplTest {
             .withSuccess(false)
             .withErrorCodes(Collections.singletonList(ReCaptchaErrorCode.TIMEOUT_OR_DUPLICATE))
             .build();
-
-    @ClassRule
-    public static WireMockClassRule wireMockRule = new WireMockClassRule(options().port(9999));
-
-    @Rule
-    public WireMockClassRule wireMockInstanceRule = wireMockRule;
 
     @Autowired
     private ReCaptchaClient reCaptchaClient;

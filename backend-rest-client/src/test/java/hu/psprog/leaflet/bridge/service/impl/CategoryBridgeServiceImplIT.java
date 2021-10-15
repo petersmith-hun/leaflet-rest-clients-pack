@@ -9,10 +9,8 @@ import hu.psprog.leaflet.bridge.client.exception.CommunicationFailureException;
 import hu.psprog.leaflet.bridge.config.LeafletPath;
 import hu.psprog.leaflet.bridge.it.config.BridgeITSuite;
 import hu.psprog.leaflet.bridge.service.CategoryBridgeService;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.time.ZonedDateTime;
 
@@ -37,7 +35,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
  *
  * @author Peter Smith
  */
-@RunWith(SpringJUnit4ClassRunner.class)
 @BridgeITSuite
 public class CategoryBridgeServiceImplIT extends WireMockBaseTest {
 
@@ -194,7 +191,7 @@ public class CategoryBridgeServiceImplIT extends WireMockBaseTest {
     private CategoryDataModel prepareCategoryDataModel(Long categoryID) {
         return CategoryDataModel.getBuilder()
                 .withID(categoryID)
-                .withTitle("Category #" + categoryID.toString())
+                .withTitle("Category #" + categoryID)
                 .withDescription("Description for category")
                 .withCreated(ZonedDateTime.now(ZONE_ID))
                 .withLastModified(ZonedDateTime.now(ZONE_ID))

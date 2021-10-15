@@ -1,7 +1,7 @@
 package hu.psprog.leaflet.rcp.hystrix.support.filter;
 
 import com.netflix.hystrix.Hystrix;
-import org.junit.BeforeClass;
+import org.junit.jupiter.api.BeforeAll;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpStatus;
@@ -32,7 +32,7 @@ public abstract class AbstractHystrixContextFilterBaseTest {
     @Autowired
     private TestRestTemplate restTemplate;
 
-    @BeforeClass
+    @BeforeAll
     public static void setup() {
         Hystrix.reset();
     }

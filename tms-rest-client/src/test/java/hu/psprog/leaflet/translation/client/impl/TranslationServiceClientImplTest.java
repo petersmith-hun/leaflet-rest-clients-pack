@@ -3,7 +3,7 @@ package hu.psprog.leaflet.translation.client.impl;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.tomakehurst.wiremock.client.ResponseDefinitionBuilder;
-import com.github.tomakehurst.wiremock.junit.WireMockClassRule;
+import com.github.tomakehurst.wiremock.junit5.WireMockTest;
 import com.github.tomakehurst.wiremock.matching.EqualToPattern;
 import com.github.tomakehurst.wiremock.matching.StringValuePattern;
 import hu.psprog.leaflet.bridge.client.exception.CommunicationFailureException;
@@ -17,21 +17,17 @@ import hu.psprog.leaflet.translation.api.domain.TranslationPackCreationRequest;
 import hu.psprog.leaflet.translation.api.domain.TranslationPackMetaInfo;
 import hu.psprog.leaflet.translation.client.MessageSourceClient;
 import hu.psprog.leaflet.translation.client.TranslationServiceClient;
-import org.junit.ClassRule;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.boot.test.context.ConfigFileApplicationContextInitializer;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -55,9 +51,7 @@ import static com.github.tomakehurst.wiremock.client.WireMock.put;
 import static com.github.tomakehurst.wiremock.client.WireMock.putRequestedFor;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlPathEqualTo;
 import static com.github.tomakehurst.wiremock.client.WireMock.verify;
-import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.options;
 import static hu.psprog.leaflet.translation.client.impl.TranslationServiceClientImplTest.TranslationServiceClientTestConfiguration.TMS_CLIENT_INTEGRATION_TEST_PROFILE;
-import static junit.framework.TestCase.fail;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -68,11 +62,11 @@ import static org.hamcrest.MatcherAssert.assertThat;
  *
  * @author Peter Smith
  */
-@RunWith(SpringJUnit4ClassRunner.class)
-@ActiveProfiles(TMS_CLIENT_INTEGRATION_TEST_PROFILE)
-@ContextConfiguration(
+@SpringBootTest(
         classes = TranslationServiceClientImplTest.TranslationServiceClientTestConfiguration.class,
-        initializers = ConfigFileApplicationContextInitializer.class)
+        webEnvironment = SpringBootTest.WebEnvironment.NONE)
+@WireMockTest(httpPort = 9999)
+@ActiveProfiles(TMS_CLIENT_INTEGRATION_TEST_PROFILE)
 public class TranslationServiceClientImplTest {
 
     private static final UUID PACK_ID = UUID.randomUUID();
@@ -108,12 +102,6 @@ public class TranslationServiceClientImplTest {
         TRANSLATION_PACK_CREATION_REQUEST.setLocale(Locale.ENGLISH);
         TRANSLATION_PACK_CREATION_REQUEST.setDefinitions(prepareErrorMessage());
     }
-
-    @ClassRule
-    public static WireMockClassRule wireMockRule = new WireMockClassRule(options().port(9999));
-
-    @Rule
-    public WireMockClassRule wireMockInstanceRule = wireMockRule;
 
     @Autowired
     private TranslationServiceClient translationServiceClient;
@@ -173,8 +161,8 @@ public class TranslationServiceClientImplTest {
         assertThat(result, equalTo(TRANSLATION_PACK));
     }
 
-    @Test(expected = ResourceNotFoundException.class)
-    public void shouldGetPackByIDThrowException() throws JsonProcessingException, CommunicationFailureException {
+    @Test
+    public void shouldGetPackByIDThrowException() throws JsonProcessingException {
 
         // given
         givenThat(get(PATH_TRANSLATIONS_ID)
@@ -184,7 +172,7 @@ public class TranslationServiceClientImplTest {
                         .withBody(OBJECT_MAPPER.writeValueAsString(ERROR_MESSAGE_BODY))));
 
         // when
-        translationServiceClient.getPackByID(PACK_ID);
+        Assertions.assertThrows(ResourceNotFoundException.class, () -> translationServiceClient.getPackByID(PACK_ID));
 
         // then
         // exception expected
@@ -211,7 +199,7 @@ public class TranslationServiceClientImplTest {
     }
 
     @Test
-    public void shouldCreateTranslationPackWithValidationError() throws JsonProcessingException, CommunicationFailureException {
+    public void shouldCreateTranslationPackWithValidationError() throws JsonProcessingException {
 
         // given
         StringValuePattern requestBody = equalToJson(OBJECT_MAPPER.writeValueAsString(TRANSLATION_PACK_CREATION_REQUEST));
@@ -223,20 +211,14 @@ public class TranslationServiceClientImplTest {
                         .withBody(OBJECT_MAPPER.writeValueAsString(VALIDATION_ERROR_MESSAGE_BODY))));
 
         // when
-        try {
-            translationServiceClient.createTranslationPack(TRANSLATION_PACK_CREATION_REQUEST);
-            fail("Test case should have thrown exception");
-        } catch (ValidationFailureException exc) {
+        Assertions.assertThrows(ValidationFailureException.class, () -> translationServiceClient.createTranslationPack(TRANSLATION_PACK_CREATION_REQUEST));
 
-            // then
-            // exception expected
-            //assertThat(exc.getValidation(), notNullValue());
-            //assertThat(exc.getValidation(), equalTo(VALIDATION_ERROR_MESSAGE_BODY.get("validation")));
-        }
+        // then
+        // exception expected
     }
 
-    @Test(expected = ConflictingRequestException.class)
-    public void shouldCreateTranslationPackWithCreationError() throws JsonProcessingException, CommunicationFailureException {
+    @Test
+    public void shouldCreateTranslationPackWithCreationError() throws JsonProcessingException {
 
         // given
         StringValuePattern requestBody = equalToJson(OBJECT_MAPPER.writeValueAsString(TRANSLATION_PACK_CREATION_REQUEST));
@@ -248,14 +230,14 @@ public class TranslationServiceClientImplTest {
                         .withBody(OBJECT_MAPPER.writeValueAsString(ERROR_MESSAGE_BODY))));
 
         // when
-        translationServiceClient.createTranslationPack(TRANSLATION_PACK_CREATION_REQUEST);
+        Assertions.assertThrows(ConflictingRequestException.class, () -> translationServiceClient.createTranslationPack(TRANSLATION_PACK_CREATION_REQUEST));
 
         // then
         // exception expected
     }
 
-    @Test(expected = RequestProcessingFailureException.class)
-    public void shouldCreateTranslationPackWithUnknownError() throws JsonProcessingException, CommunicationFailureException {
+    @Test
+    public void shouldCreateTranslationPackWithUnknownError() throws JsonProcessingException {
 
         // given
         StringValuePattern requestBody = equalToJson(OBJECT_MAPPER.writeValueAsString(TRANSLATION_PACK_CREATION_REQUEST));
@@ -267,7 +249,7 @@ public class TranslationServiceClientImplTest {
                         .withBody(OBJECT_MAPPER.writeValueAsString(ERROR_MESSAGE_BODY))));
 
         // when
-        translationServiceClient.createTranslationPack(TRANSLATION_PACK_CREATION_REQUEST);
+        Assertions.assertThrows(RequestProcessingFailureException.class, () -> translationServiceClient.createTranslationPack(TRANSLATION_PACK_CREATION_REQUEST));
 
         // then
         // exception expected

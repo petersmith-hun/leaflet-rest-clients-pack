@@ -1,8 +1,8 @@
 package hu.psprog.leaflet.bridge.it.config;
 
-import org.springframework.boot.test.context.ConfigFileApplicationContextInitializer;
+import com.github.tomakehurst.wiremock.junit5.WireMockTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -16,9 +16,10 @@ import java.lang.annotation.Target;
  */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-@ContextConfiguration(
+@SpringBootTest(
         classes = LeafletBridgeITContextConfig.class,
-        initializers = ConfigFileApplicationContextInitializer.class)
+        webEnvironment = SpringBootTest.WebEnvironment.NONE)
+@WireMockTest(httpPort = 9999)
 @ActiveProfiles(LeafletBridgeITContextConfig.INTEGRATION_TEST_CONFIG_PROFILE)
 public @interface BridgeITSuite {
 }

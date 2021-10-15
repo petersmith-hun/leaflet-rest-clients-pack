@@ -2,7 +2,7 @@ package hu.psprog.leaflet.tlp.api.client.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.tomakehurst.wiremock.client.ResponseDefinitionBuilder;
-import com.github.tomakehurst.wiremock.junit.WireMockClassRule;
+import com.github.tomakehurst.wiremock.junit5.WireMockTest;
 import com.github.tomakehurst.wiremock.matching.EqualToPattern;
 import hu.psprog.leaflet.bridge.client.exception.CommunicationFailureException;
 import hu.psprog.leaflet.bridge.client.request.RequestAuthentication;
@@ -13,21 +13,16 @@ import hu.psprog.leaflet.tlp.api.domain.LogRequest;
 import hu.psprog.leaflet.tlp.api.domain.LoggingEvent;
 import hu.psprog.leaflet.tlp.api.domain.OrderBy;
 import hu.psprog.leaflet.tlp.api.domain.OrderDirection;
-import org.junit.ClassRule;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.boot.test.context.ConfigFileApplicationContextInitializer;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -44,7 +39,6 @@ import static com.github.tomakehurst.wiremock.client.WireMock.post;
 import static com.github.tomakehurst.wiremock.client.WireMock.postRequestedFor;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlPathEqualTo;
 import static com.github.tomakehurst.wiremock.client.WireMock.verify;
-import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.options;
 import static hu.psprog.leaflet.tlp.api.client.impl.TLPClientImplTest.TLPClientTestConfiguration.TLP_CLIENT_INTEGRATION_TEST_PROFILE;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -54,11 +48,11 @@ import static org.hamcrest.MatcherAssert.assertThat;
  *
  * @author Peter Smith
  */
-@RunWith(SpringJUnit4ClassRunner.class)
-@ActiveProfiles(TLP_CLIENT_INTEGRATION_TEST_PROFILE)
-@ContextConfiguration(
+@SpringBootTest(
         classes = TLPClientImplTest.TLPClientTestConfiguration.class,
-        initializers = ConfigFileApplicationContextInitializer.class)
+        webEnvironment = SpringBootTest.WebEnvironment.NONE)
+@WireMockTest(httpPort = 9999)
+@ActiveProfiles(TLP_CLIENT_INTEGRATION_TEST_PROFILE)
 public class TLPClientImplTest {
 
     private static final String QUERY_PARAM_PAGE = "page";
@@ -94,12 +88,6 @@ public class TLPClientImplTest {
         LOG_REQUEST.setSource("source");
         LOG_REQUEST.setTo(prepareDate(26));
     }
-
-    @ClassRule
-    public static WireMockClassRule wireMockRule = new WireMockClassRule(options().port(9999));
-
-    @Rule
-    public WireMockClassRule wireMockInstanceRule = wireMockRule;
 
     @Autowired
     private TLPClient tlpClient;
