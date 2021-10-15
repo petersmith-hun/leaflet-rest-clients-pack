@@ -7,11 +7,9 @@ import hu.psprog.leaflet.bridge.client.exception.CommunicationFailureException;
 import hu.psprog.leaflet.bridge.config.LeafletPath;
 import hu.psprog.leaflet.bridge.it.config.BridgeITSuite;
 import hu.psprog.leaflet.bridge.service.ContactBridgeService;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.client.WireMock.equalTo;
@@ -28,7 +26,6 @@ import static hu.psprog.leaflet.bridge.client.domain.BridgeConstants.X_CAPTCHA_R
  *
  * @author Peter Smith
  */
-@RunWith(SpringJUnit4ClassRunner.class)
 @BridgeITSuite
 public class ContactBridgeServiceImplIT extends WireMockBaseTest {
 
@@ -40,7 +37,7 @@ public class ContactBridgeServiceImplIT extends WireMockBaseTest {
     private StringValuePattern requestBody;
     private ContactRequestModel contactRequestModel;
 
-    @Before
+    @BeforeEach
     public void setup() throws JsonProcessingException {
         contactRequestModel = new ContactRequestModel();
         contactRequestModel.setName("Contact IT");

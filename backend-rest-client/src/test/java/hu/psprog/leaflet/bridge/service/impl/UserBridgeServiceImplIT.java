@@ -18,10 +18,8 @@ import hu.psprog.leaflet.bridge.client.exception.CommunicationFailureException;
 import hu.psprog.leaflet.bridge.config.LeafletPath;
 import hu.psprog.leaflet.bridge.it.config.BridgeITSuite;
 import hu.psprog.leaflet.bridge.service.UserBridgeService;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.Locale;
 
@@ -47,7 +45,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
  *
  * @author Peter Smith
  */
-@RunWith(SpringJUnit4ClassRunner.class)
 @BridgeITSuite
 public class UserBridgeServiceImplIT extends WireMockBaseTest {
 
@@ -314,7 +311,7 @@ public class UserBridgeServiceImplIT extends WireMockBaseTest {
     }
 
     @Test
-    public void shouldRenewToken() throws JsonProcessingException, CommunicationFailureException {
+    public void shouldRenewToken() throws CommunicationFailureException {
 
         // given
         LoginResponseDataModel loginResponseDataModel = prepareLoginResponseDataModel();

@@ -11,10 +11,8 @@ import hu.psprog.leaflet.bridge.client.exception.CommunicationFailureException;
 import hu.psprog.leaflet.bridge.config.LeafletPath;
 import hu.psprog.leaflet.bridge.it.config.BridgeITSuite;
 import hu.psprog.leaflet.bridge.service.DocumentBridgeService;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.time.ZonedDateTime;
 
@@ -38,7 +36,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
  *
  * @author Peter Smith
  */
-@RunWith(SpringJUnit4ClassRunner.class)
 @BridgeITSuite
 public class DocumentBridgeServiceImplIT extends WireMockBaseTest {
 
@@ -213,7 +210,7 @@ public class DocumentBridgeServiceImplIT extends WireMockBaseTest {
         return EditDocumentDataModel.getExtendedBuilder()
                 .withId(documentID)
                 .withCreated(ZonedDateTime.now(ZONE_ID))
-                .withLink("document-" + documentID.toString())
+                .withLink("document-" + documentID)
                 .withTitle("Document #" + documentID)
                 .withUser(null)
                 .withEnabled(true)
@@ -227,7 +224,7 @@ public class DocumentBridgeServiceImplIT extends WireMockBaseTest {
                 .withId(documentID)
                 .withRawContent("Content")
                 .withCreated(ZonedDateTime.now(ZONE_ID))
-                .withLink("document-" + documentID.toString())
+                .withLink("document-" + documentID)
                 .withTitle("Document #" + documentID)
                 .withUser(null)
                 .build();

@@ -10,10 +10,8 @@ import hu.psprog.leaflet.bridge.client.exception.CommunicationFailureException;
 import hu.psprog.leaflet.bridge.config.LeafletPath;
 import hu.psprog.leaflet.bridge.it.config.BridgeITSuite;
 import hu.psprog.leaflet.bridge.service.DCPStoreBridgeService;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.delete;
 import static com.github.tomakehurst.wiremock.client.WireMock.deleteRequestedFor;
@@ -35,7 +33,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
  *
  * @author Peter Smith
  */
-@RunWith(SpringJUnit4ClassRunner.class)
 @BridgeITSuite
 public class DCPStoreBridgeServiceImplIT extends WireMockBaseTest {
 
@@ -96,7 +93,7 @@ public class DCPStoreBridgeServiceImplIT extends WireMockBaseTest {
     }
 
     @Test
-    public void shouldDeleteDCPEntry() throws CommunicationFailureException, JsonProcessingException {
+    public void shouldDeleteDCPEntry() throws CommunicationFailureException {
 
         // given
         String dcpKey = "dcp";
@@ -128,8 +125,8 @@ public class DCPStoreBridgeServiceImplIT extends WireMockBaseTest {
 
     private DCPDataModel prepareDCPDataModel(Long dcpID) {
         return DCPDataModel.getBuilder()
-                .withKey("DCP key #" + dcpID.toString())
-                .withValue("DCP value #" + dcpID.toString())
+                .withKey("DCP key #" + dcpID)
+                .withValue("DCP value #" + dcpID)
                 .build();
     }
 }

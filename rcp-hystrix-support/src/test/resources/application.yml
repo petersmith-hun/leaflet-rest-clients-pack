@@ -1,19 +1,25 @@
 spring:
-  profiles: hystrix-enabled
+  config:
+    activate:
+      on-profile: hystrix-enabled
 
 bridge.hystrix.enabled: true
 
 ---
 
 spring:
-  profiles: hystrix-disabled
+  config:
+    activate:
+      on-profile: hystrix-disabled
 
 bridge.hystrix.enabled: false
 
 ---
 
 spring:
-  profiles: hystrix-broken
+  config:
+    activate:
+      on-profile: hystrix-broken
 
 bridge.hystrix.enabled: false
 

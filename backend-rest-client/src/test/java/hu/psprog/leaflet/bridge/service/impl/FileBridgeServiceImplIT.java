@@ -16,10 +16,8 @@ import hu.psprog.leaflet.bridge.it.config.BridgeITSuite;
 import hu.psprog.leaflet.bridge.service.FileBridgeService;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -46,7 +44,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
  *
  * @author Peter Smith
  */
-@RunWith(SpringJUnit4ClassRunner.class)
 @BridgeITSuite
 public class FileBridgeServiceImplIT extends WireMockBaseTest {
 
@@ -110,7 +107,7 @@ public class FileBridgeServiceImplIT extends WireMockBaseTest {
     }
 
     @Test
-    public void shouldUploadFile() throws CommunicationFailureException, JsonProcessingException {
+    public void shouldUploadFile() throws CommunicationFailureException {
 
         // given
         FileUploadRequestModel fileUploadRequestModel = prepareFileUploadRequestModel();

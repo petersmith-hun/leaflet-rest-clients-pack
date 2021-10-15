@@ -7,11 +7,9 @@ import hu.psprog.leaflet.bridge.client.exception.CommunicationFailureException;
 import hu.psprog.leaflet.bridge.config.LeafletPath;
 import hu.psprog.leaflet.bridge.it.config.BridgeITSuite;
 import hu.psprog.leaflet.bridge.service.AttachmentBridgeService;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.UUID;
 
@@ -30,7 +28,6 @@ import static com.github.tomakehurst.wiremock.client.WireMock.verify;
  *
  * @author Peter Smith
  */
-@RunWith(SpringJUnit4ClassRunner.class)
 @BridgeITSuite
 public class AttachmentBridgeServiceImplIT extends WireMockBaseTest {
 
@@ -40,7 +37,7 @@ public class AttachmentBridgeServiceImplIT extends WireMockBaseTest {
     private StringValuePattern requestBody;
     private AttachmentRequestModel attachmentRequestModel;
 
-    @Before
+    @BeforeEach
     public void setup() throws JsonProcessingException {
         attachmentRequestModel = new AttachmentRequestModel();
         attachmentRequestModel.setEntryID(10L);
@@ -49,7 +46,7 @@ public class AttachmentBridgeServiceImplIT extends WireMockBaseTest {
     }
 
     @Test
-    public void shouldAttach() throws CommunicationFailureException, JsonProcessingException {
+    public void shouldAttach() throws CommunicationFailureException {
 
         // given
         givenThat(post(LeafletPath.ATTACHMENTS.getURI())
@@ -66,7 +63,7 @@ public class AttachmentBridgeServiceImplIT extends WireMockBaseTest {
     }
 
     @Test
-    public void shouldDetach() throws CommunicationFailureException, JsonProcessingException {
+    public void shouldDetach() throws CommunicationFailureException {
 
         // given
         givenThat(put(LeafletPath.ATTACHMENTS.getURI())
