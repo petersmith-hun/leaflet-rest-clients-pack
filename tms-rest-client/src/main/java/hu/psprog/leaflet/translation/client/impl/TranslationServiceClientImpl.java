@@ -26,7 +26,7 @@ public class TranslationServiceClientImpl implements TranslationServiceClient {
 
     private static final String PARAMETER_PACK_ID = "packID";
 
-    private BridgeClient bridgeClient;
+    private final BridgeClient bridgeClient;
 
     @Autowired
     public TranslationServiceClientImpl(BridgeClient bridgeClient) {
@@ -39,6 +39,7 @@ public class TranslationServiceClientImpl implements TranslationServiceClient {
         RESTRequest restRequest = RESTRequest.getBuilder()
                 .method(RequestMethod.GET)
                 .path(TMSPath.TRANSLATIONS)
+                .authenticated()
                 .build();
 
         return bridgeClient.call(restRequest, new GenericType<List<TranslationPackMetaInfo>>(){});
@@ -51,6 +52,7 @@ public class TranslationServiceClientImpl implements TranslationServiceClient {
                 .method(RequestMethod.GET)
                 .path(TMSPath.TRANSLATIONS_BY_ID)
                 .addPathParameter(PARAMETER_PACK_ID, packID)
+                .authenticated()
                 .build();
 
         return bridgeClient.call(restRequest, TranslationPack.class);
@@ -63,6 +65,7 @@ public class TranslationServiceClientImpl implements TranslationServiceClient {
                 .method(RequestMethod.POST)
                 .path(TMSPath.TRANSLATIONS)
                 .requestBody(translationPackCreationRequest)
+                .authenticated()
                 .build();
 
         return bridgeClient.call(restRequest, TranslationPack.class);
@@ -75,6 +78,7 @@ public class TranslationServiceClientImpl implements TranslationServiceClient {
                 .method(RequestMethod.PUT)
                 .path(TMSPath.TRANSLATIONS_STATUS)
                 .addPathParameter(PARAMETER_PACK_ID, packID)
+                .authenticated()
                 .build();
 
         return bridgeClient.call(restRequest, TranslationPack.class);
@@ -87,6 +91,7 @@ public class TranslationServiceClientImpl implements TranslationServiceClient {
                 .method(RequestMethod.DELETE)
                 .path(TMSPath.TRANSLATIONS_BY_ID)
                 .addPathParameter(PARAMETER_PACK_ID, packID)
+                .authenticated()
                 .build();
 
         bridgeClient.call(restRequest);
