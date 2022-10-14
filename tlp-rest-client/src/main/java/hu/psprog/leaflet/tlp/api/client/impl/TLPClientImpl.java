@@ -57,6 +57,7 @@ public class TLPClientImpl implements TLPClient {
                 .addRequestParameters(QUERY_PARAM_FROM, formatDateAsString(logRequest.getFrom()))
                 .addRequestParameters(QUERY_PARAM_TO, formatDateAsString(logRequest.getTo()))
                 .addRequestParameters(QUERY_PARAM_CONTENT, logRequest.getContent())
+                .authenticated()
                 .build();
 
         return bridgeClient.call(restRequest, LogEventPage.class);
@@ -69,6 +70,7 @@ public class TLPClientImpl implements TLPClient {
                 .method(RequestMethod.POST)
                 .path(TLPPath.LOGS_V2)
                 .requestBody(logRequest)
+                .authenticated()
                 .build();
 
         return bridgeClient.call(restRequest, LogEventPage.class);

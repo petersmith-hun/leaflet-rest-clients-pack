@@ -2,8 +2,10 @@ package hu.psprog.leaflet.tlp.api.client.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.tomakehurst.wiremock.client.ResponseDefinitionBuilder;
+import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.junit5.WireMockTest;
 import com.github.tomakehurst.wiremock.matching.EqualToPattern;
+import com.github.tomakehurst.wiremock.matching.StringValuePattern;
 import hu.psprog.leaflet.bridge.client.exception.CommunicationFailureException;
 import hu.psprog.leaflet.bridge.client.request.RequestAuthentication;
 import hu.psprog.leaflet.tlp.api.client.TLPClient;
@@ -67,6 +69,10 @@ public class TLPClientImplTest {
     private static final String EXPECTED_FROM_DATE = "2018-04-24";
     private static final String EXPECTED_TO_DATE = "2018-04-26";
 
+    private static final String AUTHORIZATION_HEADER = "Authorization";
+    private static final String BEARER_TOKEN = "Bearer token";
+    private static final StringValuePattern VALUE_PATTERN_BEARER_TOKEN = WireMock.equalTo(BEARER_TOKEN);
+
     private static final LogEventPage LOG_EVENT_PAGE = LogEventPage.getBuilder()
             .withEntitiesOnPage(Collections.singletonList(LoggingEvent.getBuilder()
                     .withLevel("INFO")
@@ -113,7 +119,8 @@ public class TLPClientImplTest {
                 .withQueryParam(QUERY_PARAM_LEVEL, new EqualToPattern(LOG_REQUEST.getLevel()))
                 .withQueryParam(QUERY_PARAM_FROM, new EqualToPattern(EXPECTED_FROM_DATE))
                 .withQueryParam(QUERY_PARAM_TO, new EqualToPattern(EXPECTED_TO_DATE))
-                .withQueryParam(QUERY_PARAM_CONTENT, new EqualToPattern(LOG_REQUEST.getContent())));
+                .withQueryParam(QUERY_PARAM_CONTENT, new EqualToPattern(LOG_REQUEST.getContent()))
+                .withHeader(AUTHORIZATION_HEADER, VALUE_PATTERN_BEARER_TOKEN));
     }
 
     @Test
@@ -129,7 +136,8 @@ public class TLPClientImplTest {
         // then
         assertThat(result, equalTo(LOG_EVENT_PAGE));
         verify(postRequestedFor(urlPathEqualTo(TLPPath.LOGS_V2.getURI()))
-                .withRequestBody(new EqualToPattern(TLQL_LOG_REQUEST)));
+                .withRequestBody(new EqualToPattern(TLQL_LOG_REQUEST))
+                .withHeader(AUTHORIZATION_HEADER, VALUE_PATTERN_BEARER_TOKEN));
     }
 
     @Profile(TLP_CLIENT_INTEGRATION_TEST_PROFILE)
@@ -151,7 +159,7 @@ public class TLPClientImplTest {
         public RequestAuthentication requestAuthenticationStub() {
             return () -> {
                 Map<String, String> auth = new HashMap<>();
-                auth.put("Authorization", "Bearer token");
+                auth.put(AUTHORIZATION_HEADER, BEARER_TOKEN);
                 return auth;
             };
         }
