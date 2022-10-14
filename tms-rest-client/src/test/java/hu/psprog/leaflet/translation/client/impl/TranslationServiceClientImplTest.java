@@ -3,6 +3,7 @@ package hu.psprog.leaflet.translation.client.impl;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.tomakehurst.wiremock.client.ResponseDefinitionBuilder;
+import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.junit5.WireMockTest;
 import com.github.tomakehurst.wiremock.matching.EqualToPattern;
 import com.github.tomakehurst.wiremock.matching.StringValuePattern;
@@ -97,6 +98,10 @@ public class TranslationServiceClientImplTest {
     private static final int HTTP_STATUS_CONFLICT = 409;
     private static final int HTTP_STATUS_INTERNAL_SERVER_ERROR = 500;
 
+    private static final String AUTHORIZATION_HEADER = "Authorization";
+    private static final String BEARER_TOKEN = "Bearer token";
+    private static final StringValuePattern VALUE_PATTERN_BEARER_TOKEN = WireMock.equalTo(BEARER_TOKEN);
+
     static {
         TRANSLATION_PACK_CREATION_REQUEST.setPackName(PACK_NAME);
         TRANSLATION_PACK_CREATION_REQUEST.setLocale(Locale.ENGLISH);
@@ -139,7 +144,8 @@ public class TranslationServiceClientImplTest {
         List<TranslationPackMetaInfo> result = translationServiceClient.listStoredPacks();
 
         // then
-        verify(getRequestedFor(urlPathEqualTo(PATH_TRANSLATIONS)));
+        verify(getRequestedFor(urlPathEqualTo(PATH_TRANSLATIONS))
+                .withHeader(AUTHORIZATION_HEADER, VALUE_PATTERN_BEARER_TOKEN));
         assertThat(result, notNullValue());
         assertThat(result.size(), equalTo(1));
         assertThat(result.contains(TRANSLATION_PACK_META_INFO), is(true));
@@ -194,7 +200,8 @@ public class TranslationServiceClientImplTest {
         TranslationPack result = translationServiceClient.createTranslationPack(TRANSLATION_PACK_CREATION_REQUEST);
 
         // then
-        verify(postRequestedFor(urlPathEqualTo(PATH_TRANSLATIONS)));
+        verify(postRequestedFor(urlPathEqualTo(PATH_TRANSLATIONS))
+                .withHeader(AUTHORIZATION_HEADER, VALUE_PATTERN_BEARER_TOKEN));
         assertThat(result, equalTo(TRANSLATION_PACK));
     }
 
@@ -269,7 +276,8 @@ public class TranslationServiceClientImplTest {
         TranslationPack result = translationServiceClient.changePackStatus(PACK_ID);
 
         // then
-        verify(putRequestedFor(urlPathEqualTo(PATH_TRANSLATIONS_STATUS)));
+        verify(putRequestedFor(urlPathEqualTo(PATH_TRANSLATIONS_STATUS))
+                .withHeader(AUTHORIZATION_HEADER, VALUE_PATTERN_BEARER_TOKEN));
         assertThat(result, equalTo(TRANSLATION_PACK));
     }
 
@@ -328,7 +336,7 @@ public class TranslationServiceClientImplTest {
         public RequestAuthentication requestAuthenticationStub() {
             return () -> {
                 Map<String, String> auth = new HashMap<>();
-                auth.put("Authorization", "Bearer token");
+                auth.put(AUTHORIZATION_HEADER, BEARER_TOKEN);
                 return auth;
             };
         }
