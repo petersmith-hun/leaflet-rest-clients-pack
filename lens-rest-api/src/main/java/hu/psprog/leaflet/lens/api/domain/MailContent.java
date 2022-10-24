@@ -1,5 +1,7 @@
 package hu.psprog.leaflet.lens.api.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.Map;
 
 /**
@@ -15,6 +17,7 @@ public interface MailContent {
      *
      * @return contents as map
      */
+    @JsonIgnore
     Map<String, Object> asContentMap();
 
     /**
@@ -22,5 +25,6 @@ public interface MailContent {
      *
      * @return attached content type identifier
      */
+    @JsonIgnore
     String getMailContentType();
 }
