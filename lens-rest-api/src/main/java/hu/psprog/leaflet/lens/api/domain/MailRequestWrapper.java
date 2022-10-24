@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -12,7 +13,7 @@ import java.util.List;
  * @author Peter Smith
  */
 @Data
-public class MailRequestWrapper<T extends MailContent> {
+public class MailRequestWrapper<T extends MailContent> implements Serializable {
 
     private List<String> recipients;
     private String replyTo;
