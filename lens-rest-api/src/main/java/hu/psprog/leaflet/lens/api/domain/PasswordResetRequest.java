@@ -2,6 +2,7 @@ package hu.psprog.leaflet.lens.api.domain;
 
 import lombok.Builder;
 import lombok.Data;
+import lombok.extern.jackson.Jacksonized;
 
 import java.util.Map;
 
@@ -12,6 +13,7 @@ import java.util.Map;
  */
 @Data
 @Builder
+@Jacksonized
 public class PasswordResetRequest implements MailContent {
 
     public static final String MAIL_CONTENT_TYPE = "pw_reset_request";

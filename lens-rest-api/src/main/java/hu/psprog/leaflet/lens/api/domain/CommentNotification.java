@@ -2,6 +2,7 @@ package hu.psprog.leaflet.lens.api.domain;
 
 import lombok.Builder;
 import lombok.Data;
+import lombok.extern.jackson.Jacksonized;
 
 import java.util.Map;
 
@@ -12,6 +13,7 @@ import java.util.Map;
  */
 @Data
 @Builder
+@Jacksonized
 public class CommentNotification implements MailContent {
 
     public static final String MAIL_CONTENT_TYPE = "comment_notification";
@@ -37,7 +39,7 @@ public class CommentNotification implements MailContent {
                 EMAIL, email,
                 CONTENT, content,
                 ENTRY_TITLE, entryTitle,
-                AUTHOR_NAME, authorEmail
+                AUTHOR_NAME, authorName
         );
     }
 

@@ -81,9 +81,7 @@ public enum LENSClientScenario implements Scenario {
 
             MailRequestWrapper<PasswordResetSuccess> passwordResetSuccess = new MailRequestWrapper<>();
             passwordResetSuccess.setRecipients(List.of("user1@dev.local"));
-            passwordResetSuccess.setContent(PasswordResetSuccess.builder()
-                    .username("User 1")
-                    .build());
+            passwordResetSuccess.setContent(new PasswordResetSuccess("User 1"));
 
             return passwordResetSuccess;
         }
@@ -96,9 +94,7 @@ public enum LENSClientScenario implements Scenario {
 
             MailRequestWrapper<SignUpConfirmation> signUpConfirmation = new MailRequestWrapper<>();
             signUpConfirmation.setRecipients(List.of("new-user@dev.local"));
-            signUpConfirmation.setContent(SignUpConfirmation.builder()
-                    .username("New User")
-                    .build());
+            signUpConfirmation.setContent(new SignUpConfirmation("New User"));
 
             return signUpConfirmation;
         }
