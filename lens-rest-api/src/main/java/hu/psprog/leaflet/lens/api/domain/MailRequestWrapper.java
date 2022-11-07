@@ -2,9 +2,13 @@ package hu.psprog.leaflet.lens.api.domain;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -13,6 +17,9 @@ import java.util.List;
  * @author Peter Smith
  */
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class MailRequestWrapper<T extends MailContent> implements Serializable {
 
     private List<String> recipients;
@@ -29,4 +36,12 @@ public class MailRequestWrapper<T extends MailContent> implements Serializable {
             @JsonSubTypes.Type(value = SystemStartup.class, name = SystemStartup.MAIL_CONTENT_TYPE)
     })
     private T content;
+
+    public static class MailRequestWrapperBuilder<T extends MailContent> {
+
+        public MailRequestWrapperBuilder<T> recipients(String... recipients) {
+            this.recipients = Arrays.asList(recipients);
+            return this;
+        }
+    }
 }

@@ -1,6 +1,6 @@
 package hu.psprog.leaflet.lens.api.domain;
 
-import lombok.Builder;
+import com.fasterxml.jackson.annotation.JsonCreator;
 import lombok.Data;
 
 import java.util.Map;
@@ -11,7 +11,6 @@ import java.util.Map;
  * @author Peter Smith
  */
 @Data
-@Builder
 public class SignUpConfirmation implements MailContent {
 
     public static final String MAIL_CONTENT_TYPE = "signup_confirmation";
@@ -19,6 +18,11 @@ public class SignUpConfirmation implements MailContent {
     private static final String USERNAME = "username";
 
     private final String username;
+
+    @JsonCreator
+    public SignUpConfirmation(String username) {
+        this.username = username;
+    }
 
     @Override
     public Map<String, Object> asContentMap() {
