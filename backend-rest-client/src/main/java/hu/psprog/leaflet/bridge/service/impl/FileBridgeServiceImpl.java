@@ -8,7 +8,6 @@ import hu.psprog.leaflet.api.rest.response.file.FileDataModel;
 import hu.psprog.leaflet.api.rest.response.file.FileListDataModel;
 import hu.psprog.leaflet.bridge.adapter.RequestBodyAdapter;
 import hu.psprog.leaflet.bridge.client.BridgeClient;
-import hu.psprog.leaflet.bridge.client.domain.BridgeService;
 import hu.psprog.leaflet.bridge.client.exception.CommunicationFailureException;
 import hu.psprog.leaflet.bridge.client.request.RESTRequest;
 import hu.psprog.leaflet.bridge.client.request.RequestMethod;
@@ -25,7 +24,7 @@ import java.util.UUID;
  *
  * @author Peter Smith
  */
-@BridgeService(client = "leaflet")
+@Deprecated(forRemoval = true)
 public class FileBridgeServiceImpl implements FileBridgeService {
 
     private static final String FILE_IDENTIFIER = "fileIdentifier";

@@ -15,7 +15,9 @@ import java.util.UUID;
  * BridgeClient interface for file related calls.
  *
  * @author Peter Smith
+ * @deprecated Use lsrs-rest-client module instead
  */
+@Deprecated(forRemoval = true)
 public interface FileBridgeService {
 
     /**
@@ -24,6 +26,7 @@ public interface FileBridgeService {
      * @return list of uploaded files as {@link FileDataModel}
      * @throws CommunicationFailureException if client fails to reach backend application
      */
+    @Deprecated(forRemoval = true)
     FileListDataModel getUploadedFiles() throws CommunicationFailureException;
 
     /**
@@ -34,6 +37,7 @@ public interface FileBridgeService {
      * @return file as resource
      * @throws CommunicationFailureException if client fails to reach backend application
      */
+    @Deprecated(forRemoval = true)
     InputStream downloadFile(UUID fileIdentifier, String storedFilename) throws CommunicationFailureException;
 
     /**
@@ -43,6 +47,7 @@ public interface FileBridgeService {
      * @return file meta information as {@link FileDataModel}
      * @throws CommunicationFailureException if client fails to reach backend application
      */
+    @Deprecated(forRemoval = true)
     FileDataModel getFileDetails(UUID fileIdentifier) throws CommunicationFailureException;
 
     /**
@@ -52,6 +57,7 @@ public interface FileBridgeService {
      * @return data of uploaded file as {@link FileDataModel}
      * @throws CommunicationFailureException if client fails to reach backend application
      */
+    @Deprecated(forRemoval = true)
     FileDataModel uploadFile(FileUploadRequestModel fileUploadRequestModel) throws CommunicationFailureException;
 
     /**
@@ -60,6 +66,7 @@ public interface FileBridgeService {
      * @param fileIdentifier UUID of the uploaded file
      * @throws CommunicationFailureException if client fails to reach backend application
      */
+    @Deprecated(forRemoval = true)
     void deleteFile(UUID fileIdentifier) throws CommunicationFailureException;
 
     /**
@@ -68,6 +75,7 @@ public interface FileBridgeService {
      * @param directoryCreationRequestModel model holding directory information
      * @throws CommunicationFailureException if client fails to reach backend application
      */
+    @Deprecated(forRemoval = true)
     void createDirectory(DirectoryCreationRequestModel directoryCreationRequestModel) throws CommunicationFailureException;
 
     /**
@@ -77,6 +85,7 @@ public interface FileBridgeService {
      * @param updateFileMetaInfoRequestModel updated meta information
      * @throws CommunicationFailureException if client fails to reach backend application
      */
+    @Deprecated(forRemoval = true)
     void updateFileMetaInfo(UUID fileIdentifier, UpdateFileMetaInfoRequestModel updateFileMetaInfoRequestModel) throws CommunicationFailureException;
 
     /**
@@ -85,5 +94,6 @@ public interface FileBridgeService {
      * @return directory structure information as {@link DirectoryListDataModel}
      * @throws CommunicationFailureException if client fails to reach backend application
      */
+    @Deprecated(forRemoval = true)
     DirectoryListDataModel getDirectories() throws CommunicationFailureException;
 }
