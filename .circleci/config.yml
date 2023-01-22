@@ -22,6 +22,10 @@ jobs:
           path: tms-rest-client/target/failsafe-reports
       - store_test_results:
           path: rcp-hystrix-support/target/failsafe-reports
+      - store_test_results:
+          path: lens-rest-client/target/failsafe-reports
+      - store_test_results:
+          path: lsrs-rest-client/target/failsafe-reports
 workflows:
   build:
     jobs:

@@ -13,8 +13,10 @@ import org.springframework.stereotype.Component;
  * multipart/form-data wrapper object.
  *
  * @author Peter Smith
+ * @deprecated Use {@link LSRSFileUploadMultipartRequestBodyAdapter} instead, along with calling LSRS service via lsrs-rest-client module
  */
 @Component
+@Deprecated(forRemoval = true)
 public class FileUploadMultipartRequestBodyAdapter extends AbstractMultipartRequestBodyAdapter<FileUploadRequestModel> {
 
     private static final String FIELD_DESCRIPTION = "description";

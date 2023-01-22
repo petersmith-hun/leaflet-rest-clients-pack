@@ -6,7 +6,7 @@
 
     <artifactId>leaflet-rest-clients-pack</artifactId>
     <packaging>pom</packaging>
-    <version>1.9.1</version>
+    <version>1.10.0</version>
 
     <parent>
         <groupId>hu.psprog.leaflet</groupId>
@@ -29,6 +29,8 @@
         <module>rcp-hystrix-support</module>
         <module>lens-rest-api</module>
         <module>lens-rest-client</module>
+        <module>lsrs-rest-api</module>
+        <module>lsrs-rest-client</module>
     </modules>
 
     <properties>
@@ -46,6 +48,16 @@
         <skip.it>false</skip.it>
 
     </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>hu.psprog.leaflet</groupId>
+                <artifactId>lsrs-rest-api</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <dependencies>
         <dependency>
