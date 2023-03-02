@@ -2,17 +2,13 @@ package hu.psprog.leaflet.bridge.service.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.github.tomakehurst.wiremock.client.ResponseDefinitionBuilder;
-import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.matching.StringValuePattern;
-import hu.psprog.leaflet.api.rest.request.user.LoginRequestModel;
-import hu.psprog.leaflet.api.rest.request.user.PasswordResetDemandRequestModel;
 import hu.psprog.leaflet.api.rest.request.user.UpdateProfileRequestModel;
 import hu.psprog.leaflet.api.rest.request.user.UpdateRoleRequestModel;
 import hu.psprog.leaflet.api.rest.request.user.UserCreateRequestModel;
 import hu.psprog.leaflet.api.rest.request.user.UserInitializeRequestModel;
 import hu.psprog.leaflet.api.rest.request.user.UserPasswordRequestModel;
 import hu.psprog.leaflet.api.rest.response.user.ExtendedUserDataModel;
-import hu.psprog.leaflet.api.rest.response.user.LoginResponseDataModel;
 import hu.psprog.leaflet.api.rest.response.user.UserListDataModel;
 import hu.psprog.leaflet.bridge.client.exception.CommunicationFailureException;
 import hu.psprog.leaflet.bridge.config.LeafletPath;
@@ -23,7 +19,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Locale;
 
-import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.client.WireMock.delete;
 import static com.github.tomakehurst.wiremock.client.WireMock.deleteRequestedFor;
 import static com.github.tomakehurst.wiremock.client.WireMock.equalToJson;
@@ -36,7 +31,6 @@ import static com.github.tomakehurst.wiremock.client.WireMock.put;
 import static com.github.tomakehurst.wiremock.client.WireMock.putRequestedFor;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
 import static com.github.tomakehurst.wiremock.client.WireMock.verify;
-import static hu.psprog.leaflet.bridge.client.domain.BridgeConstants.X_CAPTCHA_RESPONSE;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -47,8 +41,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
  */
 @BridgeITSuite
 public class UserBridgeServiceImplIT extends WireMockBaseTest {
-
-    private static final String RECAPTCHA_TOKEN = "recaptcha-token";
 
     @Autowired
     private UserBridgeService userBridgeService;
@@ -215,131 +207,6 @@ public class UserBridgeServiceImplIT extends WireMockBaseTest {
                 .withHeader(AUTHORIZATION_HEADER, VALUE_PATTERN_BEARER_TOKEN));
     }
 
-    @Test
-    public void shouldClaimToken() throws JsonProcessingException, CommunicationFailureException {
-
-        // given
-        LoginRequestModel loginRequestModel = prepareLoginRequestModel();
-        LoginResponseDataModel loginResponseDataModel = prepareLoginResponseDataModel();
-        StringValuePattern requestBody = equalToJson(OBJECT_MAPPER.writeValueAsString(loginRequestModel));
-        givenThat(post(LeafletPath.USERS_CLAIM.getURI())
-                .withRequestBody(requestBody)
-                .willReturn(ResponseDefinitionBuilder.okForJson(loginResponseDataModel)));
-
-        // when
-        LoginResponseDataModel result = userBridgeService.claimToken(loginRequestModel);
-
-        // then
-        assertThat(result, equalTo(loginResponseDataModel));
-        verify(postRequestedFor(urlEqualTo(LeafletPath.USERS_CLAIM.getURI()))
-                .withRequestBody(requestBody));
-    }
-
-    @Test
-    public void shouldSignUp() throws JsonProcessingException, CommunicationFailureException {
-
-        // given
-        UserInitializeRequestModel userInitializeRequestModel = prepareUserInitializeRequestModel();
-        ExtendedUserDataModel extendedUserDataModel = prepareExtendedUserDataModel(1L);
-        StringValuePattern requestBody = equalToJson(OBJECT_MAPPER.writeValueAsString(userInitializeRequestModel));
-        givenThat(post(LeafletPath.USERS_REGISTER.getURI())
-                .withRequestBody(requestBody)
-                .willReturn(ResponseDefinitionBuilder.okForJson(extendedUserDataModel)));
-
-        // when
-        ExtendedUserDataModel result = userBridgeService.signUp(userInitializeRequestModel, RECAPTCHA_TOKEN);
-
-        // then
-        assertThat(result, equalTo(extendedUserDataModel));
-        verify(postRequestedFor(urlEqualTo(LeafletPath.USERS_REGISTER.getURI()))
-                .withHeader(X_CAPTCHA_RESPONSE, WireMock.equalTo(RECAPTCHA_TOKEN))
-                .withRequestBody(requestBody));
-    }
-
-    @Test
-    public void shouldRevokeToken() throws CommunicationFailureException {
-
-        // given
-        givenThat(post(LeafletPath.USERS_REVOKE.getURI())
-                .willReturn(aResponse().withStatus(204)));
-
-        // when
-        userBridgeService.revokeToken();
-
-        // then
-        verify(postRequestedFor(urlEqualTo(LeafletPath.USERS_REVOKE.getURI()))
-                .withHeader(AUTHORIZATION_HEADER, VALUE_PATTERN_BEARER_TOKEN));
-    }
-
-    @Test
-    public void shouldDemandPasswordReset() throws JsonProcessingException, CommunicationFailureException {
-
-        // given
-        PasswordResetDemandRequestModel passwordResetDemandRequestModel = preparePasswordResetDemandRequestModel();
-        StringValuePattern requestBody = equalToJson(OBJECT_MAPPER.writeValueAsString(passwordResetDemandRequestModel));
-        givenThat(post(LeafletPath.USERS_RECLAIM.getURI())
-                .withRequestBody(requestBody)
-                .willReturn(aResponse().withStatus(201)));
-
-        // when
-        userBridgeService.demandPasswordReset(passwordResetDemandRequestModel, RECAPTCHA_TOKEN);
-
-        // then
-        verify(postRequestedFor(urlEqualTo(LeafletPath.USERS_RECLAIM.getURI()))
-                .withRequestBody(requestBody)
-                .withHeader(X_CAPTCHA_RESPONSE, WireMock.equalTo(RECAPTCHA_TOKEN)));
-    }
-
-    @Test
-    public void shouldConfirmPasswordReset() throws JsonProcessingException, CommunicationFailureException {
-
-        // given
-        UserPasswordRequestModel userPasswordRequestModel = prepareUserPasswordRequestModel();
-        StringValuePattern requestBody = equalToJson(OBJECT_MAPPER.writeValueAsString(userPasswordRequestModel));
-        givenThat(put(LeafletPath.USERS_RECLAIM.getURI())
-                .withRequestBody(requestBody)
-                .willReturn(aResponse().withStatus(201)));
-
-        // when
-        userBridgeService.confirmPasswordReset(userPasswordRequestModel, RECAPTCHA_TOKEN);
-
-        // then
-        verify(putRequestedFor(urlEqualTo(LeafletPath.USERS_RECLAIM.getURI()))
-                .withRequestBody(requestBody)
-                .withHeader(AUTHORIZATION_HEADER, VALUE_PATTERN_BEARER_TOKEN)
-                .withHeader(X_CAPTCHA_RESPONSE, WireMock.equalTo(RECAPTCHA_TOKEN)));
-    }
-
-    @Test
-    public void shouldRenewToken() throws CommunicationFailureException {
-
-        // given
-        LoginResponseDataModel loginResponseDataModel = prepareLoginResponseDataModel();
-        givenThat(put(LeafletPath.USERS_RENEW.getURI())
-                .willReturn(ResponseDefinitionBuilder.okForJson(loginResponseDataModel)));
-
-        // when
-        LoginResponseDataModel result = userBridgeService.renewToken();
-
-        // then
-        assertThat(result, equalTo(loginResponseDataModel));
-        verify(putRequestedFor(urlEqualTo(LeafletPath.USERS_RENEW.getURI())));
-    }
-
-    private LoginRequestModel prepareLoginRequestModel() {
-        LoginRequestModel loginRequestModel = new LoginRequestModel();
-        loginRequestModel.setEmail("user@it.dev");
-        loginRequestModel.setPassword("password");
-        return loginRequestModel;
-    }
-
-    private LoginResponseDataModel prepareLoginResponseDataModel() {
-        return LoginResponseDataModel.getBuilder()
-                .withStatus(LoginResponseDataModel.AuthenticationResult.AUTH_SUCCESS)
-                .withToken("token")
-                .build();
-    }
-
     private UpdateRoleRequestModel prepareUpdateRoleRequestModel() {
         UpdateRoleRequestModel updateRoleRequestModel = new UpdateRoleRequestModel();
         updateRoleRequestModel.setRole("ADMIN");
@@ -389,11 +256,5 @@ public class UserBridgeServiceImplIT extends WireMockBaseTest {
                 .withUsername("User #" + userID)
                 .withEmail("user" + userID + "@it.dev")
                 .build();
-    }
-
-    private PasswordResetDemandRequestModel preparePasswordResetDemandRequestModel() {
-        PasswordResetDemandRequestModel passwordResetDemandRequestModel = new PasswordResetDemandRequestModel();
-        passwordResetDemandRequestModel.setEmail("user1@it.dev");
-        return passwordResetDemandRequestModel;
     }
 }

@@ -1,14 +1,11 @@
 package hu.psprog.leaflet.bridge.service;
 
-import hu.psprog.leaflet.api.rest.request.user.LoginRequestModel;
-import hu.psprog.leaflet.api.rest.request.user.PasswordResetDemandRequestModel;
 import hu.psprog.leaflet.api.rest.request.user.UpdateProfileRequestModel;
 import hu.psprog.leaflet.api.rest.request.user.UpdateRoleRequestModel;
 import hu.psprog.leaflet.api.rest.request.user.UserCreateRequestModel;
 import hu.psprog.leaflet.api.rest.request.user.UserInitializeRequestModel;
 import hu.psprog.leaflet.api.rest.request.user.UserPasswordRequestModel;
 import hu.psprog.leaflet.api.rest.response.user.ExtendedUserDataModel;
-import hu.psprog.leaflet.api.rest.response.user.LoginResponseDataModel;
 import hu.psprog.leaflet.api.rest.response.user.UserListDataModel;
 import hu.psprog.leaflet.bridge.client.exception.CommunicationFailureException;
 
@@ -91,56 +88,4 @@ public interface UserBridgeService {
      * @throws CommunicationFailureException if client fails to reach backend application
      */
     ExtendedUserDataModel updatePassword(Long userID, UserPasswordRequestModel userPasswordRequestModel) throws CommunicationFailureException;
-
-    /**
-     * Claims token for given existing user.
-     *
-     * @param loginRequestModel {@link LoginRequestModel} object holding user information
-     * @return response mapped to {@link LoginResponseDataModel}
-     * @throws CommunicationFailureException if client fails to reach backend application
-     */
-    LoginResponseDataModel claimToken(LoginRequestModel loginRequestModel) throws CommunicationFailureException;
-
-    /**
-     * Public registration for visitors.
-     *
-     * @param userInitializeRequestModel user data
-     * @param recaptchaToken ReCaptcha response token
-     * @return response mapped to {@link ExtendedUserDataModel}
-     * @throws CommunicationFailureException if client fails to reach backend application
-     */
-    ExtendedUserDataModel signUp(UserInitializeRequestModel userInitializeRequestModel, String recaptchaToken) throws CommunicationFailureException;
-
-    /**
-     * Logout (token revoke).
-     *
-     * @throws CommunicationFailureException if client fails to reach backend application
-     */
-    void revokeToken() throws CommunicationFailureException;
-
-    /**
-     * Starts password reset process.
-     *
-     * @param passwordResetDemandRequestModel user's email address wrapped in {@link PasswordResetDemandRequestModel} to request password reset for
-     * @param recaptchaToken ReCaptcha response token
-     * @throws CommunicationFailureException if client fails to reach backend application
-     */
-    void demandPasswordReset(PasswordResetDemandRequestModel passwordResetDemandRequestModel, String recaptchaToken) throws CommunicationFailureException;
-
-    /**
-     * Confirms password reset request by providing the new password.
-     *
-     * @param userPasswordRequestModel {@link UserPasswordRequestModel} holding the new password and its confirmation
-     * @param recaptchaToken ReCaptcha response token
-     * @throws CommunicationFailureException if client fails to reach backend application
-     */
-    void confirmPasswordReset(UserPasswordRequestModel userPasswordRequestModel, String recaptchaToken) throws CommunicationFailureException;
-
-    /**
-     * Claims "session extension" - replaces given token with a new one.
-     *
-     * @return response mapped to {@link LoginResponseDataModel}
-     * @throws CommunicationFailureException if client fails to reach backend application
-     */
-    LoginResponseDataModel renewToken() throws CommunicationFailureException;
 }
