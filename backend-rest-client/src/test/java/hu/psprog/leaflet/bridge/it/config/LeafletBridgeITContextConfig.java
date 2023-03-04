@@ -35,7 +35,7 @@ public class LeafletBridgeITContextConfig {
     public static final String INTEGRATION_TEST_CONFIG_PROFILE = "it";
     static final String COMPONENT_SCAN_PACKAGE = "hu.psprog.leaflet.bridge";
 
-    private RequestAuthentication requestAuthentication = () -> {
+    private final RequestAuthentication requestAuthentication = () -> {
         Map<String, String> auth = new HashMap<>();
         auth.put("Authorization", "Bearer token");
         return auth;
