@@ -5,6 +5,7 @@ import com.github.tomakehurst.wiremock.client.ResponseDefinitionBuilder;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.matching.StringValuePattern;
 import hu.psprog.leaflet.api.rest.request.entry.EntryCreateRequestModel;
+import hu.psprog.leaflet.api.rest.request.entry.EntryInitialStatus;
 import hu.psprog.leaflet.api.rest.response.common.WrapperBodyDataModel;
 import hu.psprog.leaflet.api.rest.response.entry.EditEntryDataModel;
 import hu.psprog.leaflet.api.rest.response.entry.EntryDataModel;
@@ -286,6 +287,27 @@ public class EntryBridgeServiceImplIT extends WireMockBaseTest {
 
         // when
         EditEntryDataModel result = entryBridgeService.changeStatus(entryID);
+
+        // then
+        assertThat(result, equalTo(extendedEntryDataModel));
+        verify(putRequestedFor(urlEqualTo(uri))
+                .withHeader(AUTHORIZATION_HEADER, VALUE_PATTERN_BEARER_TOKEN));
+    }
+
+    @Test
+    public void shouldChangePublicationStatus() throws CommunicationFailureException {
+
+        // given
+        EditEntryDataModel extendedEntryDataModel = prepareEditEntryDataModel(1L);
+        Long entryID = 1L;
+        EntryInitialStatus newStatus = EntryInitialStatus.PUBLIC;
+        String uri = prepareURI(LeafletPath.ENTRIES_PUBLICATION_STATUS.getURI(), entryID, newStatus);
+
+        givenThat(put(uri)
+                .willReturn(ResponseDefinitionBuilder.okForJson(extendedEntryDataModel)));
+
+        // when
+        EditEntryDataModel result = entryBridgeService.changePublicationStatus(entryID, newStatus);
 
         // then
         assertThat(result, equalTo(extendedEntryDataModel));

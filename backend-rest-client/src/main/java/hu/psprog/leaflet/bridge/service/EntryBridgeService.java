@@ -1,6 +1,7 @@
 package hu.psprog.leaflet.bridge.service;
 
 import hu.psprog.leaflet.api.rest.request.entry.EntryCreateRequestModel;
+import hu.psprog.leaflet.api.rest.request.entry.EntryInitialStatus;
 import hu.psprog.leaflet.api.rest.request.entry.EntryUpdateRequestModel;
 import hu.psprog.leaflet.api.rest.response.common.WrapperBodyDataModel;
 import hu.psprog.leaflet.api.rest.response.entry.EditEntryDataModel;
@@ -138,6 +139,16 @@ public interface EntryBridgeService {
      * @throws CommunicationFailureException if client fails to reach backend application
      */
     EditEntryDataModel changeStatus(Long entryID) throws CommunicationFailureException;
+
+    /**
+     * Changes publication status of an existing entry.
+     *
+     * @param entryID ID of an existing entry
+     * @param newStatus new publication status to transition entry to
+     * @return updated entry data
+     * @throws CommunicationFailureException if client fails to reach backend application
+     */
+    EditEntryDataModel changePublicationStatus(Long entryID, EntryInitialStatus newStatus) throws CommunicationFailureException;
 
     /**
      * Deletes an existing entry.
