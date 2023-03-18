@@ -3,6 +3,7 @@ package hu.psprog.leaflet.bridge.service.impl;
 import com.netflix.hystrix.contrib.javanica.annotation.DefaultProperties;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import hu.psprog.leaflet.api.rest.request.entry.EntryCreateRequestModel;
+import hu.psprog.leaflet.api.rest.request.entry.EntryInitialStatus;
 import hu.psprog.leaflet.api.rest.request.entry.EntryUpdateRequestModel;
 import hu.psprog.leaflet.api.rest.response.common.WrapperBodyDataModel;
 import hu.psprog.leaflet.api.rest.response.entry.EditEntryDataModel;
@@ -37,8 +38,9 @@ public class EntryBridgeServiceImpl extends HystrixDefaultConfiguration implemen
     private static final String ORDER_DIRECTION = "orderDirection";
     private static final String ID = "id";
     private static final String LINK = "link";
+    private static final String STATUS = "status";
 
-    private BridgeClient bridgeClient;
+    private final BridgeClient bridgeClient;
 
     @Autowired
     public EntryBridgeServiceImpl(BridgeClient bridgeClient) {
@@ -205,6 +207,20 @@ public class EntryBridgeServiceImpl extends HystrixDefaultConfiguration implemen
                 .method(RequestMethod.PUT)
                 .path(LeafletPath.ENTRIES_STATUS)
                 .addPathParameter(ID, String.valueOf(entryID))
+                .authenticated()
+                .build();
+
+        return bridgeClient.call(restRequest, EditEntryDataModel.class);
+    }
+
+    @Override
+    public EditEntryDataModel changePublicationStatus(Long entryID, EntryInitialStatus newStatus) throws CommunicationFailureException {
+
+        RESTRequest restRequest = RESTRequest.getBuilder()
+                .method(RequestMethod.PUT)
+                .path(LeafletPath.ENTRIES_PUBLICATION_STATUS)
+                .addPathParameter(ID, String.valueOf(entryID))
+                .addPathParameter(STATUS, String.valueOf(newStatus))
                 .authenticated()
                 .build();
 

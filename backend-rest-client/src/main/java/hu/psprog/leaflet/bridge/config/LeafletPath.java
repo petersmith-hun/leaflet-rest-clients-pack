@@ -51,6 +51,7 @@ public enum LeafletPath implements Path {
     ENTRIES_BY_LINK("/entries/link/{link}"),
     ENTRIES_BY_ID("/entries/{id}"),
     ENTRIES_STATUS("/entries/{id}/status"),
+    ENTRIES_PUBLICATION_STATUS("/entries/{id}/publication/{status}"),
 
     // file related paths
     FILES("/files"),
@@ -86,7 +87,7 @@ public enum LeafletPath implements Path {
     USERS_RECLAIM("/users/reclaim"),
     USERS_RENEW("/users/renew");
 
-    private String uri;
+    private final String uri;
 
     LeafletPath(String uri) {
         this.uri = uri;
