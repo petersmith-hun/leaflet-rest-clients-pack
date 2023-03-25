@@ -6,7 +6,7 @@
 
     <artifactId>leaflet-rest-clients-pack</artifactId>
     <packaging>pom</packaging>
-    <version>1.12.0</version>
+    <version>1.12.1</version>
 
     <parent>
         <groupId>hu.psprog.leaflet</groupId>
@@ -40,6 +40,7 @@
 
         <!-- overrides for leaflet internal libs -->
         <leaflet.rcp.version>${project.version}</leaflet.rcp.version>
+        <leaflet.api.version>2.1.0</leaflet.api.version>
 
         <!-- compiler settings -->
         <maven.compiler.source>${java.version}</maven.compiler.source>

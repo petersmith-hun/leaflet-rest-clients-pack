@@ -6,10 +6,12 @@ import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.matching.StringValuePattern;
 import hu.psprog.leaflet.api.rest.request.entry.EntryCreateRequestModel;
 import hu.psprog.leaflet.api.rest.request.entry.EntryInitialStatus;
+import hu.psprog.leaflet.api.rest.request.entry.EntrySearchParameters;
 import hu.psprog.leaflet.api.rest.response.common.WrapperBodyDataModel;
 import hu.psprog.leaflet.api.rest.response.entry.EditEntryDataModel;
 import hu.psprog.leaflet.api.rest.response.entry.EntryDataModel;
 import hu.psprog.leaflet.api.rest.response.entry.EntryListDataModel;
+import hu.psprog.leaflet.api.rest.response.entry.EntrySearchResultDataModel;
 import hu.psprog.leaflet.api.rest.response.entry.ExtendedEntryDataModel;
 import hu.psprog.leaflet.bridge.client.domain.OrderBy;
 import hu.psprog.leaflet.bridge.client.domain.OrderDirection;
@@ -19,6 +21,8 @@ import hu.psprog.leaflet.bridge.it.config.BridgeITSuite;
 import hu.psprog.leaflet.bridge.service.EntryBridgeService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.List;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.delete;
 import static com.github.tomakehurst.wiremock.client.WireMock.deleteRequestedFor;
@@ -195,6 +199,61 @@ public class EntryBridgeServiceImplIT extends WireMockBaseTest {
     }
 
     @Test
+    public void shouldSearchEntriesWithEmptySearchRequest() throws CommunicationFailureException {
+
+        // given
+        EntrySearchResultDataModel entrySearchResultDataModel = prepareEntrySearchResultDataModel();
+        WrapperBodyDataModel<EntrySearchResultDataModel> wrappedEntrySearchResultDataModel = prepareWrappedListDataModel(entrySearchResultDataModel);
+        EntrySearchParameters entrySearchParameters = new EntrySearchParameters();
+
+        givenThat(get(urlPathEqualTo(LeafletPath.ENTRIES_SEARCH.getURI()))
+                .willReturn(ResponseDefinitionBuilder.okForJson(wrappedEntrySearchResultDataModel)));
+
+        // when
+        WrapperBodyDataModel<EntrySearchResultDataModel> result = entryBridgeService.searchEntries(entrySearchParameters);
+
+        // then
+        assertThat(result, equalTo(wrappedEntrySearchResultDataModel));
+        verify(getRequestedFor(urlPathEqualTo(LeafletPath.ENTRIES_SEARCH.getURI()))
+                .withQueryParam("page", WireMock.equalTo("1")));
+    }
+
+    @Test
+    public void shouldSearchEntriesWithCompleteSearchRequest() throws CommunicationFailureException {
+
+        // given
+        EntrySearchResultDataModel entrySearchResultDataModel = prepareEntrySearchResultDataModel();
+        WrapperBodyDataModel<EntrySearchResultDataModel> wrappedEntrySearchResultDataModel = prepareWrappedListDataModel(entrySearchResultDataModel);
+        EntrySearchParameters entrySearchParameters = new EntrySearchParameters();
+        entrySearchParameters.setPage(3);
+        entrySearchParameters.setContent("content1");
+        entrySearchParameters.setEnabled(true);
+        entrySearchParameters.setLimit(30);
+        entrySearchParameters.setStatus(EntryInitialStatus.REVIEW);
+        entrySearchParameters.setCategoryID(2L);
+        entrySearchParameters.setOrderBy(hu.psprog.leaflet.api.rest.request.common.OrderBy.Entry.TITLE);
+        entrySearchParameters.setOrderDirection(hu.psprog.leaflet.api.rest.request.common.OrderDirection.ASC);
+
+        givenThat(get(urlPathEqualTo(LeafletPath.ENTRIES_SEARCH.getURI()))
+                .willReturn(ResponseDefinitionBuilder.okForJson(wrappedEntrySearchResultDataModel)));
+
+        // when
+        WrapperBodyDataModel<EntrySearchResultDataModel> result = entryBridgeService.searchEntries(entrySearchParameters);
+
+        // then
+        assertThat(result, equalTo(wrappedEntrySearchResultDataModel));
+        verify(getRequestedFor(urlPathEqualTo(LeafletPath.ENTRIES_SEARCH.getURI()))
+                .withQueryParam("page", WireMock.equalTo("3"))
+                .withQueryParam("content", WireMock.equalTo("content1"))
+                .withQueryParam("enabled", WireMock.equalTo("true"))
+                .withQueryParam("limit", WireMock.equalTo("30"))
+                .withQueryParam("status", WireMock.equalTo("REVIEW"))
+                .withQueryParam("categoryID", WireMock.equalTo("2"))
+                .withQueryParam("orderBy", WireMock.equalTo("TITLE"))
+                .withQueryParam("orderDirection", WireMock.equalTo("ASC")));
+    }
+
+    @Test
     public void shouldGetEntryByLink() throws CommunicationFailureException {
 
         // given
@@ -341,6 +400,13 @@ public class EntryBridgeServiceImplIT extends WireMockBaseTest {
         return EntryListDataModel.getBuilder()
                 .withItem(prepareEntryDataModel(1L))
                 .withItem(prepareEntryDataModel(2L))
+                .build();
+    }
+
+    private EntrySearchResultDataModel prepareEntrySearchResultDataModel() {
+
+        return EntrySearchResultDataModel.getBuilder()
+                .withEntries(List.of(prepareEditEntryDataModel(3L)))
                 .build();
     }
 
