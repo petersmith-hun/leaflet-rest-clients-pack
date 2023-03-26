@@ -4,10 +4,12 @@ import com.netflix.hystrix.contrib.javanica.annotation.DefaultProperties;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import hu.psprog.leaflet.api.rest.request.entry.EntryCreateRequestModel;
 import hu.psprog.leaflet.api.rest.request.entry.EntryInitialStatus;
+import hu.psprog.leaflet.api.rest.request.entry.EntrySearchParameters;
 import hu.psprog.leaflet.api.rest.request.entry.EntryUpdateRequestModel;
 import hu.psprog.leaflet.api.rest.response.common.WrapperBodyDataModel;
 import hu.psprog.leaflet.api.rest.response.entry.EditEntryDataModel;
 import hu.psprog.leaflet.api.rest.response.entry.EntryListDataModel;
+import hu.psprog.leaflet.api.rest.response.entry.EntrySearchResultDataModel;
 import hu.psprog.leaflet.api.rest.response.entry.ExtendedEntryDataModel;
 import hu.psprog.leaflet.bridge.client.BridgeClient;
 import hu.psprog.leaflet.bridge.client.domain.BridgeService;
@@ -39,6 +41,8 @@ public class EntryBridgeServiceImpl extends HystrixDefaultConfiguration implemen
     private static final String ID = "id";
     private static final String LINK = "link";
     private static final String STATUS = "status";
+    private static final String ENABLED = "enabled";
+    private static final String CATEGORY_ID = "categoryID";
 
     private final BridgeClient bridgeClient;
 
@@ -145,6 +149,33 @@ public class EntryBridgeServiceImpl extends HystrixDefaultConfiguration implemen
                 .build();
 
         return bridgeClient.call(restRequest, new GenericType<WrapperBodyDataModel<EntryListDataModel>>() {});
+    }
+
+    @Override
+    public WrapperBodyDataModel<EntrySearchResultDataModel> searchEntries(EntrySearchParameters entrySearchParameters) throws CommunicationFailureException {
+
+        RESTRequest.RESTRequestBuilder restRequestBuilder = RESTRequest.getBuilder()
+                .method(RequestMethod.GET)
+                .path(LeafletPath.ENTRIES_SEARCH)
+                .authenticated()
+                .addRequestParameters(PAGE, String.valueOf(entrySearchParameters.getPage()));
+
+        entrySearchParameters.getOrderBy()
+                .ifPresent(orderBy -> restRequestBuilder.addRequestParameters(ORDER_BY, orderBy.name()));
+        entrySearchParameters.getOrderDirection()
+                .ifPresent(orderDirection -> restRequestBuilder.addRequestParameters(ORDER_DIRECTION, orderDirection.name()));
+        entrySearchParameters.getLimit()
+                .ifPresent(limit -> restRequestBuilder.addRequestParameters(LIMIT, String.valueOf(limit)));
+        entrySearchParameters.getEnabled()
+                .ifPresent(enabled -> restRequestBuilder.addRequestParameters(ENABLED, String.valueOf(enabled)));
+        entrySearchParameters.getCategoryID()
+                .ifPresent(categoryID -> restRequestBuilder.addRequestParameters(CATEGORY_ID, String.valueOf(categoryID)));
+        entrySearchParameters.getStatus()
+                .ifPresent(status -> restRequestBuilder.addRequestParameters(STATUS, status.name()));
+        entrySearchParameters.getContent()
+                .ifPresent(content -> restRequestBuilder.addRequestParameters(CONTENT, content));
+
+        return bridgeClient.call(restRequestBuilder.build(), new GenericType<WrapperBodyDataModel<EntrySearchResultDataModel>>() {});
     }
 
     @Override

@@ -52,6 +52,7 @@ public enum LeafletPath implements Path {
     ENTRIES_BY_ID("/entries/{id}"),
     ENTRIES_STATUS("/entries/{id}/status"),
     ENTRIES_PUBLICATION_STATUS("/entries/{id}/publication/{status}"),
+    ENTRIES_SEARCH("/entries/search"),
 
     // file related paths
     FILES("/files"),

@@ -2,10 +2,12 @@ package hu.psprog.leaflet.bridge.service;
 
 import hu.psprog.leaflet.api.rest.request.entry.EntryCreateRequestModel;
 import hu.psprog.leaflet.api.rest.request.entry.EntryInitialStatus;
+import hu.psprog.leaflet.api.rest.request.entry.EntrySearchParameters;
 import hu.psprog.leaflet.api.rest.request.entry.EntryUpdateRequestModel;
 import hu.psprog.leaflet.api.rest.response.common.WrapperBodyDataModel;
 import hu.psprog.leaflet.api.rest.response.entry.EditEntryDataModel;
 import hu.psprog.leaflet.api.rest.response.entry.EntryListDataModel;
+import hu.psprog.leaflet.api.rest.response.entry.EntrySearchResultDataModel;
 import hu.psprog.leaflet.api.rest.response.entry.ExtendedEntryDataModel;
 import hu.psprog.leaflet.bridge.client.domain.OrderBy;
 import hu.psprog.leaflet.bridge.client.domain.OrderDirection;
@@ -93,6 +95,15 @@ public interface EntryBridgeService {
      */
     WrapperBodyDataModel<EntryListDataModel> getPageOfPublicEntriesByContent(String content, int page, int limit, OrderBy.Entry orderBy, OrderDirection orderDirection)
             throws CommunicationFailureException;
+
+    /**
+     * Returns a paginated list of edit-level entry data for the given search request.
+     *
+     * @param entrySearchParameters {@link EntrySearchParameters} object containing search request parameters
+     * @return page of entries filtered and paginated by the given search parameters
+     * @throws CommunicationFailureException if client fails to reach backend application
+     */
+    WrapperBodyDataModel<EntrySearchResultDataModel> searchEntries(EntrySearchParameters entrySearchParameters) throws CommunicationFailureException;
 
     /**
      * Returns entry identified by given link.
