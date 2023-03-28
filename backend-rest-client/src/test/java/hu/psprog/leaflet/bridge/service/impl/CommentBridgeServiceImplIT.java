@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.matching.StringValuePattern;
 import hu.psprog.leaflet.api.rest.request.comment.CommentCreateRequestModel;
+import hu.psprog.leaflet.api.rest.request.comment.CommentSearchParameters;
 import hu.psprog.leaflet.api.rest.response.comment.CommentDataModel;
 import hu.psprog.leaflet.api.rest.response.comment.CommentListDataModel;
 import hu.psprog.leaflet.api.rest.response.comment.ExtendedCommentDataModel;
@@ -128,6 +129,57 @@ public class CommentBridgeServiceImplIT extends WireMockBaseTest {
                 .withHeader(AUTHORIZATION_HEADER, VALUE_PATTERN_BEARER_TOKEN));
     }
 
+    @Test
+    public void shouldSearchEntriesWithEmptySearchRequest() throws CommunicationFailureException, JsonProcessingException {
+
+        // given
+        ExtendedCommentListDataModel extendedCommentListDataModel = prepareExtendedCommentListDataModel();
+        WrapperBodyDataModel<ExtendedCommentListDataModel> wrappedExtendedCommentListDataModelModel = prepareWrappedListDataModel(extendedCommentListDataModel);
+        CommentSearchParameters commentSearchParameters = new CommentSearchParameters();
+
+        givenThat(get(urlPathEqualTo(LeafletPath.COMMENTS_SEARCH.getURI()))
+                .willReturn(jsonResponse(wrappedExtendedCommentListDataModelModel)));
+
+        // when
+        WrapperBodyDataModel<ExtendedCommentListDataModel> result = commentBridgeService.searchComments(commentSearchParameters);
+
+        // then
+        assertThat(result, equalTo(wrappedExtendedCommentListDataModelModel));
+        verify(getRequestedFor(urlPathEqualTo(LeafletPath.COMMENTS_SEARCH.getURI()))
+                .withQueryParam("page", WireMock.equalTo("1")));
+    }
+
+    @Test
+    public void shouldSearchEntriesWithCompleteSearchRequest() throws CommunicationFailureException, JsonProcessingException {
+
+        // given
+        ExtendedCommentListDataModel extendedCommentListDataModel = prepareExtendedCommentListDataModel();
+        WrapperBodyDataModel<ExtendedCommentListDataModel> wrappedExtendedCommentListDataModelModel = prepareWrappedListDataModel(extendedCommentListDataModel);
+        CommentSearchParameters commentSearchParameters = new CommentSearchParameters();
+        commentSearchParameters.setPage(3);
+        commentSearchParameters.setContent("content1");
+        commentSearchParameters.setEnabled(true);
+        commentSearchParameters.setLimit(30);
+        commentSearchParameters.setOrderBy(hu.psprog.leaflet.api.rest.request.common.OrderBy.Comment.ID);
+        commentSearchParameters.setOrderDirection(hu.psprog.leaflet.api.rest.request.common.OrderDirection.ASC);
+
+        givenThat(get(urlPathEqualTo(LeafletPath.COMMENTS_SEARCH.getURI()))
+                .willReturn(jsonResponse(wrappedExtendedCommentListDataModelModel)));
+
+        // when
+        WrapperBodyDataModel<ExtendedCommentListDataModel> result = commentBridgeService.searchComments(commentSearchParameters);
+
+        // then
+        assertThat(result, equalTo(wrappedExtendedCommentListDataModelModel));
+        verify(getRequestedFor(urlPathEqualTo(LeafletPath.COMMENTS_SEARCH.getURI()))
+                .withQueryParam("page", WireMock.equalTo("3"))
+                .withQueryParam("content", WireMock.equalTo("content1"))
+                .withQueryParam("enabled", WireMock.equalTo("true"))
+                .withQueryParam("limit", WireMock.equalTo("30"))
+                .withQueryParam("orderBy", WireMock.equalTo("ID"))
+                .withQueryParam("orderDirection", WireMock.equalTo("ASC")));
+    }
+    
     @Test
     public void shouldGetComment() throws CommunicationFailureException, JsonProcessingException {
 

@@ -26,6 +26,7 @@ public enum LeafletPath implements Path {
     COMMENTS_BY_ID("/comments/{id}"),
     COMMENTS_STATUS("/comments/{id}/status"),
     COMMENTS_DELETE_PERMANENT("/comments/{id}/permanent"),
+    COMMENTS_SEARCH("/comments/search"),
 
     // contact request related paths
     CONTACT("/contact"),
