@@ -3,6 +3,7 @@ package hu.psprog.leaflet.bridge.service.impl;
 import com.netflix.hystrix.contrib.javanica.annotation.DefaultProperties;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import hu.psprog.leaflet.api.rest.request.comment.CommentCreateRequestModel;
+import hu.psprog.leaflet.api.rest.request.comment.CommentSearchParameters;
 import hu.psprog.leaflet.api.rest.request.comment.CommentUpdateRequestModel;
 import hu.psprog.leaflet.api.rest.response.comment.CommentDataModel;
 import hu.psprog.leaflet.api.rest.response.comment.CommentListDataModel;
@@ -37,8 +38,11 @@ public class CommentBridgeServiceImpl extends HystrixDefaultConfiguration implem
     private static final String ORDER_DIRECTION = "orderDirection";
     private static final String ID = "id";
     private static final String LINK = "link";
+    private static final String ENABLED = "enabled";
+    private static final String DELETED = "deleted";
+    private static final String CONTENT = "content";
 
-    private BridgeClient bridgeClient;
+    private final BridgeClient bridgeClient;
 
     @Autowired
     public CommentBridgeServiceImpl(BridgeClient bridgeClient) {
@@ -98,6 +102,31 @@ public class CommentBridgeServiceImpl extends HystrixDefaultConfiguration implem
                 .build();
 
         return bridgeClient.call(restRequest, new GenericType<WrapperBodyDataModel<ExtendedCommentListDataModel>>() {});
+    }
+
+    @Override
+    public WrapperBodyDataModel<ExtendedCommentListDataModel> searchComments(CommentSearchParameters commentSearchParameters) throws CommunicationFailureException {
+
+        RESTRequest.RESTRequestBuilder restRequestBuilder = RESTRequest.getBuilder()
+                .method(RequestMethod.GET)
+                .path(LeafletPath.COMMENTS_SEARCH)
+                .authenticated()
+                .addRequestParameters(PAGE, String.valueOf(commentSearchParameters.getPage()));
+
+        commentSearchParameters.getOrderBy()
+                .ifPresent(orderBy -> restRequestBuilder.addRequestParameters(ORDER_BY, orderBy.name()));
+        commentSearchParameters.getOrderDirection()
+                .ifPresent(orderDirection -> restRequestBuilder.addRequestParameters(ORDER_DIRECTION, orderDirection.name()));
+        commentSearchParameters.getLimit()
+                .ifPresent(limit -> restRequestBuilder.addRequestParameters(LIMIT, String.valueOf(limit)));
+        commentSearchParameters.getEnabled()
+                .ifPresent(enabled -> restRequestBuilder.addRequestParameters(ENABLED, String.valueOf(enabled)));
+        commentSearchParameters.getDeleted()
+                .ifPresent(deleted -> restRequestBuilder.addRequestParameters(DELETED, String.valueOf(deleted)));
+        commentSearchParameters.getContent()
+                .ifPresent(content -> restRequestBuilder.addRequestParameters(CONTENT, content));
+
+        return bridgeClient.call(restRequestBuilder.build(), new GenericType<WrapperBodyDataModel<ExtendedCommentListDataModel>>() {});
     }
 
     @Override

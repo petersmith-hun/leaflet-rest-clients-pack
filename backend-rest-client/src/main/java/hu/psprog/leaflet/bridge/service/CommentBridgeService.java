@@ -1,6 +1,7 @@
 package hu.psprog.leaflet.bridge.service;
 
 import hu.psprog.leaflet.api.rest.request.comment.CommentCreateRequestModel;
+import hu.psprog.leaflet.api.rest.request.comment.CommentSearchParameters;
 import hu.psprog.leaflet.api.rest.request.comment.CommentUpdateRequestModel;
 import hu.psprog.leaflet.api.rest.response.comment.CommentDataModel;
 import hu.psprog.leaflet.api.rest.response.comment.CommentListDataModel;
@@ -62,6 +63,15 @@ public interface CommentBridgeService {
      */
     WrapperBodyDataModel<ExtendedCommentListDataModel> getPageOfCommentsForUser(Long userID, int page, int limit, OrderBy.Comment orderBy, OrderDirection orderDirection)
             throws CommunicationFailureException;
+
+    /**
+     * Returns a paginated list of comment data for the given search request.
+     *
+     * @param commentSearchParameters {@link CommentSearchParameters} object containing search request parameters
+     * @return page of comments filtered and paginated by the given search parameters
+     * @throws CommunicationFailureException if client fails to reach backend application
+     */
+    WrapperBodyDataModel<ExtendedCommentListDataModel> searchComments(CommentSearchParameters commentSearchParameters) throws CommunicationFailureException;
 
     /**
      * Retrieves comment identified by given ID.
