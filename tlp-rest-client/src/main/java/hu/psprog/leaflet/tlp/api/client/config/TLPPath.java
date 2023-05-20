@@ -12,7 +12,7 @@ public enum TLPPath implements Path {
     LOGS("/logs"),
     LOGS_V2("/v2/logs");
 
-    private String uri;
+    private final String uri;
 
     TLPPath(String uri) {
         this.uri = uri;

@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.ZonedDateTime;
+import java.util.List;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.delete;
 import static com.github.tomakehurst.wiremock.client.WireMock.deleteRequestedFor;
@@ -183,18 +184,20 @@ public class CategoryBridgeServiceImplIT extends WireMockBaseTest {
 
     private CategoryListDataModel prepareCategoryListDataModel() {
         return CategoryListDataModel.getBuilder()
-                .withItem(prepareCategoryDataModel(1L))
-                .withItem(prepareCategoryDataModel(2L))
+                .withCategories(List.of(
+                        prepareCategoryDataModel(1L),
+                        prepareCategoryDataModel(2L)
+                ))
                 .build();
     }
 
     private CategoryDataModel prepareCategoryDataModel(Long categoryID) {
         return CategoryDataModel.getBuilder()
-                .withID(categoryID)
+                .withId(categoryID)
                 .withTitle("Category #" + categoryID)
                 .withDescription("Description for category")
-                .withCreated(ZonedDateTime.now(ZONE_ID))
-                .withLastModified(ZonedDateTime.now(ZONE_ID))
+                .withCreated(ZonedDateTime.now(ZONE_OFFSET))
+                .withLastModified(ZonedDateTime.now(ZONE_OFFSET))
                 .build();
     }
 }

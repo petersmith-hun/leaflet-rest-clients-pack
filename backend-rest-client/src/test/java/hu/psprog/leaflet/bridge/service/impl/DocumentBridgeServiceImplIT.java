@@ -15,6 +15,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.ZonedDateTime;
+import java.util.List;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.delete;
 import static com.github.tomakehurst.wiremock.client.WireMock.deleteRequestedFor;
@@ -201,20 +202,22 @@ public class DocumentBridgeServiceImplIT extends WireMockBaseTest {
 
     private DocumentListDataModel prepareDocumentListDataModel() {
         return DocumentListDataModel.getBuilder()
-                .withItem(prepareEditDocumentDataModel(1L))
-                .withItem(prepareEditDocumentDataModel(2L))
+                .withDocuments(List.of(
+                        prepareEditDocumentDataModel(1L),
+                        prepareEditDocumentDataModel(2L)
+                ))
                 .build();
     }
 
     private EditDocumentDataModel prepareEditDocumentDataModel(Long documentID) {
-        return EditDocumentDataModel.getExtendedBuilder()
+        return EditDocumentDataModel.getBuilder()
                 .withId(documentID)
-                .withCreated(ZonedDateTime.now(ZONE_ID))
+                .withCreated(ZonedDateTime.now(ZONE_OFFSET))
                 .withLink("document-" + documentID)
                 .withTitle("Document #" + documentID)
                 .withUser(null)
                 .withEnabled(true)
-                .withLastModified(ZonedDateTime.now(ZONE_ID))
+                .withLastModified(ZonedDateTime.now(ZONE_OFFSET))
                 .withRawContent("Raw content")
                 .build();
     }
@@ -223,7 +226,7 @@ public class DocumentBridgeServiceImplIT extends WireMockBaseTest {
         return DocumentDataModel.getBuilder()
                 .withId(documentID)
                 .withRawContent("Content")
-                .withCreated(ZonedDateTime.now(ZONE_ID))
+                .withCreated(ZonedDateTime.now(ZONE_OFFSET))
                 .withLink("document-" + documentID)
                 .withTitle("Document #" + documentID)
                 .withUser(null)

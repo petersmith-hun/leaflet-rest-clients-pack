@@ -22,7 +22,7 @@ public enum OrderBy {
      */
     CONTENT("content");
 
-    private String field;
+    private final String field;
 
     OrderBy(String field) {
         this.field = field;

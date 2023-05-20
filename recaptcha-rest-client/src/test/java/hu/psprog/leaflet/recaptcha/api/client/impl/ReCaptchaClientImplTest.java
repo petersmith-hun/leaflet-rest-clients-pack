@@ -26,9 +26,9 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ActiveProfiles;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.core.MediaType;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.ws.rs.core.MediaType;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -75,12 +75,12 @@ public class ReCaptchaClientImplTest {
             .withRemoteIp(VALUE_REMOTE_IP)
             .build();
     private static final ReCaptchaResponse RE_CAPTCHA_RESPONSE_SUCCESSFUL = ReCaptchaResponse.getBuilder()
-            .withSuccess(true)
+            .withSuccessful(true)
             .withHostname("hostname")
             .withChallengeTimeStamp(new Date())
             .build();
     private static final ReCaptchaResponse RE_CAPTCHA_RESPONSE_FAILED = ReCaptchaResponse.getBuilder()
-            .withSuccess(false)
+            .withSuccessful(false)
             .withErrorCodes(Collections.singletonList(ReCaptchaErrorCode.TIMEOUT_OR_DUPLICATE))
             .build();
 
@@ -141,10 +141,10 @@ public class ReCaptchaClientImplTest {
     private Map<String, Object> prepareRawResponse(ReCaptchaResponse response) {
 
         Map<String, Object> rawResponse = new HashMap<>();
-        rawResponse.put("success", response.isSuccessful());
-        rawResponse.put("challenge_ts", response.getChallengeTimeStamp());
-        rawResponse.put("hostname", response.getHostname());
-        rawResponse.put("error-codes", Optional.ofNullable(response.getErrorCodes())
+        rawResponse.put("success", response.successful());
+        rawResponse.put("challenge_ts", response.challengeTimeStamp());
+        rawResponse.put("hostname", response.hostname());
+        rawResponse.put("error-codes", Optional.ofNullable(response.errorCodes())
                 .map(reCaptchaErrorCodes -> reCaptchaErrorCodes.stream()
                         .map(ReCaptchaErrorCode::getRawErrorCode)
                         .collect(Collectors.toList()))

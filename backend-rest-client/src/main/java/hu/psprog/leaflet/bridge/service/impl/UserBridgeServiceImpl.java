@@ -1,7 +1,5 @@
 package hu.psprog.leaflet.bridge.service.impl;
 
-import com.netflix.hystrix.contrib.javanica.annotation.DefaultProperties;
-import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import hu.psprog.leaflet.api.rest.request.user.UpdateProfileRequestModel;
 import hu.psprog.leaflet.api.rest.request.user.UpdateRoleRequestModel;
 import hu.psprog.leaflet.api.rest.request.user.UserCreateRequestModel;
@@ -24,8 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @author Peter Smith
  */
 @BridgeService(client = "leaflet")
-@DefaultProperties(groupKey = "leaflet.user")
-public class UserBridgeServiceImpl extends HystrixDefaultConfiguration implements UserBridgeService {
+public class UserBridgeServiceImpl implements UserBridgeService {
 
     private static final String ID = "id";
 
@@ -114,7 +111,6 @@ public class UserBridgeServiceImpl extends HystrixDefaultConfiguration implement
     }
 
     @Override
-    @HystrixCommand
     public ExtendedUserDataModel updateProfile(Long userID, UpdateProfileRequestModel updateProfileRequestModel) throws CommunicationFailureException {
 
         RESTRequest restRequest = RESTRequest.getBuilder()
@@ -129,7 +125,6 @@ public class UserBridgeServiceImpl extends HystrixDefaultConfiguration implement
     }
 
     @Override
-    @HystrixCommand
     public ExtendedUserDataModel updatePassword(Long userID, UserPasswordRequestModel userPasswordRequestModel) throws CommunicationFailureException {
 
         RESTRequest restRequest = RESTRequest.getBuilder()

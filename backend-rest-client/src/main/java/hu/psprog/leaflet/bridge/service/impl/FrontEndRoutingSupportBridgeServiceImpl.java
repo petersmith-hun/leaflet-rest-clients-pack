@@ -22,7 +22,7 @@ public class FrontEndRoutingSupportBridgeServiceImpl implements FrontEndRoutingS
 
     private static final String ID = "id";
 
-    private BridgeClient bridgeClient;
+    private final BridgeClient bridgeClient;
 
     @Autowired
     public FrontEndRoutingSupportBridgeServiceImpl(BridgeClient bridgeClient) {

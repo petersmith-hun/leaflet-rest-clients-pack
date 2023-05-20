@@ -4,14 +4,16 @@ import hu.psprog.leaflet.bridge.client.exception.CommunicationFailureException;
 import hu.psprog.leaflet.translation.api.domain.TranslationPack;
 import hu.psprog.leaflet.translation.client.MessageSourceClient;
 import hu.psprog.leaflet.translation.client.config.TMSPath;
+import lombok.AccessLevel;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Service;
 
-import javax.ws.rs.client.Client;
-import javax.ws.rs.core.GenericType;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
+import jakarta.ws.rs.client.Client;
+import jakarta.ws.rs.core.GenericType;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 import java.util.List;
 import java.util.Set;
 
@@ -21,13 +23,14 @@ import java.util.Set;
  * @author Peter Smith
  */
 @Service
+@Setter(AccessLevel.PACKAGE)
 @ConfigurationProperties("bridge.clients.tms")
 public class MessageSourceClientImpl implements MessageSourceClient {
 
     private static final String PARAMETER_PACKS = "packs";
-    private static final GenericType<Set<TranslationPack>> ENTITY_TYPE = new GenericType<Set<TranslationPack>>() {};
+    private static final GenericType<Set<TranslationPack>> ENTITY_TYPE = new GenericType<>() {};
 
-    private Client client;
+    private final Client client;
     private String hostUrl;
 
     @Autowired
@@ -50,10 +53,6 @@ public class MessageSourceClientImpl implements MessageSourceClient {
         }
 
         return readResponse(response);
-    }
-
-    public void setHostUrl(String hostUrl) {
-        this.hostUrl = hostUrl;
     }
 
     private Set<TranslationPack> readResponse(Response response) {

@@ -21,6 +21,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.ZonedDateTime;
+import java.util.List;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.delete;
 import static com.github.tomakehurst.wiremock.client.WireMock.deleteRequestedFor;
@@ -297,24 +298,28 @@ public class CommentBridgeServiceImplIT extends WireMockBaseTest {
 
     private CommentListDataModel prepareCommentListDataModel() {
         return CommentListDataModel.getBuilder()
-                .withItem(prepareCommentDataModel(1L))
-                .withItem(prepareCommentDataModel(2L))
+                .withComments(List.of(
+                        prepareCommentDataModel(1L),
+                        prepareCommentDataModel(2L)
+                ))
                 .build();
     }
 
     private ExtendedCommentListDataModel prepareExtendedCommentListDataModel() {
         return ExtendedCommentListDataModel.getBuilder()
-                .withItem(prepareExtendedCommentDataModel(1L))
-                .withItem(prepareExtendedCommentDataModel(2L))
+                .withComments(List.of(
+                        prepareExtendedCommentDataModel(1L),
+                        prepareExtendedCommentDataModel(2L)
+                ))
                 .build();
     }
 
     private ExtendedCommentDataModel prepareExtendedCommentDataModel(Long commentID) {
-        return ExtendedCommentDataModel.getExtendedBuilder()
+        return ExtendedCommentDataModel.getBuilder()
                 .withId(commentID)
                 .withContent("Comment #" + commentID.toString())
-                .withCreated(ZonedDateTime.now(ZONE_ID))
-                .withLastModified(ZonedDateTime.now(ZONE_ID))
+                .withCreated(ZonedDateTime.now(ZONE_OFFSET))
+                .withLastModified(ZonedDateTime.now(ZONE_OFFSET))
                 .withDeleted(false)
                 .withOwner(UserDataModel.getBuilder()
                         .withId(1L)
@@ -329,8 +334,8 @@ public class CommentBridgeServiceImplIT extends WireMockBaseTest {
         return CommentDataModel.getBuilder()
                 .withId(commentID)
                 .withContent("Comment #" + commentID.toString())
-                .withCreated(ZonedDateTime.now(ZONE_ID))
-                .withLastModified(ZonedDateTime.now(ZONE_ID))
+                .withCreated(ZonedDateTime.now(ZONE_OFFSET))
+                .withLastModified(ZonedDateTime.now(ZONE_OFFSET))
                 .withDeleted(false)
                 .withOwner(UserDataModel.getBuilder()
                         .withId(1L)

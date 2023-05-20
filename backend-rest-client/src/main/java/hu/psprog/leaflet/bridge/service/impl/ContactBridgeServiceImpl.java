@@ -1,7 +1,5 @@
 package hu.psprog.leaflet.bridge.service.impl;
 
-import com.netflix.hystrix.contrib.javanica.annotation.DefaultProperties;
-import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import hu.psprog.leaflet.api.rest.request.contact.ContactRequestModel;
 import hu.psprog.leaflet.bridge.client.BridgeClient;
 import hu.psprog.leaflet.bridge.client.domain.BridgeService;
@@ -18,10 +16,9 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @author Peter Smith
  */
 @BridgeService(client = "leaflet")
-@DefaultProperties(groupKey = "leaflet.user")
-public class ContactBridgeServiceImpl extends HystrixDefaultConfiguration implements ContactBridgeService {
+public class ContactBridgeServiceImpl implements ContactBridgeService {
 
-    private BridgeClient bridgeClient;
+    private final BridgeClient bridgeClient;
 
     @Autowired
     public ContactBridgeServiceImpl(BridgeClient bridgeClient) {
@@ -29,7 +26,6 @@ public class ContactBridgeServiceImpl extends HystrixDefaultConfiguration implem
     }
 
     @Override
-    @HystrixCommand
     public void sendContactRequest(ContactRequestModel contactRequestModel, String recaptchaToken) throws CommunicationFailureException {
 
         RESTRequest restRequest = RESTRequest.getBuilder()

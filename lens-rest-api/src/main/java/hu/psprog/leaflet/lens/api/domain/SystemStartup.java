@@ -1,7 +1,6 @@
 package hu.psprog.leaflet.lens.api.domain;
 
 import lombok.Builder;
-import lombok.Data;
 import lombok.extern.jackson.Jacksonized;
 
 import java.util.Map;
@@ -11,18 +10,17 @@ import java.util.Map;
  *
  * @author Peter Smith
  */
-@Data
 @Builder
 @Jacksonized
-public class SystemStartup implements MailContent {
+public record SystemStartup(
+        String applicationName,
+        String version
+) implements MailContent {
 
     public static final String MAIL_CONTENT_TYPE = "system_startup";
 
     private static final String APPLICATION_NAME = "applicationName";
     private static final String VERSION = "version";
-
-    private final String applicationName;
-    private final String version;
 
     @Override
     public Map<String, Object> asContentMap() {

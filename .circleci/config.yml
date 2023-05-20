@@ -4,7 +4,7 @@ orbs:
 jobs:
   build_leaflet-rest-clients-pack:
     docker:
-      - image: cimg/openjdk:11.0
+      - image: cimg/openjdk:17.0
     steps:
       - checkout
       - run:
@@ -20,8 +20,6 @@ jobs:
           path: tlp-rest-client/target/failsafe-reports
       - store_test_results:
           path: tms-rest-client/target/failsafe-reports
-      - store_test_results:
-          path: rcp-hystrix-support/target/failsafe-reports
       - store_test_results:
           path: lens-rest-client/target/failsafe-reports
       - store_test_results:

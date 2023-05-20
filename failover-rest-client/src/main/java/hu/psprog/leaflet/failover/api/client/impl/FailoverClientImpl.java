@@ -18,7 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 @BridgeService(client = "cbfs")
 public class FailoverClientImpl implements FailoverClient {
 
-    private BridgeClient bridgeClient;
+    private final BridgeClient bridgeClient;
 
     @Autowired
     public FailoverClientImpl(BridgeClient bridgeClient) {

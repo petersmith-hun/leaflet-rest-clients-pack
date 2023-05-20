@@ -1,7 +1,5 @@
 package hu.psprog.leaflet.bridge.service.impl;
 
-import com.netflix.hystrix.contrib.javanica.annotation.DefaultProperties;
-import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import hu.psprog.leaflet.api.rest.request.document.DocumentCreateRequestModel;
 import hu.psprog.leaflet.api.rest.request.document.DocumentUpdateRequestModel;
 import hu.psprog.leaflet.api.rest.response.common.WrapperBodyDataModel;
@@ -11,13 +9,12 @@ import hu.psprog.leaflet.api.rest.response.document.EditDocumentDataModel;
 import hu.psprog.leaflet.bridge.client.BridgeClient;
 import hu.psprog.leaflet.bridge.client.domain.BridgeService;
 import hu.psprog.leaflet.bridge.client.exception.CommunicationFailureException;
-import hu.psprog.leaflet.bridge.config.LeafletPath;
 import hu.psprog.leaflet.bridge.client.request.RESTRequest;
 import hu.psprog.leaflet.bridge.client.request.RequestMethod;
+import hu.psprog.leaflet.bridge.config.LeafletPath;
 import hu.psprog.leaflet.bridge.service.DocumentBridgeService;
+import jakarta.ws.rs.core.GenericType;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import javax.ws.rs.core.GenericType;
 
 /**
  * Implementation of {@link DocumentBridgeService}.
@@ -25,13 +22,12 @@ import javax.ws.rs.core.GenericType;
  * @author Peter Smith
  */
 @BridgeService(client = "leaflet")
-@DefaultProperties(groupKey = "leaflet.content")
-public class DocumentBridgeServiceImpl extends HystrixDefaultConfiguration implements DocumentBridgeService {
+public class DocumentBridgeServiceImpl implements DocumentBridgeService {
 
     private static final String ID = "id";
     private static final String LINK = "link";
 
-    private BridgeClient bridgeClient;
+    private final BridgeClient bridgeClient;
 
     @Autowired
     public DocumentBridgeServiceImpl(BridgeClient bridgeClient) {
@@ -51,7 +47,6 @@ public class DocumentBridgeServiceImpl extends HystrixDefaultConfiguration imple
     }
 
     @Override
-    @HystrixCommand
     public DocumentListDataModel getPublicDocuments() throws CommunicationFailureException {
 
         RESTRequest restRequest = RESTRequest.getBuilder()
@@ -76,7 +71,6 @@ public class DocumentBridgeServiceImpl extends HystrixDefaultConfiguration imple
     }
 
     @Override
-    @HystrixCommand
     public WrapperBodyDataModel<DocumentDataModel> getDocumentByLink(String link) throws CommunicationFailureException {
 
         RESTRequest restRequest = RESTRequest.getBuilder()

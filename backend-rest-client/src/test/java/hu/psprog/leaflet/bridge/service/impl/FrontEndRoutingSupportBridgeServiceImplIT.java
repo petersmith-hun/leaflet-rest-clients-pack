@@ -13,6 +13,8 @@ import hu.psprog.leaflet.bridge.service.FrontEndRoutingSupportBridgeService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.List;
+
 import static com.github.tomakehurst.wiremock.client.WireMock.delete;
 import static com.github.tomakehurst.wiremock.client.WireMock.deleteRequestedFor;
 import static com.github.tomakehurst.wiremock.client.WireMock.equalToJson;
@@ -158,13 +160,13 @@ public class FrontEndRoutingSupportBridgeServiceImplIT extends WireMockBaseTest 
     }
 
     private ExtendedFrontEndRouteListDataModel prepareExtendedFrontEndRouteListDataModel() {
-        return ExtendedFrontEndRouteListDataModel.getExtendedBuilder()
-                .withItem(prepareExtendedFrontEndRouteDataModel())
+        return ExtendedFrontEndRouteListDataModel.getBuilder()
+                .withRoutes(List.of(prepareExtendedFrontEndRouteDataModel()))
                 .build();
     }
 
     private ExtendedFrontEndRouteDataModel prepareExtendedFrontEndRouteDataModel() {
-        return ExtendedFrontEndRouteDataModel.getExtendedBuilder()
+        return ExtendedFrontEndRouteDataModel.getBuilder()
                 .withRouteId(ROUTE_ID_STRING)
                 .build();
     }

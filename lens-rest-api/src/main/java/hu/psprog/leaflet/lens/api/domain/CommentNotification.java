@@ -1,7 +1,6 @@
 package hu.psprog.leaflet.lens.api.domain;
 
 import lombok.Builder;
-import lombok.Data;
 import lombok.extern.jackson.Jacksonized;
 
 import java.util.Map;
@@ -11,10 +10,16 @@ import java.util.Map;
  *
  * @author Peter Smith
  */
-@Data
 @Builder
 @Jacksonized
-public class CommentNotification implements MailContent {
+public record CommentNotification(
+        String username,
+        String email,
+        String content,
+        String authorEmail,
+        String authorName,
+        String entryTitle
+) implements MailContent {
 
     public static final String MAIL_CONTENT_TYPE = "comment_notification";
 
@@ -23,13 +28,6 @@ public class CommentNotification implements MailContent {
     private static final String CONTENT = "content";
     private static final String ENTRY_TITLE = "entryTitle";
     private static final String AUTHOR_NAME = "authorName";
-
-    private final String username;
-    private final String email;
-    private final String content;
-    private final String authorEmail;
-    private final String authorName;
-    private final String entryTitle;
 
     @Override
     public Map<String, Object> asContentMap() {
