@@ -15,6 +15,8 @@ import hu.psprog.leaflet.bridge.service.TagBridgeService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.List;
+
 import static com.github.tomakehurst.wiremock.client.WireMock.delete;
 import static com.github.tomakehurst.wiremock.client.WireMock.deleteRequestedFor;
 import static com.github.tomakehurst.wiremock.client.WireMock.equalToJson;
@@ -224,8 +226,10 @@ public class TagBridgeServiceImplIT extends WireMockBaseTest {
 
     private TagListDataModel prepareTagListDataModel() {
         return TagListDataModel.getBuilder()
-                .withItem(prepareTagDataModel(1L))
-                .withItem(prepareTagDataModel(2L))
+                .withTags(List.of(
+                        prepareTagDataModel(1L),
+                        prepareTagDataModel(2L)
+                ))
                 .build();
     }
 

@@ -9,7 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.MediaType;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
@@ -28,7 +28,7 @@ abstract class AbstractMultipartRequestBodyAdapter<S extends Serializable> imple
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractMultipartRequestBodyAdapter.class);
     private static final String EXTENSION_SEPARATOR = ".";
 
-    private String baseDirectory;
+    private final String baseDirectory;
 
     public AbstractMultipartRequestBodyAdapter(String baseDirectory) {
         this.baseDirectory = baseDirectory;
@@ -49,8 +49,8 @@ abstract class AbstractMultipartRequestBodyAdapter<S extends Serializable> imple
      */
     class FormBuilder {
 
-        private FormDataMultiPart multiPartForm;
-        private S source;
+        private final FormDataMultiPart multiPartForm;
+        private final S source;
 
         private FormBuilder(S source) {
             this.multiPartForm = new FormDataMultiPart();

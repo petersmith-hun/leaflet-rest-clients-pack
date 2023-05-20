@@ -13,6 +13,8 @@ import hu.psprog.leaflet.bridge.service.DCPStoreBridgeService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.List;
+
 import static com.github.tomakehurst.wiremock.client.WireMock.delete;
 import static com.github.tomakehurst.wiremock.client.WireMock.deleteRequestedFor;
 import static com.github.tomakehurst.wiremock.client.WireMock.equalToJson;
@@ -118,8 +120,10 @@ public class DCPStoreBridgeServiceImplIT extends WireMockBaseTest {
 
     private DCPListDataModel prepareDCPListDataModel() {
         return DCPListDataModel.getBuilder()
-                .withItem(prepareDCPDataModel(1L))
-                .withItem(prepareDCPDataModel(2L))
+                .withDcpStore(List.of(
+                        prepareDCPDataModel(1L),
+                        prepareDCPDataModel(2L)
+                ))
                 .build();
     }
 

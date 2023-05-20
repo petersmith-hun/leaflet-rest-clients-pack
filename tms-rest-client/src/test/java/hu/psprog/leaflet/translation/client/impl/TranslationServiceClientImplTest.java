@@ -30,8 +30,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.test.context.ActiveProfiles;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -72,12 +72,12 @@ public class TranslationServiceClientImplTest {
 
     private static final UUID PACK_ID = UUID.randomUUID();
     private static final String PACK_NAME = "pack1";
-    private static final TranslationPackCreationRequest TRANSLATION_PACK_CREATION_REQUEST = new TranslationPackCreationRequest();
-    private static final TranslationPack TRANSLATION_PACK = TranslationPack.getPackBuilder()
+    private static final TranslationPackCreationRequest TRANSLATION_PACK_CREATION_REQUEST = TranslationPackCreationRequest.getBuilder().build();
+    private static final TranslationPack TRANSLATION_PACK = TranslationPack.getBuilder()
             .withId(PACK_ID)
             .withPackName(PACK_NAME)
             .build();
-    private static final TranslationPackMetaInfo TRANSLATION_PACK_META_INFO = TranslationPackMetaInfo.getMetaInfoBuilder()
+    private static final TranslationPackMetaInfo TRANSLATION_PACK_META_INFO = TranslationPackMetaInfo.getBuilder()
             .withId(PACK_ID)
             .withPackName(PACK_NAME)
             .build();

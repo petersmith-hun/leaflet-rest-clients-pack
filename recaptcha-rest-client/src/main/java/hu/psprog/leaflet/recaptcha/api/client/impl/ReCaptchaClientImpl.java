@@ -20,8 +20,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 @BridgeService(client = "grc")
 public class ReCaptchaClientImpl implements ReCaptchaClient {
 
-    private BridgeClient bridgeClient;
-    private ReCaptchaRequestBodyAdapter reCaptchaRequestBodyAdapter;
+    private final BridgeClient bridgeClient;
+    private final ReCaptchaRequestBodyAdapter reCaptchaRequestBodyAdapter;
 
     @Autowired
     public ReCaptchaClientImpl(BridgeClient bridgeClient, ReCaptchaRequestBodyAdapter reCaptchaRequestBodyAdapter) {

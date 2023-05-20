@@ -1,9 +1,7 @@
 package hu.psprog.leaflet.lsrs.api.response;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import lombok.Builder;
-import lombok.Data;
+import lombok.extern.jackson.Jacksonized;
 
 import java.util.List;
 
@@ -12,18 +10,11 @@ import java.util.List;
  *
  * @author Peter Smith
  */
-@Data
 @Builder
-@JsonDeserialize(builder = DirectoryDataModel.DirectoryDataModelBuilder.class)
-public class DirectoryDataModel {
-
-    private final String id;
-    private final String root;
-    private final List<String> children;
-    private final List<String> acceptableMimeTypes;
-
-    @JsonPOJOBuilder(withPrefix = "")
-    public static class DirectoryDataModelBuilder {
-
-    }
-}
+@Jacksonized
+public record DirectoryDataModel(
+        String id,
+        String root,
+        List<String> children,
+        List<String> acceptableMimeTypes
+) { }

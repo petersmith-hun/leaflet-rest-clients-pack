@@ -14,6 +14,7 @@ import hu.psprog.leaflet.api.rest.response.common.WrapperBodyDataModel;
 
 import java.text.DateFormat;
 import java.time.ZoneId;
+import java.time.ZoneOffset;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.equalTo;
 
@@ -30,7 +31,7 @@ public abstract class WireMockBaseTest {
     static final String LIMIT = "limit";
     static final String ORDER_BY = "orderBy";
     static final String ORDER_DIRECTION = "orderDirection";
-    static final ZoneId ZONE_ID = ZoneId.of("UTC");
+    static final ZoneId ZONE_OFFSET = ZoneOffset.UTC;
 
     static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
@@ -63,7 +64,7 @@ public abstract class WireMockBaseTest {
     }
 
     <T extends BaseBodyDataModel> WrapperBodyDataModel<T> prepareWrappedListDataModel(T body) {
-        return WrapperBodyDataModel.getBuilder()
+        return WrapperBodyDataModel.<T>getBuilder()
                 .withBody(body)
                 .withSeo(SEODataModel.getBuilder()
                         .withMetaDescription("SEO Desc")

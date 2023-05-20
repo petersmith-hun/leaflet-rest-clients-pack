@@ -18,7 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 @BridgeService(client = "leaflet")
 public class AttachmentBridgeServiceImpl implements AttachmentBridgeService {
 
-    private BridgeClient bridgeClient;
+    private final BridgeClient bridgeClient;
 
     @Autowired
     public AttachmentBridgeServiceImpl(BridgeClient bridgeClient) {

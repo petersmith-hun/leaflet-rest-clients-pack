@@ -5,7 +5,7 @@
     <parent>
         <artifactId>leaflet-rest-clients-pack</artifactId>
         <groupId>hu.psprog.leaflet</groupId>
-        <version>1.12.2</version>
+        <version>1.13.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -31,15 +31,13 @@
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>hu.psprog.leaflet</groupId>
-            <artifactId>rcp-hystrix-support</artifactId>
-            <version>${project.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-core</artifactId>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.tomcat.embed</groupId>
@@ -56,7 +54,7 @@
         </dependency>
         <dependency>
             <groupId>com.github.tomakehurst</groupId>
-            <artifactId>wiremock-jre8</artifactId>
+            <artifactId>wiremock-jre8-standalone</artifactId>
         </dependency>
     </dependencies>
 

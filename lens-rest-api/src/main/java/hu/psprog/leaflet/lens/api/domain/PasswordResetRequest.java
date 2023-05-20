@@ -1,7 +1,6 @@
 package hu.psprog.leaflet.lens.api.domain;
 
 import lombok.Builder;
-import lombok.Data;
 import lombok.extern.jackson.Jacksonized;
 
 import java.util.Map;
@@ -11,10 +10,14 @@ import java.util.Map;
  *
  * @author Peter Smith
  */
-@Data
 @Builder
 @Jacksonized
-public class PasswordResetRequest implements MailContent {
+public record PasswordResetRequest(
+        String username,
+        String token,
+        String resetLink,
+        int expiration
+) implements MailContent {
 
     public static final String MAIL_CONTENT_TYPE = "pw_reset_request";
 
@@ -22,11 +25,6 @@ public class PasswordResetRequest implements MailContent {
     private static final String TOKEN = "token";
     private static final String RESET_LINK = "resetLink";
     private static final String EXPIRATION = "expiration";
-
-    private final String username;
-    private final String token;
-    private final String resetLink;
-    private final int expiration;
 
     @Override
     public Map<String, Object> asContentMap() {

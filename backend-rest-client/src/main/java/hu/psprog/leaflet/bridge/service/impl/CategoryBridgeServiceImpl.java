@@ -1,16 +1,14 @@
 package hu.psprog.leaflet.bridge.service.impl;
 
-import com.netflix.hystrix.contrib.javanica.annotation.DefaultProperties;
-import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import hu.psprog.leaflet.api.rest.request.category.CategoryCreateRequestModel;
 import hu.psprog.leaflet.api.rest.response.category.CategoryDataModel;
 import hu.psprog.leaflet.api.rest.response.category.CategoryListDataModel;
 import hu.psprog.leaflet.bridge.client.BridgeClient;
 import hu.psprog.leaflet.bridge.client.domain.BridgeService;
 import hu.psprog.leaflet.bridge.client.exception.CommunicationFailureException;
-import hu.psprog.leaflet.bridge.config.LeafletPath;
 import hu.psprog.leaflet.bridge.client.request.RESTRequest;
 import hu.psprog.leaflet.bridge.client.request.RequestMethod;
+import hu.psprog.leaflet.bridge.config.LeafletPath;
 import hu.psprog.leaflet.bridge.service.CategoryBridgeService;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -20,12 +18,11 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @author Peter Smith
  */
 @BridgeService(client = "leaflet")
-@DefaultProperties(groupKey = "leaflet.content")
-public class CategoryBridgeServiceImpl extends HystrixDefaultConfiguration implements CategoryBridgeService {
+public class CategoryBridgeServiceImpl implements CategoryBridgeService {
 
     private static final String ID = "id";
 
-    private BridgeClient bridgeClient;
+    private final BridgeClient bridgeClient;
 
     @Autowired
     public CategoryBridgeServiceImpl(BridgeClient bridgeClient) {
@@ -45,7 +42,6 @@ public class CategoryBridgeServiceImpl extends HystrixDefaultConfiguration imple
     }
 
     @Override
-    @HystrixCommand
     public CategoryListDataModel getPublicCategories() throws CommunicationFailureException {
 
         RESTRequest restRequest = RESTRequest.getBuilder()

@@ -13,7 +13,7 @@ public enum TMSPath implements Path {
     TRANSLATIONS_BY_ID("/translations/{packID}"),
     TRANSLATIONS_STATUS("/translations/{packID}/status");
 
-    private String uri;
+    private final String uri;
 
     TMSPath(String uri) {
         this.uri = uri;

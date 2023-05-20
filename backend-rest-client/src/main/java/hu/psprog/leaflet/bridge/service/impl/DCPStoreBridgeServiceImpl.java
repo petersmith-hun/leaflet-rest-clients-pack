@@ -21,7 +21,7 @@ public class DCPStoreBridgeServiceImpl implements DCPStoreBridgeService {
 
     private static final String KEY = "key";
 
-    private BridgeClient bridgeClient;
+    private final BridgeClient bridgeClient;
 
     @Autowired
     public DCPStoreBridgeServiceImpl(BridgeClient bridgeClient) {

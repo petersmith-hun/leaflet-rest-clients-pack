@@ -9,8 +9,6 @@ import hu.psprog.leaflet.lens.api.domain.PasswordResetSuccess;
 import hu.psprog.leaflet.lens.api.domain.SignUpConfirmation;
 import hu.psprog.leaflet.lens.api.domain.SystemStartup;
 
-import java.util.List;
-
 /**
  * Test data class for LENS client integration tests.
  *
@@ -23,19 +21,18 @@ public enum LENSClientScenario implements Scenario {
         @Override
         public MailRequestWrapper<? extends MailContent> request() {
 
-            MailRequestWrapper<CommentNotification> commentNotification = new MailRequestWrapper<>();
-            commentNotification.setOverrideSubjectKey("override-for-test");
-            commentNotification.setRecipients(List.of("editor1@dev.local"));
-            commentNotification.setContent(CommentNotification.builder()
-                    .entryTitle("Entry 1")
-                    .content("Comment content")
-                    .authorName("Author 1")
-                    .authorEmail("author@dev.local")
-                    .username("User 1")
-                    .email("editor1@dev.local")
-                    .build());
-
-            return commentNotification;
+            return MailRequestWrapper.<CommentNotification>builder()
+                    .overrideSubjectKey("override-for-test")
+                    .recipients("editor1@dev.local")
+                    .content(CommentNotification.builder()
+                            .entryTitle("Entry 1")
+                            .content("Comment content")
+                            .authorName("Author 1")
+                            .authorEmail("author@dev.local")
+                            .username("User 1")
+                            .email("editor1@dev.local")
+                            .build())
+                    .build();
         }
     },
 
@@ -44,15 +41,14 @@ public enum LENSClientScenario implements Scenario {
         @Override
         public MailRequestWrapper<? extends MailContent> request() {
 
-            MailRequestWrapper<ContactRequest> contactRequest = new MailRequestWrapper<>();
-            contactRequest.setReplyTo("reply-to@dev.local");
-            contactRequest.setContent(ContactRequest.builder()
-                    .name("User 1")
-                    .email("reply-to@dev.local")
-                    .message("Message of the user")
-                    .build());
-
-            return contactRequest;
+            return MailRequestWrapper.<ContactRequest>builder()
+                    .replyTo("reply-to@dev.local")
+                    .content(ContactRequest.builder()
+                            .name("User 1")
+                            .email("reply-to@dev.local")
+                            .message("Message of the user")
+                            .build())
+                    .build();
         }
     },
 
@@ -61,16 +57,15 @@ public enum LENSClientScenario implements Scenario {
         @Override
         public MailRequestWrapper<? extends MailContent> request() {
 
-            MailRequestWrapper<PasswordResetRequest> passwordResetRequest = new MailRequestWrapper<>();
-            passwordResetRequest.setRecipients(List.of("user1@dev.local"));
-            passwordResetRequest.setContent(PasswordResetRequest.builder()
-                    .expiration(300)
-                    .resetLink("http://localhost:9999/pwreset")
-                    .token("reset-token")
-                    .username("User 1")
-                    .build());
-
-            return passwordResetRequest;
+            return MailRequestWrapper.<PasswordResetRequest>builder()
+                    .recipients("user1@dev.local")
+                    .content(PasswordResetRequest.builder()
+                            .expiration(300)
+                            .resetLink("http://localhost:9999/pwreset")
+                            .token("reset-token")
+                            .username("User 1")
+                            .build())
+                    .build();
         }
     },
 
@@ -79,11 +74,10 @@ public enum LENSClientScenario implements Scenario {
         @Override
         public MailRequestWrapper<? extends MailContent> request() {
 
-            MailRequestWrapper<PasswordResetSuccess> passwordResetSuccess = new MailRequestWrapper<>();
-            passwordResetSuccess.setRecipients(List.of("user1@dev.local"));
-            passwordResetSuccess.setContent(new PasswordResetSuccess("User 1"));
-
-            return passwordResetSuccess;
+            return MailRequestWrapper.<PasswordResetSuccess>builder()
+                    .recipients("user1@dev.local")
+                    .content(new PasswordResetSuccess("User 1"))
+                    .build();
         }
     },
 
@@ -92,11 +86,10 @@ public enum LENSClientScenario implements Scenario {
         @Override
         public MailRequestWrapper<? extends MailContent> request() {
 
-            MailRequestWrapper<SignUpConfirmation> signUpConfirmation = new MailRequestWrapper<>();
-            signUpConfirmation.setRecipients(List.of("new-user@dev.local"));
-            signUpConfirmation.setContent(new SignUpConfirmation("New User"));
-
-            return signUpConfirmation;
+            return MailRequestWrapper.<SignUpConfirmation>builder()
+                    .recipients("new-user@dev.local")
+                    .content(new SignUpConfirmation("New User"))
+                    .build();
         }
     },
 
@@ -105,13 +98,12 @@ public enum LENSClientScenario implements Scenario {
         @Override
         public MailRequestWrapper<? extends MailContent> request() {
 
-            MailRequestWrapper<SystemStartup> systemStartup = new MailRequestWrapper<>();
-            systemStartup.setContent(SystemStartup.builder()
-                    .applicationName("app1")
-                    .version("1.0.0")
-                    .build());
-
-            return systemStartup;
+            return MailRequestWrapper.<SystemStartup>builder()
+                    .content(SystemStartup.builder()
+                            .applicationName("app1")
+                            .version("1.0.0")
+                            .build())
+                    .build();
         }
     };
 

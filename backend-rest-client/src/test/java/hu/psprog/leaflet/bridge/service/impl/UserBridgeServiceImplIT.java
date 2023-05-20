@@ -17,6 +17,7 @@ import hu.psprog.leaflet.bridge.service.UserBridgeService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.List;
 import java.util.Locale;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.delete;
@@ -245,13 +246,15 @@ public class UserBridgeServiceImplIT extends WireMockBaseTest {
 
     private UserListDataModel prepareUserListDataModel() {
         return UserListDataModel.getBuilder()
-                .withItem(prepareExtendedUserDataModel(1L))
-                .withItem(prepareExtendedUserDataModel(2L))
+                .withUsers(List.of(
+                        prepareExtendedUserDataModel(1L),
+                        prepareExtendedUserDataModel(2L)
+                ))
                 .build();
     }
 
     private ExtendedUserDataModel prepareExtendedUserDataModel(Long userID) {
-        return ExtendedUserDataModel.getExtendedBuilder()
+        return ExtendedUserDataModel.getBuilder()
                 .withId(userID)
                 .withUsername("User #" + userID)
                 .withEmail("user" + userID + "@it.dev")

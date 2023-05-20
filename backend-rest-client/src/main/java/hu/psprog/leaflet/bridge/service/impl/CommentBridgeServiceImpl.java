@@ -1,7 +1,5 @@
 package hu.psprog.leaflet.bridge.service.impl;
 
-import com.netflix.hystrix.contrib.javanica.annotation.DefaultProperties;
-import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import hu.psprog.leaflet.api.rest.request.comment.CommentCreateRequestModel;
 import hu.psprog.leaflet.api.rest.request.comment.CommentSearchParameters;
 import hu.psprog.leaflet.api.rest.request.comment.CommentUpdateRequestModel;
@@ -19,9 +17,8 @@ import hu.psprog.leaflet.bridge.client.request.RESTRequest;
 import hu.psprog.leaflet.bridge.client.request.RequestMethod;
 import hu.psprog.leaflet.bridge.config.LeafletPath;
 import hu.psprog.leaflet.bridge.service.CommentBridgeService;
+import jakarta.ws.rs.core.GenericType;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import javax.ws.rs.core.GenericType;
 
 /**
  * Implementation of {@link CommentBridgeService}.
@@ -29,8 +26,7 @@ import javax.ws.rs.core.GenericType;
  * @author Peter Smith
  */
 @BridgeService(client = "leaflet")
-@DefaultProperties(groupKey = "leaflet.comments")
-public class CommentBridgeServiceImpl extends HystrixDefaultConfiguration implements CommentBridgeService {
+public class CommentBridgeServiceImpl implements CommentBridgeService {
 
     private static final String PAGE = "page";
     private static final String LIMIT = "limit";
@@ -50,7 +46,6 @@ public class CommentBridgeServiceImpl extends HystrixDefaultConfiguration implem
     }
 
     @Override
-    @HystrixCommand
     public WrapperBodyDataModel<CommentListDataModel> getPageOfPublicCommentsForEntry(String entryLink, int page, int limit, OrderBy.Comment orderBy, OrderDirection orderDirection)
             throws CommunicationFailureException {
 
@@ -86,7 +81,6 @@ public class CommentBridgeServiceImpl extends HystrixDefaultConfiguration implem
     }
 
     @Override
-    @HystrixCommand
     public WrapperBodyDataModel<ExtendedCommentListDataModel> getPageOfCommentsForUser(Long userID, int page, int limit, OrderBy.Comment orderBy, OrderDirection orderDirection)
             throws CommunicationFailureException {
 

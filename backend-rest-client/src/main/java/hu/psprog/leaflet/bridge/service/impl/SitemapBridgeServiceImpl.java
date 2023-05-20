@@ -1,7 +1,5 @@
 package hu.psprog.leaflet.bridge.service.impl;
 
-import com.netflix.hystrix.contrib.javanica.annotation.DefaultProperties;
-import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import hu.psprog.leaflet.api.rest.response.sitemap.Sitemap;
 import hu.psprog.leaflet.bridge.client.BridgeClient;
 import hu.psprog.leaflet.bridge.client.domain.BridgeService;
@@ -18,13 +16,12 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @author Peter Smith
  */
 @BridgeService(client = "leaflet")
-@DefaultProperties(groupKey = "leaflet.sitemap")
-public class SitemapBridgeServiceImpl extends HystrixDefaultConfiguration implements SitemapBridgeService {
+public class SitemapBridgeServiceImpl implements SitemapBridgeService {
 
     private static final String HTTP_HEADER_ACCEPT = "Accept";
     private static final String CONTENT_TYPE_APPLICATION_JSON = "application/json";
 
-    private BridgeClient bridgeClient;
+    private final BridgeClient bridgeClient;
 
     @Autowired
     public SitemapBridgeServiceImpl(BridgeClient bridgeClient) {
@@ -32,7 +29,6 @@ public class SitemapBridgeServiceImpl extends HystrixDefaultConfiguration implem
     }
 
     @Override
-    @HystrixCommand
     public Sitemap getSitemap() throws CommunicationFailureException {
 
         RESTRequest restRequest = RESTRequest.getBuilder()

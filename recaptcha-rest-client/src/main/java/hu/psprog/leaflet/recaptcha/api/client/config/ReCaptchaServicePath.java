@@ -11,7 +11,7 @@ public enum ReCaptchaServicePath implements Path {
 
     VERIFY("/siteverify");
 
-    private String uri;
+    private final String uri;
 
     ReCaptchaServicePath(String uri) {
         this.uri = uri;

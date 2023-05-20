@@ -18,7 +18,7 @@ public enum ReCaptchaErrorCode {
     TIMEOUT_OR_DUPLICATE("timeout-or-duplicate"),
     BAD_REQUEST("bad-request");
 
-    private String rawErrorCode;
+    private final String rawErrorCode;
 
     ReCaptchaErrorCode(String rawErrorCode) {
         this.rawErrorCode = rawErrorCode;

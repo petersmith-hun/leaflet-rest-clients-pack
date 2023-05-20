@@ -398,8 +398,10 @@ public class EntryBridgeServiceImplIT extends WireMockBaseTest {
 
     private EntryListDataModel prepareEntryListDataModel() {
         return EntryListDataModel.getBuilder()
-                .withItem(prepareEntryDataModel(1L))
-                .withItem(prepareEntryDataModel(2L))
+                .withEntries(List.of(
+                        prepareEntryDataModel(1L),
+                        prepareEntryDataModel(2L)
+                ))
                 .build();
     }
 
@@ -419,7 +421,7 @@ public class EntryBridgeServiceImplIT extends WireMockBaseTest {
     }
 
     private ExtendedEntryDataModel prepareExtendedEntryDataModel(Long entryID) {
-        return ExtendedEntryDataModel.getExtendedBuilder()
+        return ExtendedEntryDataModel.getBuilder()
                 .withId(entryID)
                 .withLink("entry-" + entryID)
                 .withTitle("Entry #" + entryID)
@@ -427,7 +429,7 @@ public class EntryBridgeServiceImplIT extends WireMockBaseTest {
     }
 
     private EditEntryDataModel prepareEditEntryDataModel(Long entryID) {
-        return EditEntryDataModel.getExtendedBuilder()
+        return EditEntryDataModel.getBuilder()
                 .withId(entryID)
                 .withLink("entry-" + entryID)
                 .withTitle("Entry #" + entryID)

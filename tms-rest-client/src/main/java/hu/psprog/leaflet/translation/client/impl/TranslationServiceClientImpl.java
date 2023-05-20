@@ -12,7 +12,7 @@ import hu.psprog.leaflet.translation.client.TranslationServiceClient;
 import hu.psprog.leaflet.translation.client.config.TMSPath;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.ws.rs.core.GenericType;
+import jakarta.ws.rs.core.GenericType;
 import java.util.List;
 import java.util.UUID;
 

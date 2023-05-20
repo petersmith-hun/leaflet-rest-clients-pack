@@ -35,7 +35,7 @@ public class EventNotificationServiceClientImpl implements EventNotificationServ
         RESTRequest request = RESTRequest.getBuilder()
                 .method(RequestMethod.POST)
                 .path(MAIL_PATH)
-                .addPathParameter(PATH_PARAMETER_MAIL_TYPE, mailRequestWrapper.getContent().getMailContentType())
+                .addPathParameter(PATH_PARAMETER_MAIL_TYPE, mailRequestWrapper.content().getMailContentType())
                 .requestBody(mailRequestWrapper)
                 .authenticated()
                 .build();

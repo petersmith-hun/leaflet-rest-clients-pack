@@ -1,7 +1,5 @@
 package hu.psprog.leaflet.bridge.service.impl;
 
-import com.netflix.hystrix.contrib.javanica.annotation.DefaultProperties;
-import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import hu.psprog.leaflet.api.rest.request.entry.EntryCreateRequestModel;
 import hu.psprog.leaflet.api.rest.request.entry.EntryInitialStatus;
 import hu.psprog.leaflet.api.rest.request.entry.EntrySearchParameters;
@@ -20,9 +18,8 @@ import hu.psprog.leaflet.bridge.client.request.RESTRequest;
 import hu.psprog.leaflet.bridge.client.request.RequestMethod;
 import hu.psprog.leaflet.bridge.config.LeafletPath;
 import hu.psprog.leaflet.bridge.service.EntryBridgeService;
+import jakarta.ws.rs.core.GenericType;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import javax.ws.rs.core.GenericType;
 
 /**
  * Implementation of {@link EntryBridgeService}.
@@ -30,8 +27,7 @@ import javax.ws.rs.core.GenericType;
  * @author Peter Smith
  */
 @BridgeService(client = "leaflet")
-@DefaultProperties(groupKey = "leaflet.content")
-public class EntryBridgeServiceImpl extends HystrixDefaultConfiguration implements EntryBridgeService {
+public class EntryBridgeServiceImpl implements EntryBridgeService {
 
     private static final String PAGE = "page";
     private static final String CONTENT = "content";
@@ -64,7 +60,6 @@ public class EntryBridgeServiceImpl extends HystrixDefaultConfiguration implemen
     }
 
     @Override
-    @HystrixCommand
     public WrapperBodyDataModel<EntryListDataModel> getPageOfPublicEntries(int page, int limit, OrderBy.Entry orderBy, OrderDirection orderDirection)
             throws CommunicationFailureException {
 
@@ -98,7 +93,6 @@ public class EntryBridgeServiceImpl extends HystrixDefaultConfiguration implemen
     }
 
     @Override
-    @HystrixCommand
     public WrapperBodyDataModel<EntryListDataModel> getPageOfPublicEntriesByCategory(Long categoryID, int page, int limit, OrderBy.Entry orderBy, OrderDirection orderDirection)
             throws CommunicationFailureException {
 
@@ -116,7 +110,6 @@ public class EntryBridgeServiceImpl extends HystrixDefaultConfiguration implemen
     }
 
     @Override
-    @HystrixCommand
     public WrapperBodyDataModel<EntryListDataModel> getPageOfPublicEntriesByTag(Long tagID, int page, int limit, OrderBy.Entry orderBy, OrderDirection orderDirection)
             throws CommunicationFailureException {
 
@@ -134,7 +127,6 @@ public class EntryBridgeServiceImpl extends HystrixDefaultConfiguration implemen
     }
 
     @Override
-    @HystrixCommand
     public WrapperBodyDataModel<EntryListDataModel> getPageOfPublicEntriesByContent(String content, int page, int limit, OrderBy.Entry orderBy, OrderDirection orderDirection)
             throws CommunicationFailureException {
 
@@ -179,7 +171,6 @@ public class EntryBridgeServiceImpl extends HystrixDefaultConfiguration implemen
     }
 
     @Override
-    @HystrixCommand
     public WrapperBodyDataModel<ExtendedEntryDataModel> getEntryByLink(String link) throws CommunicationFailureException {
 
         RESTRequest request = RESTRequest.getBuilder()

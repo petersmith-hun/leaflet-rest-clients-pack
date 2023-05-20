@@ -11,7 +11,7 @@ public enum FailoverPath implements Path {
 
     STATUS("/status");
 
-    private String uri;
+    private final String uri;
 
     FailoverPath(String uri) {
         this.uri = uri;

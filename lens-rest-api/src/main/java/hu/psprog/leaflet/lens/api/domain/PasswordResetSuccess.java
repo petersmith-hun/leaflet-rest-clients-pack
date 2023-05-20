@@ -1,7 +1,6 @@
 package hu.psprog.leaflet.lens.api.domain;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import lombok.Data;
 
 import java.util.Map;
 
@@ -10,18 +9,16 @@ import java.util.Map;
  *
  * @author Peter Smith
  */
-@Data
-public class PasswordResetSuccess implements MailContent {
+public record PasswordResetSuccess(
+        String username
+) implements MailContent {
 
     public static final String MAIL_CONTENT_TYPE = "pw_reset_confirmation";
 
     private static final String USERNAME = "username";
 
-    private final String username;
-
     @JsonCreator
-    public PasswordResetSuccess(String username) {
-        this.username = username;
+    public PasswordResetSuccess {
     }
 
     @Override
