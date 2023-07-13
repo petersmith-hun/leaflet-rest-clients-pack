@@ -7,6 +7,7 @@ import hu.psprog.leaflet.lsrs.api.request.UpdateFileMetaInfoRequestModel;
 import hu.psprog.leaflet.lsrs.api.response.DirectoryListDataModel;
 import hu.psprog.leaflet.lsrs.api.response.FileDataModel;
 import hu.psprog.leaflet.lsrs.api.response.FileListDataModel;
+import hu.psprog.leaflet.lsrs.api.response.VFSBrowserModel;
 
 import java.io.InputStream;
 import java.util.UUID;
@@ -86,4 +87,13 @@ public interface FileBridgeService {
      * @throws CommunicationFailureException if client fails to reach backend application
      */
     DirectoryListDataModel getDirectories() throws CommunicationFailureException;
+
+    /**
+     * Retrieves the contents of the VFS under the given path.
+     *
+     * @param path VFS path
+     * @return VFS contents as {@link VFSBrowserModel}
+     * @throws CommunicationFailureException if client fails to reach backend application
+     */
+    VFSBrowserModel browse(String path) throws CommunicationFailureException;
 }

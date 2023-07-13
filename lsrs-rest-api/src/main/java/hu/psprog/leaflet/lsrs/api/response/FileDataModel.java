@@ -15,5 +15,6 @@ public record FileDataModel(
         String reference,
         String acceptedAs,
         String description,
-        String path
+        String path,
+        String pathUUID
 ) { }

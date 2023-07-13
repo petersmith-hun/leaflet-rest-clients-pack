@@ -12,6 +12,7 @@ import hu.psprog.leaflet.lsrs.api.request.UpdateFileMetaInfoRequestModel;
 import hu.psprog.leaflet.lsrs.api.response.DirectoryListDataModel;
 import hu.psprog.leaflet.lsrs.api.response.FileDataModel;
 import hu.psprog.leaflet.lsrs.api.response.FileListDataModel;
+import hu.psprog.leaflet.lsrs.api.response.VFSBrowserModel;
 import hu.psprog.leaflet.lsrs.client.FileBridgeService;
 import hu.psprog.leaflet.lsrs.client.config.LSRSPath;
 import org.glassfish.jersey.media.multipart.FormDataMultiPart;
@@ -146,5 +147,17 @@ public class FileBridgeServiceImpl implements FileBridgeService {
                 .build();
 
         return bridgeClient.call(restRequest, DirectoryListDataModel.class);
+    }
+
+    @Override
+    public VFSBrowserModel browse(String path) throws CommunicationFailureException {
+
+        RESTRequest restRequest = RESTRequest.getBuilder()
+                .method(RequestMethod.GET)
+                .path(() -> String.format("/files/browse/%s", path))
+                .authenticated()
+                .build();
+
+        return bridgeClient.call(restRequest, VFSBrowserModel.class);
     }
 }
