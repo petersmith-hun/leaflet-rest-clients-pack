@@ -18,6 +18,7 @@ import hu.psprog.leaflet.lsrs.api.response.DirectoryDataModel;
 import hu.psprog.leaflet.lsrs.api.response.DirectoryListDataModel;
 import hu.psprog.leaflet.lsrs.api.response.FileDataModel;
 import hu.psprog.leaflet.lsrs.api.response.FileListDataModel;
+import hu.psprog.leaflet.lsrs.api.response.VFSBrowserModel;
 import hu.psprog.leaflet.lsrs.client.FileBridgeService;
 import hu.psprog.leaflet.lsrs.client.config.LSRSPath;
 import org.apache.commons.io.IOUtils;
@@ -227,6 +228,24 @@ public class FileBridgeServiceImplIT {
                 .withHeader(AUTHORIZATION_HEADER, VALUE_PATTERN_BEARER_TOKEN));
     }
 
+    @Test
+    public void shouldBrowse() throws CommunicationFailureException {
+
+        // given
+        String uri = "/files/browse/images/sub1";
+        VFSBrowserModel vfsBrowserModel = prepareVFSBrowserModel();
+        givenThat(get(uri)
+                .willReturn(ResponseDefinitionBuilder.okForJson(vfsBrowserModel)));
+
+        // when
+        VFSBrowserModel result = fileBridgeService.browse("images/sub1");
+
+        // then
+        assertThat(result, equalTo(vfsBrowserModel));
+        verify(getRequestedFor(urlEqualTo(uri))
+                .withHeader(AUTHORIZATION_HEADER, VALUE_PATTERN_BEARER_TOKEN));
+    }
+
     private UpdateFileMetaInfoRequestModel prepareUpdateFileMetaInfoRequestModel() {
 
         return UpdateFileMetaInfoRequestModel.builder()
@@ -278,6 +297,13 @@ public class FileBridgeServiceImplIT {
                 .id(id)
                 .root(id + "-root")
                 .children(Arrays.asList("sub1", "sub2", "sub/sub3"))
+                .build();
+    }
+
+    private VFSBrowserModel prepareVFSBrowserModel() {
+
+        return VFSBrowserModel.builder()
+                .currentPath("/images/sub1")
                 .build();
     }
 
