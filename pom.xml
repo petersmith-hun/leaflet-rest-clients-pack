@@ -6,12 +6,12 @@
 
     <artifactId>leaflet-rest-clients-pack</artifactId>
     <packaging>pom</packaging>
-    <version>1.14.0</version>
+    <version>1.14.1</version>
 
     <parent>
         <groupId>hu.psprog.leaflet</groupId>
         <artifactId>leaflet-stack-base-bom</artifactId>
-        <version>3.2-r2307.2</version>
+        <version>3.2-r2307.3</version>
     </parent>
 
     <modules>
