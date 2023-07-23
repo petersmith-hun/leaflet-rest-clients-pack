@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.extern.jackson.Jacksonized;
 
 import java.util.Date;
+import java.util.Map;
 
 /**
  * Domain object for parsing and storing received log events.
@@ -19,5 +20,6 @@ public record LoggingEvent(
         String content,
         ThrowableProxyLogItem exception,
         Date timeStamp,
-        String source
+        String source,
+        Map<String, String> context
 ) { }
