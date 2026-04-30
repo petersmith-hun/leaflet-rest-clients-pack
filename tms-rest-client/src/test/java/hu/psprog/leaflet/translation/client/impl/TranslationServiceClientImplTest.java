@@ -1,7 +1,5 @@
 package hu.psprog.leaflet.translation.client.impl;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.tomakehurst.wiremock.client.ResponseDefinitionBuilder;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.junit5.WireMockTest;
@@ -18,7 +16,9 @@ import hu.psprog.leaflet.translation.api.domain.TranslationPackCreationRequest;
 import hu.psprog.leaflet.translation.api.domain.TranslationPackMetaInfo;
 import hu.psprog.leaflet.translation.client.MessageSourceClient;
 import hu.psprog.leaflet.translation.client.TranslationServiceClient;
-import org.junit.jupiter.api.Assertions;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import org.apache.hc.core5.http.HttpStatus;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,9 +29,8 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.test.context.ActiveProfiles;
+import tools.jackson.databind.json.JsonMapper;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -57,6 +56,7 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * Integration tests for {@link TranslationServiceClientImpl}.
@@ -88,7 +88,7 @@ public class TranslationServiceClientImplTest {
     private static final String PATH_TRANSLATIONS_STATUS = "/translations/" + PACK_ID + "/status";
     private static final Map<String, String> ERROR_MESSAGE_BODY = prepareErrorMessage();
     private static final Map<String, Object> VALIDATION_ERROR_MESSAGE_BODY = prepareValidationErrorMessage();
-    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
+    private static final JsonMapper JSON_MAPPER = new JsonMapper();
     private static final String HEADER_CONTENT_TYPE = "Content-Type";
     private static final String MEDIA_TYPE_APPLICATION_JSON = "application/json";
     private static final int HTTP_STATUS_CREATED = 201;
@@ -134,6 +134,22 @@ public class TranslationServiceClientImplTest {
     }
 
     @Test
+    public void shouldRetrievePacksThrowCommunicationErrorOnNon200Response() {
+
+        // given
+        givenThat(get(urlPathEqualTo(PATH_TRANSLATIONS))
+                .withQueryParam(QUERY_PARAMETER_PACKS, PACKS_QUERY_PARAMETER_VALUE_PATTERN)
+                .willReturn(ResponseDefinitionBuilder.responseDefinition().withStatus(HttpStatus.SC_NOT_FOUND)));
+
+        // when
+        assertThrows(CommunicationFailureException.class, () -> messageSourceClient.retrievePacks(Collections.singletonList(PACK_NAME)));
+
+        // then
+        verify(getRequestedFor(urlPathEqualTo(PATH_TRANSLATIONS))
+                .withQueryParam(QUERY_PARAMETER_PACKS, PACKS_QUERY_PARAMETER_VALUE_PATTERN));
+    }
+
+    @Test
     public void shouldListStoredPacks() throws CommunicationFailureException {
 
         // given
@@ -168,33 +184,33 @@ public class TranslationServiceClientImplTest {
     }
 
     @Test
-    public void shouldGetPackByIDThrowException() throws JsonProcessingException {
+    public void shouldGetPackByIDThrowException() {
 
         // given
         givenThat(get(PATH_TRANSLATIONS_ID)
                 .willReturn(ResponseDefinitionBuilder.responseDefinition()
                         .withHeader(HEADER_CONTENT_TYPE, MEDIA_TYPE_APPLICATION_JSON)
                         .withStatus(HTTP_STATUS_NOT_FOUND)
-                        .withBody(OBJECT_MAPPER.writeValueAsString(ERROR_MESSAGE_BODY))));
+                        .withBody(JSON_MAPPER.writeValueAsString(ERROR_MESSAGE_BODY))));
 
         // when
-        Assertions.assertThrows(ResourceNotFoundException.class, () -> translationServiceClient.getPackByID(PACK_ID));
+        assertThrows(ResourceNotFoundException.class, () -> translationServiceClient.getPackByID(PACK_ID));
 
         // then
         // exception expected
     }
 
     @Test
-    public void shouldCreateTranslationPack() throws JsonProcessingException, CommunicationFailureException {
+    public void shouldCreateTranslationPack() throws CommunicationFailureException {
 
         // given
-        StringValuePattern requestBody = equalToJson(OBJECT_MAPPER.writeValueAsString(TRANSLATION_PACK_CREATION_REQUEST));
+        StringValuePattern requestBody = equalToJson(JSON_MAPPER.writeValueAsString(TRANSLATION_PACK_CREATION_REQUEST));
         givenThat(post(PATH_TRANSLATIONS)
                 .withRequestBody(requestBody)
                 .willReturn(ResponseDefinitionBuilder.responseDefinition()
                         .withHeader(HEADER_CONTENT_TYPE, MEDIA_TYPE_APPLICATION_JSON)
                         .withStatus(HTTP_STATUS_CREATED)
-                        .withBody(OBJECT_MAPPER.writeValueAsString(TRANSLATION_PACK))));
+                        .withBody(JSON_MAPPER.writeValueAsString(TRANSLATION_PACK))));
 
         // when
         TranslationPack result = translationServiceClient.createTranslationPack(TRANSLATION_PACK_CREATION_REQUEST);
@@ -206,71 +222,71 @@ public class TranslationServiceClientImplTest {
     }
 
     @Test
-    public void shouldCreateTranslationPackWithValidationError() throws JsonProcessingException {
+    public void shouldCreateTranslationPackWithValidationError() {
 
         // given
-        StringValuePattern requestBody = equalToJson(OBJECT_MAPPER.writeValueAsString(TRANSLATION_PACK_CREATION_REQUEST));
+        StringValuePattern requestBody = equalToJson(JSON_MAPPER.writeValueAsString(TRANSLATION_PACK_CREATION_REQUEST));
         givenThat(post(PATH_TRANSLATIONS)
                 .withRequestBody(requestBody)
                 .willReturn(ResponseDefinitionBuilder.responseDefinition()
                         .withHeader(HEADER_CONTENT_TYPE, MEDIA_TYPE_APPLICATION_JSON)
                         .withStatus(HTTP_STATUS_BAD_REQUEST)
-                        .withBody(OBJECT_MAPPER.writeValueAsString(VALIDATION_ERROR_MESSAGE_BODY))));
+                        .withBody(JSON_MAPPER.writeValueAsString(VALIDATION_ERROR_MESSAGE_BODY))));
 
         // when
-        Assertions.assertThrows(ValidationFailureException.class, () -> translationServiceClient.createTranslationPack(TRANSLATION_PACK_CREATION_REQUEST));
+        assertThrows(ValidationFailureException.class, () -> translationServiceClient.createTranslationPack(TRANSLATION_PACK_CREATION_REQUEST));
 
         // then
         // exception expected
     }
 
     @Test
-    public void shouldCreateTranslationPackWithCreationError() throws JsonProcessingException {
+    public void shouldCreateTranslationPackWithCreationError() {
 
         // given
-        StringValuePattern requestBody = equalToJson(OBJECT_MAPPER.writeValueAsString(TRANSLATION_PACK_CREATION_REQUEST));
+        StringValuePattern requestBody = equalToJson(JSON_MAPPER.writeValueAsString(TRANSLATION_PACK_CREATION_REQUEST));
         givenThat(post(PATH_TRANSLATIONS)
                 .withRequestBody(requestBody)
                 .willReturn(ResponseDefinitionBuilder.responseDefinition()
                         .withHeader(HEADER_CONTENT_TYPE, MEDIA_TYPE_APPLICATION_JSON)
                         .withStatus(HTTP_STATUS_CONFLICT)
-                        .withBody(OBJECT_MAPPER.writeValueAsString(ERROR_MESSAGE_BODY))));
+                        .withBody(JSON_MAPPER.writeValueAsString(ERROR_MESSAGE_BODY))));
 
         // when
-        Assertions.assertThrows(ConflictingRequestException.class, () -> translationServiceClient.createTranslationPack(TRANSLATION_PACK_CREATION_REQUEST));
+        assertThrows(ConflictingRequestException.class, () -> translationServiceClient.createTranslationPack(TRANSLATION_PACK_CREATION_REQUEST));
 
         // then
         // exception expected
     }
 
     @Test
-    public void shouldCreateTranslationPackWithUnknownError() throws JsonProcessingException {
+    public void shouldCreateTranslationPackWithUnknownError() {
 
         // given
-        StringValuePattern requestBody = equalToJson(OBJECT_MAPPER.writeValueAsString(TRANSLATION_PACK_CREATION_REQUEST));
+        StringValuePattern requestBody = equalToJson(JSON_MAPPER.writeValueAsString(TRANSLATION_PACK_CREATION_REQUEST));
         givenThat(post(PATH_TRANSLATIONS)
                 .withRequestBody(requestBody)
                 .willReturn(ResponseDefinitionBuilder.responseDefinition()
                         .withHeader(HEADER_CONTENT_TYPE, MEDIA_TYPE_APPLICATION_JSON)
                         .withStatus(HTTP_STATUS_INTERNAL_SERVER_ERROR)
-                        .withBody(OBJECT_MAPPER.writeValueAsString(ERROR_MESSAGE_BODY))));
+                        .withBody(JSON_MAPPER.writeValueAsString(ERROR_MESSAGE_BODY))));
 
         // when
-        Assertions.assertThrows(RequestProcessingFailureException.class, () -> translationServiceClient.createTranslationPack(TRANSLATION_PACK_CREATION_REQUEST));
+        assertThrows(RequestProcessingFailureException.class, () -> translationServiceClient.createTranslationPack(TRANSLATION_PACK_CREATION_REQUEST));
 
         // then
         // exception expected
     }
 
     @Test
-    public void shouldChangePackStatus() throws JsonProcessingException, CommunicationFailureException {
+    public void shouldChangePackStatus() throws CommunicationFailureException {
 
         // given
         givenThat(put(PATH_TRANSLATIONS_STATUS)
                 .willReturn(ResponseDefinitionBuilder.responseDefinition()
                         .withHeader(HEADER_CONTENT_TYPE, MEDIA_TYPE_APPLICATION_JSON)
                         .withStatus(HTTP_STATUS_CREATED)
-                        .withBody(OBJECT_MAPPER.writeValueAsString(TRANSLATION_PACK))));
+                        .withBody(JSON_MAPPER.writeValueAsString(TRANSLATION_PACK))));
 
         // when
         TranslationPack result = translationServiceClient.changePackStatus(PACK_ID);
@@ -328,8 +344,8 @@ public class TranslationServiceClientImplTest {
         static final String TMS_CLIENT_INTEGRATION_TEST_PROFILE = "it";
 
         @Bean
-        public ObjectMapper objectMapper() {
-            return new ObjectMapper();
+        public JsonMapper jsonMapper() {
+            return new JsonMapper();
         }
 
         @Bean

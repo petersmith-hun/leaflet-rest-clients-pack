@@ -11,8 +11,8 @@ import hu.psprog.leaflet.translation.api.domain.TranslationPackMetaInfo;
 import hu.psprog.leaflet.translation.client.TranslationServiceClient;
 import hu.psprog.leaflet.translation.client.config.TMSPath;
 import org.springframework.beans.factory.annotation.Autowired;
+import tools.jackson.core.type.TypeReference;
 
-import jakarta.ws.rs.core.GenericType;
 import java.util.List;
 import java.util.UUID;
 
@@ -25,6 +25,7 @@ import java.util.UUID;
 public class TranslationServiceClientImpl implements TranslationServiceClient {
 
     private static final String PARAMETER_PACK_ID = "packID";
+    private static final TypeReference<List<TranslationPackMetaInfo>> TRANSLATION_PACK_LIST_TYPE_REFERENCE = new TypeReference<>() {};
 
     private final BridgeClient bridgeClient;
 
@@ -42,7 +43,7 @@ public class TranslationServiceClientImpl implements TranslationServiceClient {
                 .authenticated()
                 .build();
 
-        return bridgeClient.call(restRequest, new GenericType<List<TranslationPackMetaInfo>>(){});
+        return bridgeClient.call(restRequest, TRANSLATION_PACK_LIST_TYPE_REFERENCE);
     }
 
     @Override

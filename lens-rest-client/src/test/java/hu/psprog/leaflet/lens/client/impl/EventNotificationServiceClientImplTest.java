@@ -1,7 +1,5 @@
 package hu.psprog.leaflet.lens.client.impl;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.tomakehurst.wiremock.client.ResponseDefinitionBuilder;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.junit5.WireMockTest;
@@ -16,6 +14,8 @@ import hu.psprog.leaflet.lens.api.domain.MailRequestWrapper;
 import hu.psprog.leaflet.lens.client.EventNotificationServiceClient;
 import hu.psprog.leaflet.lens.client.impl.testdata.LENSClientScenario;
 import hu.psprog.leaflet.lens.client.impl.testdata.Scenario;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
@@ -28,9 +28,8 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.test.context.ActiveProfiles;
+import tools.jackson.databind.json.JsonMapper;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -41,7 +40,6 @@ import static com.github.tomakehurst.wiremock.client.WireMock.urlPathEqualTo;
 import static com.github.tomakehurst.wiremock.client.WireMock.verify;
 import static hu.psprog.leaflet.lens.client.impl.EventNotificationServiceClientImplTest.LENSClientTestConfiguration.LENS_CLIENT_IT_TEST_PROFILE;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * Integration tests for {@link EventNotificationServiceClientImpl}.
@@ -63,7 +61,7 @@ class EventNotificationServiceClientImplTest {
     private EventNotificationServiceClient eventNotificationServiceClient;
 
     @Autowired
-    private ObjectMapper objectMapper;
+    private JsonMapper jsonMapper;
 
     @ParameterizedTest
     @EnumSource(LENSClientScenario.class)
@@ -123,13 +121,8 @@ class EventNotificationServiceClientImplTest {
 
     private EqualToJsonPattern createPattern(MailRequestWrapper<? extends MailContent> mailRequestWrapper) {
 
-        try {
-            String json = objectMapper.writeValueAsString(mailRequestWrapper);
-            return new EqualToJsonPattern(json, false, false);
-        } catch (JsonProcessingException e) {
-            fail();
-            return null;
-        }
+        String json = jsonMapper.writeValueAsString(mailRequestWrapper);
+        return new EqualToJsonPattern(json, false, false);
     }
 
     @Profile(LENS_CLIENT_IT_TEST_PROFILE)
@@ -144,8 +137,8 @@ class EventNotificationServiceClientImplTest {
         static final String LENS_CLIENT_IT_TEST_PROFILE = "it";
 
         @Bean
-        public ObjectMapper objectMapper() {
-            return new ObjectMapper();
+        public JsonMapper jsonMapper() {
+            return new JsonMapper();
         }
 
         @Bean

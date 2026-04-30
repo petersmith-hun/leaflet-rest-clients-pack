@@ -1,6 +1,5 @@
 package hu.psprog.leaflet.bridge.service.impl;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.matching.StringValuePattern;
 import hu.psprog.leaflet.api.rest.request.comment.CommentCreateRequestModel;
@@ -54,7 +53,7 @@ public class CommentBridgeServiceImplIT extends WireMockBaseTest {
     private CommentBridgeService commentBridgeService;
 
     @Test
-    public void shouldGetPageOfPublicCommentsForEntry() throws CommunicationFailureException, JsonProcessingException {
+    public void shouldGetPageOfPublicCommentsForEntry() throws CommunicationFailureException {
 
         // given
         String entryLink = "entry-link";
@@ -79,7 +78,7 @@ public class CommentBridgeServiceImplIT extends WireMockBaseTest {
     }
 
     @Test
-    public void shouldGetPageOfCommentsForEntry() throws CommunicationFailureException, JsonProcessingException {
+    public void shouldGetPageOfCommentsForEntry() throws CommunicationFailureException {
 
         // given
         Long entryID = 1L;
@@ -105,7 +104,7 @@ public class CommentBridgeServiceImplIT extends WireMockBaseTest {
     }
 
     @Test
-    public void shouldGetPageOfCommentsForUser() throws CommunicationFailureException, JsonProcessingException {
+    public void shouldGetPageOfCommentsForUser() throws CommunicationFailureException {
 
         // given
         Long userID = 1L;
@@ -131,7 +130,7 @@ public class CommentBridgeServiceImplIT extends WireMockBaseTest {
     }
 
     @Test
-    public void shouldSearchEntriesWithEmptySearchRequest() throws CommunicationFailureException, JsonProcessingException {
+    public void shouldSearchEntriesWithEmptySearchRequest() throws CommunicationFailureException {
 
         // given
         ExtendedCommentListDataModel extendedCommentListDataModel = prepareExtendedCommentListDataModel();
@@ -151,7 +150,7 @@ public class CommentBridgeServiceImplIT extends WireMockBaseTest {
     }
 
     @Test
-    public void shouldSearchEntriesWithCompleteSearchRequest() throws CommunicationFailureException, JsonProcessingException {
+    public void shouldSearchEntriesWithCompleteSearchRequest() throws CommunicationFailureException {
 
         // given
         ExtendedCommentListDataModel extendedCommentListDataModel = prepareExtendedCommentListDataModel();
@@ -182,7 +181,7 @@ public class CommentBridgeServiceImplIT extends WireMockBaseTest {
     }
     
     @Test
-    public void shouldGetComment() throws CommunicationFailureException, JsonProcessingException {
+    public void shouldGetComment() throws CommunicationFailureException {
 
         // given
         Long commentID = 1L;
@@ -201,12 +200,12 @@ public class CommentBridgeServiceImplIT extends WireMockBaseTest {
     }
 
     @Test
-    public void shouldCreateComment() throws JsonProcessingException, CommunicationFailureException {
+    public void shouldCreateComment() throws CommunicationFailureException {
 
         // given
         CommentCreateRequestModel commentCreateRequestModel = new CommentCreateRequestModel();
         commentCreateRequestModel.setContent("comment");
-        StringValuePattern requestBody = equalToJson(OBJECT_MAPPER.writeValueAsString(commentCreateRequestModel));
+        StringValuePattern requestBody = equalToJson(JSON_MAPPER.writeValueAsString(commentCreateRequestModel));
         CommentDataModel commentDataModel = prepareCommentDataModel(1L);
         givenThat(post(LeafletPath.COMMENTS.getURI())
                 .withRequestBody(requestBody)
@@ -223,13 +222,13 @@ public class CommentBridgeServiceImplIT extends WireMockBaseTest {
     }
 
     @Test
-    public void shouldUpdateComment() throws CommunicationFailureException, JsonProcessingException {
+    public void shouldUpdateComment() throws CommunicationFailureException {
 
         // given
         Long commentID = 1L;
         CommentCreateRequestModel commentCreateRequestModel = new CommentCreateRequestModel();
         commentCreateRequestModel.setContent("comment");
-        StringValuePattern requestBody = equalToJson(OBJECT_MAPPER.writeValueAsString(commentCreateRequestModel));
+        StringValuePattern requestBody = equalToJson(JSON_MAPPER.writeValueAsString(commentCreateRequestModel));
         CommentDataModel commentDataModel = prepareCommentDataModel(1L);
         String uri = prepareURI(LeafletPath.COMMENTS_BY_ID.getURI(), commentID);
         givenThat(put(uri)
@@ -246,7 +245,7 @@ public class CommentBridgeServiceImplIT extends WireMockBaseTest {
     }
 
     @Test
-    public void shouldChangeStatus() throws CommunicationFailureException, JsonProcessingException {
+    public void shouldChangeStatus() throws CommunicationFailureException {
 
         // given
         Long commentID = 1L;

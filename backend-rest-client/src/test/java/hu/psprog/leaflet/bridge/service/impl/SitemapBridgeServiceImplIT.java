@@ -1,6 +1,5 @@
 package hu.psprog.leaflet.bridge.service.impl;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import hu.psprog.leaflet.api.rest.response.sitemap.Sitemap;
 import hu.psprog.leaflet.api.rest.response.sitemap.SitemapLocationItem;
 import hu.psprog.leaflet.bridge.client.exception.CommunicationFailureException;
@@ -40,7 +39,7 @@ public class SitemapBridgeServiceImplIT extends WireMockBaseTest {
     private SitemapBridgeService sitemapBridgeService;
 
     @Test
-    public void shouldGetSitemap() throws CommunicationFailureException, JsonProcessingException {
+    public void shouldGetSitemap() throws CommunicationFailureException {
 
         // given
         givenThat(get(LeafletPath.SITEMAP.getURI())

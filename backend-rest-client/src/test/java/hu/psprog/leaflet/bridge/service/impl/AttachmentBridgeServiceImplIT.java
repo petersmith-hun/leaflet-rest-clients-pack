@@ -1,6 +1,5 @@
 package hu.psprog.leaflet.bridge.service.impl;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.github.tomakehurst.wiremock.matching.StringValuePattern;
 import hu.psprog.leaflet.api.rest.request.attachment.AttachmentRequestModel;
 import hu.psprog.leaflet.bridge.client.exception.CommunicationFailureException;
@@ -38,11 +37,11 @@ public class AttachmentBridgeServiceImplIT extends WireMockBaseTest {
     private AttachmentRequestModel attachmentRequestModel;
 
     @BeforeEach
-    public void setup() throws JsonProcessingException {
+    public void setup() {
         attachmentRequestModel = new AttachmentRequestModel();
         attachmentRequestModel.setEntryID(10L);
         attachmentRequestModel.setPathUUID(UUID.nameUUIDFromBytes("uuid".getBytes()));
-        requestBody = equalToJson(OBJECT_MAPPER.writeValueAsString(attachmentRequestModel));
+        requestBody = equalToJson(JSON_MAPPER.writeValueAsString(attachmentRequestModel));
     }
 
     @Test

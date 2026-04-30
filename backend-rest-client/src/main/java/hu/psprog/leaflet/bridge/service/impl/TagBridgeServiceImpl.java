@@ -12,8 +12,8 @@ import hu.psprog.leaflet.bridge.client.request.RESTRequest;
 import hu.psprog.leaflet.bridge.client.request.RequestMethod;
 import hu.psprog.leaflet.bridge.config.LeafletPath;
 import hu.psprog.leaflet.bridge.service.TagBridgeService;
-import jakarta.ws.rs.core.GenericType;
 import org.springframework.beans.factory.annotation.Autowired;
+import tools.jackson.core.type.TypeReference;
 
 /**
  * Implementation of {@link TagBridgeService}.
@@ -24,6 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class TagBridgeServiceImpl implements TagBridgeService {
 
     private static final String ID = "id";
+    private static final TypeReference<WrapperBodyDataModel<TagListDataModel>> WRAPPED_TAG_LIST_TYPE_REFERENCE = new TypeReference<>() {};
 
     private final BridgeClient bridgeClient;
 
@@ -52,7 +53,7 @@ public class TagBridgeServiceImpl implements TagBridgeService {
                 .path(LeafletPath.TAGS_PUBLIC)
                 .build();
 
-        return bridgeClient.call(restRequest, new GenericType<WrapperBodyDataModel<TagListDataModel>>() {});
+        return bridgeClient.call(restRequest, WRAPPED_TAG_LIST_TYPE_REFERENCE);
     }
 
     @Override

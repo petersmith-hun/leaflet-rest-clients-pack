@@ -6,29 +6,25 @@
 
     <artifactId>leaflet-rest-clients-pack</artifactId>
     <packaging>pom</packaging>
-    <version>1.15.1</version>
+    <version>2.0.0</version>
 
     <parent>
         <groupId>hu.psprog.leaflet</groupId>
         <artifactId>leaflet-stack-base-bom</artifactId>
-        <version>5.0-r2505.1</version>
+        <version>6.0-r2604.2</version>
     </parent>
 
     <modules>
         <module>backend-rest-client</module>
-        <module>tms-rest-client</module>
-        <module>failover-rest-client</module>
-        <module>tlp-rest-client</module>
-        <module>failover-rest-api</module>
-        <module>tlp-rest-api</module>
-        <module>tms-rest-api</module>
+        <module>lens-rest-api</module>
+        <module>lens-rest-client</module>
         <module>recaptcha-rest-api</module>
         <module>recaptcha-rest-client</module>
         <module>request-adapters</module>
-        <module>lens-rest-api</module>
-        <module>lens-rest-client</module>
-        <module>lsrs-rest-api</module>
-        <module>lsrs-rest-client</module>
+        <module>tlp-rest-api</module>
+        <module>tlp-rest-client</module>
+        <module>tms-rest-api</module>
+        <module>tms-rest-client</module>
     </modules>
 
     <properties>
@@ -53,20 +49,8 @@
             <artifactId>hibernate-validator</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-annotations</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-jackson</artifactId>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -89,6 +73,17 @@
 
     <build>
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>properties</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
@@ -131,6 +126,8 @@
                     <excludes>
                         <exclude>*</exclude>
                     </excludes>
+                    <!--suppress UnresolvedMavenProperty -->
+                    <argLine>-javaagent:"${org.mockito:mockito-core:jar}"</argLine>
                 </configuration>
             </plugin>
             <plugin>
@@ -139,7 +136,7 @@
                 <version>${maven-failsafe-plugin.version}</version>
                 <configuration>
                     <!--suppress UnresolvedMavenProperty -->
-                    <argLine>${argLine.failsafe}</argLine>
+                    <argLine>${argLine.failsafe} -javaagent:"${org.mockito:mockito-core:jar}"</argLine>
                     <includes>
                         <include>**/*IT.*</include>
                         <include>**/*Test.*</include>
@@ -176,6 +173,9 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>${maven-compiler-plugin.version}</version>
+                <configuration>
+                    <proc>full</proc>
+                </configuration>
             </plugin>
         </plugins>
     </build>

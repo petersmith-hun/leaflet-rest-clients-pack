@@ -13,8 +13,8 @@ import hu.psprog.leaflet.bridge.client.request.RESTRequest;
 import hu.psprog.leaflet.bridge.client.request.RequestMethod;
 import hu.psprog.leaflet.bridge.config.LeafletPath;
 import hu.psprog.leaflet.bridge.service.DocumentBridgeService;
-import jakarta.ws.rs.core.GenericType;
 import org.springframework.beans.factory.annotation.Autowired;
+import tools.jackson.core.type.TypeReference;
 
 /**
  * Implementation of {@link DocumentBridgeService}.
@@ -26,6 +26,8 @@ public class DocumentBridgeServiceImpl implements DocumentBridgeService {
 
     private static final String ID = "id";
     private static final String LINK = "link";
+    private static final TypeReference<WrapperBodyDataModel<EditDocumentDataModel>> WRAPPED_EDIT_DOCUMENT_TYPE_REFERENCE = new TypeReference<>() {};
+    private static final TypeReference<WrapperBodyDataModel<DocumentDataModel>> WRAPPED_DOCUMENT_TYPE_REFERENCE = new TypeReference<>() {};
 
     private final BridgeClient bridgeClient;
 
@@ -67,7 +69,7 @@ public class DocumentBridgeServiceImpl implements DocumentBridgeService {
                 .authenticated()
                 .build();
 
-        return bridgeClient.call(restRequest, new GenericType<WrapperBodyDataModel<EditDocumentDataModel>>() {});
+        return bridgeClient.call(restRequest, WRAPPED_EDIT_DOCUMENT_TYPE_REFERENCE);
     }
 
     @Override
@@ -79,7 +81,7 @@ public class DocumentBridgeServiceImpl implements DocumentBridgeService {
                 .addPathParameter(LINK, link)
                 .build();
 
-        return bridgeClient.call(restRequest, new GenericType<WrapperBodyDataModel<DocumentDataModel>>() {});
+        return bridgeClient.call(restRequest, WRAPPED_DOCUMENT_TYPE_REFERENCE);
     }
 
     @Override

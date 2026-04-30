@@ -68,6 +68,7 @@ public class TLPClientImpl implements TLPClient {
 
         RESTRequest restRequest = RESTRequest.getBuilder()
                 .method(RequestMethod.POST)
+                .addHeaderParameter("Content-Type", "text/plain")
                 .path(TLPPath.LOGS_V2)
                 .requestBody(logRequest)
                 .authenticated()

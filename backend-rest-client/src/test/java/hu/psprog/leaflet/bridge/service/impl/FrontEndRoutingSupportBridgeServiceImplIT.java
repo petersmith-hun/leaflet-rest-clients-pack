@@ -1,6 +1,5 @@
 package hu.psprog.leaflet.bridge.service.impl;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.github.tomakehurst.wiremock.client.ResponseDefinitionBuilder;
 import com.github.tomakehurst.wiremock.matching.StringValuePattern;
 import hu.psprog.leaflet.api.rest.request.routing.FrontEndRouteUpdateRequestModel;
@@ -86,11 +85,11 @@ public class FrontEndRoutingSupportBridgeServiceImplIT extends WireMockBaseTest 
     }
 
     @Test
-    public void shouldCreateRoute() throws JsonProcessingException, CommunicationFailureException {
+    public void shouldCreateRoute() throws CommunicationFailureException {
 
         // given
         ExtendedFrontEndRouteDataModel dataModel = prepareExtendedFrontEndRouteDataModel();
-        StringValuePattern requestBody = equalToJson(OBJECT_MAPPER.writeValueAsString(FRONT_END_ROUTE_UPDATE_REQUEST_MODEL));
+        StringValuePattern requestBody = equalToJson(JSON_MAPPER.writeValueAsString(FRONT_END_ROUTE_UPDATE_REQUEST_MODEL));
         givenThat(post(LeafletPath.ROUTES.getURI())
                 .withRequestBody(requestBody)
                 .willReturn(ResponseDefinitionBuilder.okForJson(dataModel)));
@@ -106,11 +105,11 @@ public class FrontEndRoutingSupportBridgeServiceImplIT extends WireMockBaseTest 
     }
 
     @Test
-    public void shouldUpdateRoute() throws JsonProcessingException, CommunicationFailureException {
+    public void shouldUpdateRoute() throws CommunicationFailureException {
 
         // given
         ExtendedFrontEndRouteDataModel dataModel = prepareExtendedFrontEndRouteDataModel();
-        StringValuePattern requestBody = equalToJson(OBJECT_MAPPER.writeValueAsString(FRONT_END_ROUTE_UPDATE_REQUEST_MODEL));
+        StringValuePattern requestBody = equalToJson(JSON_MAPPER.writeValueAsString(FRONT_END_ROUTE_UPDATE_REQUEST_MODEL));
         String path = prepareURI(LeafletPath.ROUTES_BY_ID.getURI(), ROUTE_ID);
         givenThat(put(urlPathEqualTo(path))
                 .withRequestBody(requestBody)

@@ -1,6 +1,5 @@
 package hu.psprog.leaflet.bridge.service.impl;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.github.tomakehurst.wiremock.matching.StringValuePattern;
 import hu.psprog.leaflet.api.rest.request.document.DocumentCreateRequestModel;
 import hu.psprog.leaflet.api.rest.response.common.WrapperBodyDataModel;
@@ -44,7 +43,7 @@ public class DocumentBridgeServiceImplIT extends WireMockBaseTest {
     private DocumentBridgeService documentBridgeService;
 
     @Test
-    public void shouldGetAllDocuments() throws CommunicationFailureException, JsonProcessingException {
+    public void shouldGetAllDocuments() throws CommunicationFailureException {
 
         // given
         DocumentListDataModel documentListDataModel = prepareDocumentListDataModel();
@@ -61,7 +60,7 @@ public class DocumentBridgeServiceImplIT extends WireMockBaseTest {
     }
 
     @Test
-    public void shouldGetPublicDocuments() throws CommunicationFailureException, JsonProcessingException {
+    public void shouldGetPublicDocuments() throws CommunicationFailureException {
 
         // given
         DocumentListDataModel documentListDataModel = prepareDocumentListDataModel();
@@ -77,7 +76,7 @@ public class DocumentBridgeServiceImplIT extends WireMockBaseTest {
     }
 
     @Test
-    public void shouldGetDocumentByID() throws CommunicationFailureException, JsonProcessingException {
+    public void shouldGetDocumentByID() throws CommunicationFailureException {
 
         // given
         EditDocumentDataModel editDocumentDataModel = prepareEditDocumentDataModel(1L);
@@ -97,10 +96,10 @@ public class DocumentBridgeServiceImplIT extends WireMockBaseTest {
     }
 
     @Test
-    public void shouldGetDocumentByLink() throws CommunicationFailureException, JsonProcessingException {
+    public void shouldGetDocumentByLink() throws CommunicationFailureException {
 
         // given
-        DocumentDataModel documentDataModel = prepareDocumentDataModel(1L);
+        DocumentDataModel documentDataModel = prepareDocumentDataModel();
         WrapperBodyDataModel<DocumentDataModel> wrappedDocumentDataModel = prepareWrappedListDataModel(documentDataModel);
         String link = "document-1";
         String uri = prepareURI(LeafletPath.DOCUMENTS_BY_LINK.getURI(), link);
@@ -116,12 +115,12 @@ public class DocumentBridgeServiceImplIT extends WireMockBaseTest {
     }
 
     @Test
-    public void shouldCreateDocument() throws CommunicationFailureException, JsonProcessingException {
+    public void shouldCreateDocument() throws CommunicationFailureException {
 
         // given
         DocumentCreateRequestModel documentCreateRequestModel = prepareDocumentCreateRequestModel();
         EditDocumentDataModel editDocumentDataModel = prepareEditDocumentDataModel(1L);
-        StringValuePattern requestBody = equalToJson(OBJECT_MAPPER.writeValueAsString(documentCreateRequestModel));
+        StringValuePattern requestBody = equalToJson(JSON_MAPPER.writeValueAsString(documentCreateRequestModel));
         givenThat(post(LeafletPath.DOCUMENTS.getURI())
                 .withRequestBody(requestBody)
                 .willReturn(jsonResponse(editDocumentDataModel)));
@@ -137,12 +136,12 @@ public class DocumentBridgeServiceImplIT extends WireMockBaseTest {
     }
 
     @Test
-    public void shouldUpdateDocument() throws CommunicationFailureException, JsonProcessingException {
+    public void shouldUpdateDocument() throws CommunicationFailureException {
 
         // given
         DocumentCreateRequestModel documentCreateRequestModel = prepareDocumentCreateRequestModel();
         EditDocumentDataModel editDocumentDataModel = prepareEditDocumentDataModel(1L);
-        StringValuePattern requestBody = equalToJson(OBJECT_MAPPER.writeValueAsString(documentCreateRequestModel));
+        StringValuePattern requestBody = equalToJson(JSON_MAPPER.writeValueAsString(documentCreateRequestModel));
         Long documentID = 1L;
         String uri = prepareURI(LeafletPath.DOCUMENTS_BY_ID.getURI(), documentID);
         givenThat(put(uri)
@@ -160,7 +159,7 @@ public class DocumentBridgeServiceImplIT extends WireMockBaseTest {
     }
 
     @Test
-    public void shouldChangeDocumentStatus() throws CommunicationFailureException, JsonProcessingException {
+    public void shouldChangeDocumentStatus() throws CommunicationFailureException {
 
         // given
         Long documentID = 1L;
@@ -222,13 +221,13 @@ public class DocumentBridgeServiceImplIT extends WireMockBaseTest {
                 .build();
     }
 
-    private DocumentDataModel prepareDocumentDataModel(Long documentID) {
+    private DocumentDataModel prepareDocumentDataModel() {
         return DocumentDataModel.getBuilder()
-                .withId(documentID)
+                .withId(1L)
                 .withRawContent("Content")
                 .withCreated(ZonedDateTime.now(ZONE_OFFSET))
-                .withLink("document-" + documentID)
-                .withTitle("Document #" + documentID)
+                .withLink("document-1")
+                .withTitle("Document #1")
                 .withUser(null)
                 .build();
     }

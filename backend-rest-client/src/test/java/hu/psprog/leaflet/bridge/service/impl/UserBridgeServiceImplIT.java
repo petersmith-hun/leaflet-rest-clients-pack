@@ -1,6 +1,5 @@
 package hu.psprog.leaflet.bridge.service.impl;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.github.tomakehurst.wiremock.client.ResponseDefinitionBuilder;
 import com.github.tomakehurst.wiremock.matching.StringValuePattern;
 import hu.psprog.leaflet.api.rest.request.user.UpdateProfileRequestModel;
@@ -64,12 +63,12 @@ public class UserBridgeServiceImplIT extends WireMockBaseTest {
     }
 
     @Test
-    public void shouldCreateUser() throws JsonProcessingException, CommunicationFailureException {
+    public void shouldCreateUser() throws CommunicationFailureException {
 
         // given
         UserCreateRequestModel userCreateRequestModel = prepareUserCreateRequestModel();
         ExtendedUserDataModel extendedUserDataModel = prepareExtendedUserDataModel(1L);
-        StringValuePattern requestBody = equalToJson(OBJECT_MAPPER.writeValueAsString(userCreateRequestModel));
+        StringValuePattern requestBody = equalToJson(JSON_MAPPER.writeValueAsString(userCreateRequestModel));
         givenThat(post(LeafletPath.USERS.getURI())
                 .withRequestBody(requestBody)
                 .willReturn(ResponseDefinitionBuilder.okForJson(extendedUserDataModel)));
@@ -85,12 +84,12 @@ public class UserBridgeServiceImplIT extends WireMockBaseTest {
     }
 
     @Test
-    public void shouldInitializeUserDatabase() throws JsonProcessingException, CommunicationFailureException {
+    public void shouldInitializeUserDatabase() throws CommunicationFailureException {
 
         // given
         UserInitializeRequestModel userInitializeRequestModel = prepareUserInitializeRequestModel();
         ExtendedUserDataModel extendedUserDataModel = prepareExtendedUserDataModel(1L);
-        StringValuePattern requestBody = equalToJson(OBJECT_MAPPER.writeValueAsString(userInitializeRequestModel));
+        StringValuePattern requestBody = equalToJson(JSON_MAPPER.writeValueAsString(userInitializeRequestModel));
         givenThat(post(LeafletPath.USERS_INIT.getURI())
                 .withRequestBody(requestBody)
                 .willReturn(ResponseDefinitionBuilder.okForJson(extendedUserDataModel)));
@@ -140,13 +139,13 @@ public class UserBridgeServiceImplIT extends WireMockBaseTest {
     }
 
     @Test
-    public void shouldUpdateRole() throws JsonProcessingException, CommunicationFailureException {
+    public void shouldUpdateRole() throws CommunicationFailureException {
 
         // given
         Long userID = 1L;
         String uri = prepareURI(LeafletPath.USERS_ROLE.getURI(), userID);
         UpdateRoleRequestModel updateRoleRequestModel = prepareUpdateRoleRequestModel();
-        StringValuePattern requestBody = equalToJson(OBJECT_MAPPER.writeValueAsString(updateRoleRequestModel));
+        StringValuePattern requestBody = equalToJson(JSON_MAPPER.writeValueAsString(updateRoleRequestModel));
         ExtendedUserDataModel extendedUserDataModel = prepareExtendedUserDataModel(1L);
         givenThat(put(uri)
                 .withRequestBody(requestBody)
@@ -163,13 +162,13 @@ public class UserBridgeServiceImplIT extends WireMockBaseTest {
     }
 
     @Test
-    public void shouldUpdateProfile() throws JsonProcessingException, CommunicationFailureException {
+    public void shouldUpdateProfile() throws CommunicationFailureException {
 
         // given
         Long userID = 1L;
         String uri = prepareURI(LeafletPath.USERS_PROFILE.getURI(), userID);
         UpdateProfileRequestModel updateProfileRequestModel = prepareUpdateProfileRequestModel();
-        StringValuePattern requestBody = equalToJson(OBJECT_MAPPER.writeValueAsString(updateProfileRequestModel));
+        StringValuePattern requestBody = equalToJson(JSON_MAPPER.writeValueAsString(updateProfileRequestModel));
         ExtendedUserDataModel extendedUserDataModel = prepareExtendedUserDataModel(1L);
         givenThat(put(uri)
                 .withRequestBody(requestBody)
@@ -186,13 +185,13 @@ public class UserBridgeServiceImplIT extends WireMockBaseTest {
     }
 
     @Test
-    public void shouldUpdatePassword() throws JsonProcessingException, CommunicationFailureException {
+    public void shouldUpdatePassword() throws CommunicationFailureException {
 
         // given
         Long userID = 1L;
         String uri = prepareURI(LeafletPath.USERS_PASSWORD.getURI(), userID);
         UserPasswordRequestModel userPasswordRequestModel = prepareUserPasswordRequestModel();
-        StringValuePattern requestBody = equalToJson(OBJECT_MAPPER.writeValueAsString(userPasswordRequestModel));
+        StringValuePattern requestBody = equalToJson(JSON_MAPPER.writeValueAsString(userPasswordRequestModel));
         ExtendedUserDataModel extendedUserDataModel = prepareExtendedUserDataModel(1L);
         givenThat(put(uri)
                 .withRequestBody(requestBody)
