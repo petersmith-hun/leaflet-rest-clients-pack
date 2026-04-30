@@ -1,6 +1,5 @@
 package hu.psprog.leaflet.bridge.service.impl;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.github.tomakehurst.wiremock.matching.StringValuePattern;
 import hu.psprog.leaflet.api.rest.request.category.CategoryCreateRequestModel;
 import hu.psprog.leaflet.api.rest.response.category.CategoryDataModel;
@@ -43,7 +42,7 @@ public class CategoryBridgeServiceImplIT extends WireMockBaseTest {
     private CategoryBridgeService categoryBridgeService;
 
     @Test
-    public void shouldGetAllCategories() throws CommunicationFailureException, JsonProcessingException {
+    public void shouldGetAllCategories() throws CommunicationFailureException {
 
         // given
         CategoryListDataModel categoryListDataModel = prepareCategoryListDataModel();
@@ -61,7 +60,7 @@ public class CategoryBridgeServiceImplIT extends WireMockBaseTest {
     }
 
     @Test
-    public void shouldGetPublicCategories() throws CommunicationFailureException, JsonProcessingException {
+    public void shouldGetPublicCategories() throws CommunicationFailureException {
 
         // given
         CategoryListDataModel categoryListDataModel = prepareCategoryListDataModel();
@@ -78,7 +77,7 @@ public class CategoryBridgeServiceImplIT extends WireMockBaseTest {
     }
 
     @Test
-    public void shouldGetCategory() throws CommunicationFailureException, JsonProcessingException {
+    public void shouldGetCategory() throws CommunicationFailureException {
 
         // given
         Long categoryID = 1L;
@@ -97,12 +96,12 @@ public class CategoryBridgeServiceImplIT extends WireMockBaseTest {
     }
 
     @Test
-    public void shouldCreateCategory() throws CommunicationFailureException, JsonProcessingException {
+    public void shouldCreateCategory() throws CommunicationFailureException {
 
         // given
         CategoryDataModel categoryDataModel = prepareCategoryDataModel(1L);
         CategoryCreateRequestModel categoryCreateRequestModel = prepareCategoryCreateRequestModel();
-        StringValuePattern requestBody = equalToJson(OBJECT_MAPPER.writeValueAsString(categoryCreateRequestModel));
+        StringValuePattern requestBody = equalToJson(JSON_MAPPER.writeValueAsString(categoryCreateRequestModel));
         givenThat(post(LeafletPath.CATEGORIES.getURI())
                 .withRequestBody(requestBody)
                 .willReturn(jsonResponse(categoryDataModel, 201)));
@@ -118,13 +117,13 @@ public class CategoryBridgeServiceImplIT extends WireMockBaseTest {
     }
 
     @Test
-    public void shouldUpdateCategory() throws JsonProcessingException, CommunicationFailureException {
+    public void shouldUpdateCategory() throws CommunicationFailureException {
 
         // given
         Long categoryID = 1L;
         CategoryDataModel categoryDataModel = prepareCategoryDataModel(1L);
         CategoryCreateRequestModel categoryCreateRequestModel = prepareCategoryCreateRequestModel();
-        StringValuePattern requestBody = equalToJson(OBJECT_MAPPER.writeValueAsString(categoryCreateRequestModel));
+        StringValuePattern requestBody = equalToJson(JSON_MAPPER.writeValueAsString(categoryCreateRequestModel));
         String uri = prepareURI(LeafletPath.CATEGORIES_BY_ID.getURI(), categoryID);
         givenThat(put(uri)
                 .withRequestBody(requestBody)
@@ -141,7 +140,7 @@ public class CategoryBridgeServiceImplIT extends WireMockBaseTest {
     }
 
     @Test
-    public void shouldChangeStatus() throws CommunicationFailureException, JsonProcessingException {
+    public void shouldChangeStatus() throws CommunicationFailureException {
 
         // given
         Long categoryID = 1L;

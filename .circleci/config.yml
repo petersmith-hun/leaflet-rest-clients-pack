@@ -2,7 +2,6 @@ version: 2.1
 
 orbs:
   jira: circleci/jira@2.2.0
-  jq: circleci/jq@3.0.2
 
 executors:
   java:
@@ -20,8 +19,6 @@ jobs:
       - store_test_results:
           path: backend-rest-client/target/failsafe-reports
       - store_test_results:
-          path: failover-rest-client/target/failsafe-reports
-      - store_test_results:
           path: recaptcha-rest-client/target/failsafe-reports
       - store_test_results:
           path: tlp-rest-client/target/failsafe-reports
@@ -29,8 +26,6 @@ jobs:
           path: tms-rest-client/target/failsafe-reports
       - store_test_results:
           path: lens-rest-client/target/failsafe-reports
-      - store_test_results:
-          path: lsrs-rest-client/target/failsafe-reports
 
 workflows:
   build:

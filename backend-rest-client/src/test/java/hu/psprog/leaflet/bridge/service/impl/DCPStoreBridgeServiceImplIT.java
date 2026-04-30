@@ -1,6 +1,5 @@
 package hu.psprog.leaflet.bridge.service.impl;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.github.tomakehurst.wiremock.client.ResponseDefinitionBuilder;
 import com.github.tomakehurst.wiremock.matching.StringValuePattern;
 import hu.psprog.leaflet.api.rest.request.dcp.DCPRequestModel;
@@ -59,11 +58,11 @@ public class DCPStoreBridgeServiceImplIT extends WireMockBaseTest {
     }
 
     @Test
-    public void shouldCreateDCPEntry() throws CommunicationFailureException, JsonProcessingException {
+    public void shouldCreateDCPEntry() throws CommunicationFailureException {
 
         // given
         DCPRequestModel dcpRequestModel = prepareDCPRequestModel();
-        StringValuePattern requestBody = equalToJson(OBJECT_MAPPER.writeValueAsString(dcpRequestModel));
+        StringValuePattern requestBody = equalToJson(JSON_MAPPER.writeValueAsString(dcpRequestModel));
         givenThat(post(LeafletPath.DCP.getURI())
                 .withRequestBody(requestBody));
 
@@ -77,11 +76,11 @@ public class DCPStoreBridgeServiceImplIT extends WireMockBaseTest {
     }
 
     @Test
-    public void shouldUpdateDCPEntry() throws CommunicationFailureException, JsonProcessingException {
+    public void shouldUpdateDCPEntry() throws CommunicationFailureException {
 
         // given
         DCPRequestModel dcpRequestModel = prepareDCPRequestModel();
-        StringValuePattern requestBody = equalToJson(OBJECT_MAPPER.writeValueAsString(dcpRequestModel));
+        StringValuePattern requestBody = equalToJson(JSON_MAPPER.writeValueAsString(dcpRequestModel));
         givenThat(put(LeafletPath.DCP.getURI())
                 .withRequestBody(requestBody));
 

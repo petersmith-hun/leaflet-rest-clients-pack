@@ -1,6 +1,5 @@
 package hu.psprog.leaflet.bridge.service.impl;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.github.tomakehurst.wiremock.client.ResponseDefinitionBuilder;
 import com.github.tomakehurst.wiremock.matching.StringValuePattern;
 import hu.psprog.leaflet.api.rest.request.tag.TagAssignmentRequestModel;
@@ -97,12 +96,12 @@ public class TagBridgeServiceImplIT extends WireMockBaseTest {
     }
 
     @Test
-    public void shouldCreateTag() throws JsonProcessingException, CommunicationFailureException {
+    public void shouldCreateTag() throws CommunicationFailureException {
 
         // given
         TagCreateRequestModel tagCreateRequestModel = prepareTagCreateRequestModel();
         TagDataModel tagDataModel = prepareTagDataModel(1L);
-        StringValuePattern requestBody = equalToJson(OBJECT_MAPPER.writeValueAsString(tagCreateRequestModel));
+        StringValuePattern requestBody = equalToJson(JSON_MAPPER.writeValueAsString(tagCreateRequestModel));
         givenThat(post(LeafletPath.TAGS.getURI())
                 .withRequestBody(requestBody)
                 .willReturn(ResponseDefinitionBuilder.okForJson(tagDataModel)));
@@ -118,12 +117,12 @@ public class TagBridgeServiceImplIT extends WireMockBaseTest {
     }
 
     @Test
-    public void shouldUpdateTag() throws JsonProcessingException, CommunicationFailureException {
+    public void shouldUpdateTag() throws CommunicationFailureException {
 
         // given
         TagCreateRequestModel tagCreateRequestModel = prepareTagCreateRequestModel();
         TagDataModel tagDataModel = prepareTagDataModel(1L);
-        StringValuePattern requestBody = equalToJson(OBJECT_MAPPER.writeValueAsString(tagCreateRequestModel));
+        StringValuePattern requestBody = equalToJson(JSON_MAPPER.writeValueAsString(tagCreateRequestModel));
         Long tagID = 1L;
         String uri = prepareURI(LeafletPath.TAGS_BY_ID.getURI(), tagID);
         givenThat(put(uri)
@@ -176,11 +175,11 @@ public class TagBridgeServiceImplIT extends WireMockBaseTest {
     }
 
     @Test
-    public void shouldAttachTag() throws JsonProcessingException, CommunicationFailureException {
+    public void shouldAttachTag() throws CommunicationFailureException {
 
         // given
         TagAssignmentRequestModel tagAssignmentRequestModel = prepareTagAssignmentRequestModel();
-        StringValuePattern requestBody = equalToJson(OBJECT_MAPPER.writeValueAsString(tagAssignmentRequestModel));
+        StringValuePattern requestBody = equalToJson(JSON_MAPPER.writeValueAsString(tagAssignmentRequestModel));
         givenThat(post(LeafletPath.TAGS_ASSIGN.getURI())
                 .withRequestBody(requestBody));
 
@@ -194,11 +193,11 @@ public class TagBridgeServiceImplIT extends WireMockBaseTest {
     }
 
     @Test
-    public void shouldDetachTag() throws JsonProcessingException, CommunicationFailureException {
+    public void shouldDetachTag() throws CommunicationFailureException {
 
         // given
         TagAssignmentRequestModel tagAssignmentRequestModel = prepareTagAssignmentRequestModel();
-        StringValuePattern requestBody = equalToJson(OBJECT_MAPPER.writeValueAsString(tagAssignmentRequestModel));
+        StringValuePattern requestBody = equalToJson(JSON_MAPPER.writeValueAsString(tagAssignmentRequestModel));
         givenThat(put(LeafletPath.TAGS_ASSIGN.getURI())
                 .withRequestBody(requestBody));
 

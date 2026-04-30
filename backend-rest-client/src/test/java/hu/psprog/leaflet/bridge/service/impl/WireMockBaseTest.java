@@ -1,18 +1,14 @@
 package hu.psprog.leaflet.bridge.service.impl;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.github.tomakehurst.wiremock.client.ResponseDefinitionBuilder;
 import com.github.tomakehurst.wiremock.matching.StringValuePattern;
 import hu.psprog.leaflet.api.rest.response.common.BaseBodyDataModel;
 import hu.psprog.leaflet.api.rest.response.common.PaginationDataModel;
 import hu.psprog.leaflet.api.rest.response.common.SEODataModel;
 import hu.psprog.leaflet.api.rest.response.common.WrapperBodyDataModel;
+import tools.jackson.databind.DeserializationFeature;
+import tools.jackson.databind.json.JsonMapper;
 
-import java.text.DateFormat;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
 
@@ -33,24 +29,19 @@ public abstract class WireMockBaseTest {
     static final String ORDER_DIRECTION = "orderDirection";
     static final ZoneId ZONE_OFFSET = ZoneOffset.UTC;
 
-    static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
+    static final JsonMapper JSON_MAPPER = JsonMapper.builder()
+            .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+            .build();
 
-    static {
-        OBJECT_MAPPER.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
-        OBJECT_MAPPER.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        OBJECT_MAPPER.registerModule(new JavaTimeModule());
-        OBJECT_MAPPER.setDateFormat(DateFormat.getInstance());
-    }
-
-    ResponseDefinitionBuilder jsonResponse(Object responseObject) throws JsonProcessingException {
+    ResponseDefinitionBuilder jsonResponse(Object responseObject) {
         return jsonResponse(responseObject, 200);
     }
 
-    ResponseDefinitionBuilder jsonResponse(Object responseObject, int httpStatus) throws JsonProcessingException {
+    ResponseDefinitionBuilder jsonResponse(Object responseObject, int httpStatus) {
         return ResponseDefinitionBuilder.responseDefinition()
-                .withBody(OBJECT_MAPPER.writeValueAsString(responseObject))
+                .withBody(JSON_MAPPER.writeValueAsString(responseObject))
                 .withHeader("Content-Type", "application/json")
-                .withStatus(201);
+                .withStatus(httpStatus);
     }
 
     String prepareURI(String template, Object ... values) {

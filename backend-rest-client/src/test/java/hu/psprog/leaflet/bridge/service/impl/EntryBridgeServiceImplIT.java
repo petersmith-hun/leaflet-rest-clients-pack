@@ -1,6 +1,5 @@
 package hu.psprog.leaflet.bridge.service.impl;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.github.tomakehurst.wiremock.client.ResponseDefinitionBuilder;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.matching.StringValuePattern;
@@ -257,7 +256,7 @@ public class EntryBridgeServiceImplIT extends WireMockBaseTest {
     public void shouldGetEntryByLink() throws CommunicationFailureException {
 
         // given
-        ExtendedEntryDataModel extendedEntryDataModel = prepareExtendedEntryDataModel(1L);
+        ExtendedEntryDataModel extendedEntryDataModel = prepareExtendedEntryDataModel();
         WrapperBodyDataModel<ExtendedEntryDataModel> wrappedEntryDataModel = prepareWrappedListDataModel(extendedEntryDataModel);
         String link = "entry-1";
         String uri = prepareURI(LeafletPath.ENTRIES_BY_LINK.getURI(), link);
@@ -293,12 +292,12 @@ public class EntryBridgeServiceImplIT extends WireMockBaseTest {
     }
 
     @Test
-    public void shouldCreateEntry() throws JsonProcessingException, CommunicationFailureException {
+    public void shouldCreateEntry() throws CommunicationFailureException {
 
         // given
         EntryCreateRequestModel entryCreateRequestModel = prepareEntryCreateRequestModel();
         EditEntryDataModel extendedEntryDataModel = prepareEditEntryDataModel(1L);
-        StringValuePattern requestBody = equalToJson(OBJECT_MAPPER.writeValueAsString(entryCreateRequestModel));
+        StringValuePattern requestBody = equalToJson(JSON_MAPPER.writeValueAsString(entryCreateRequestModel));
         givenThat(post(LeafletPath.ENTRIES.getURI())
                 .withRequestBody(requestBody)
                 .willReturn(ResponseDefinitionBuilder.okForJson(extendedEntryDataModel)));
@@ -313,12 +312,12 @@ public class EntryBridgeServiceImplIT extends WireMockBaseTest {
     }
 
     @Test
-    public void shouldUpdateEntry() throws JsonProcessingException, CommunicationFailureException {
+    public void shouldUpdateEntry() throws CommunicationFailureException {
 
         // given
         EntryCreateRequestModel entryCreateRequestModel = prepareEntryCreateRequestModel();
         EditEntryDataModel extendedEntryDataModel = prepareEditEntryDataModel(1L);
-        StringValuePattern requestBody = equalToJson(OBJECT_MAPPER.writeValueAsString(entryCreateRequestModel));
+        StringValuePattern requestBody = equalToJson(JSON_MAPPER.writeValueAsString(entryCreateRequestModel));
         Long entryID = 1L;
         String uri = prepareURI(LeafletPath.ENTRIES_BY_ID.getURI(), entryID);
         givenThat(put(uri)
@@ -420,11 +419,11 @@ public class EntryBridgeServiceImplIT extends WireMockBaseTest {
                 .build();
     }
 
-    private ExtendedEntryDataModel prepareExtendedEntryDataModel(Long entryID) {
+    private ExtendedEntryDataModel prepareExtendedEntryDataModel() {
         return ExtendedEntryDataModel.getBuilder()
-                .withId(entryID)
-                .withLink("entry-" + entryID)
-                .withTitle("Entry #" + entryID)
+                .withId(1L)
+                .withLink("entry-1")
+                .withTitle("Entry #1")
                 .build();
     }
 

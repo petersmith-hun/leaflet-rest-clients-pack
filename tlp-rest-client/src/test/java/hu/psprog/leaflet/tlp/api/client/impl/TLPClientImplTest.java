@@ -1,6 +1,5 @@
 package hu.psprog.leaflet.tlp.api.client.impl;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.tomakehurst.wiremock.client.ResponseDefinitionBuilder;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.junit5.WireMockTest;
@@ -15,6 +14,8 @@ import hu.psprog.leaflet.tlp.api.domain.LogRequest;
 import hu.psprog.leaflet.tlp.api.domain.LoggingEvent;
 import hu.psprog.leaflet.tlp.api.domain.OrderBy;
 import hu.psprog.leaflet.tlp.api.domain.OrderDirection;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,9 +26,8 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.test.context.ActiveProfiles;
+import tools.jackson.databind.json.JsonMapper;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
@@ -151,8 +151,8 @@ public class TLPClientImplTest {
         static final String TLP_CLIENT_INTEGRATION_TEST_PROFILE = "it";
 
         @Bean
-        public ObjectMapper objectMapper() {
-            return new ObjectMapper();
+        public JsonMapper jsonMapper() {
+            return new JsonMapper();
         }
 
         @Bean

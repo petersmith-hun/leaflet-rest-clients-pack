@@ -17,8 +17,8 @@ import hu.psprog.leaflet.bridge.client.request.RESTRequest;
 import hu.psprog.leaflet.bridge.client.request.RequestMethod;
 import hu.psprog.leaflet.bridge.config.LeafletPath;
 import hu.psprog.leaflet.bridge.service.CommentBridgeService;
-import jakarta.ws.rs.core.GenericType;
 import org.springframework.beans.factory.annotation.Autowired;
+import tools.jackson.core.type.TypeReference;
 
 /**
  * Implementation of {@link CommentBridgeService}.
@@ -37,6 +37,8 @@ public class CommentBridgeServiceImpl implements CommentBridgeService {
     private static final String ENABLED = "enabled";
     private static final String DELETED = "deleted";
     private static final String CONTENT = "content";
+    private static final TypeReference<WrapperBodyDataModel<CommentListDataModel>> WRAPPED_COMMENT_LIST_TYPE_REFERENCE = new TypeReference<>() {};
+    private static final TypeReference<WrapperBodyDataModel<ExtendedCommentListDataModel>> WRAPPED_EXTENDED_COMMENT_LIST_TYPE_REFERENCE = new TypeReference<>() {};
 
     private final BridgeClient bridgeClient;
 
@@ -59,7 +61,7 @@ public class CommentBridgeServiceImpl implements CommentBridgeService {
                 .addRequestParameters(ORDER_DIRECTION, orderDirection.name())
                 .build();
 
-        return bridgeClient.call(restRequest, new GenericType<WrapperBodyDataModel<CommentListDataModel>>() {});
+        return bridgeClient.call(restRequest, WRAPPED_COMMENT_LIST_TYPE_REFERENCE);
     }
 
     @Override
@@ -77,7 +79,7 @@ public class CommentBridgeServiceImpl implements CommentBridgeService {
                 .authenticated()
                 .build();
 
-        return bridgeClient.call(restRequest, new GenericType<WrapperBodyDataModel<CommentListDataModel>>() {});
+        return bridgeClient.call(restRequest, WRAPPED_COMMENT_LIST_TYPE_REFERENCE);
     }
 
     @Override
@@ -95,7 +97,7 @@ public class CommentBridgeServiceImpl implements CommentBridgeService {
                 .authenticated()
                 .build();
 
-        return bridgeClient.call(restRequest, new GenericType<WrapperBodyDataModel<ExtendedCommentListDataModel>>() {});
+        return bridgeClient.call(restRequest, WRAPPED_EXTENDED_COMMENT_LIST_TYPE_REFERENCE);
     }
 
     @Override
@@ -120,7 +122,7 @@ public class CommentBridgeServiceImpl implements CommentBridgeService {
         commentSearchParameters.getContent()
                 .ifPresent(content -> restRequestBuilder.addRequestParameters(CONTENT, content));
 
-        return bridgeClient.call(restRequestBuilder.build(), new GenericType<WrapperBodyDataModel<ExtendedCommentListDataModel>>() {});
+        return bridgeClient.call(restRequestBuilder.build(), WRAPPED_EXTENDED_COMMENT_LIST_TYPE_REFERENCE);
     }
 
     @Override

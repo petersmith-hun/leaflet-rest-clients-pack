@@ -1,8 +1,5 @@
 package hu.psprog.leaflet.recaptcha.api.client.impl;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import com.github.tomakehurst.wiremock.client.ResponseDefinitionBuilder;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.junit5.WireMockTest;
@@ -14,6 +11,8 @@ import hu.psprog.leaflet.recaptcha.api.client.config.ReCaptchaServicePath;
 import hu.psprog.leaflet.recaptcha.api.domain.ReCaptchaErrorCode;
 import hu.psprog.leaflet.recaptcha.api.domain.ReCaptchaRequest;
 import hu.psprog.leaflet.recaptcha.api.domain.ReCaptchaResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,10 +24,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ActiveProfiles;
+import tools.jackson.databind.json.JsonMapper;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.ws.rs.core.MediaType;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -58,8 +55,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 @ActiveProfiles(RE_CAPTCHA_CLIENT_INTEGRATION_TEST_PROFILE)
 public class ReCaptchaClientImplTest {
 
-    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper()
-            .configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
+    private static final JsonMapper JSON_MAPPER = JsonMapper.builder().build();
 
     private static final String FIELD_SECRET = "secret";
     private static final String FIELD_RESPONSE = "response";
@@ -88,7 +84,7 @@ public class ReCaptchaClientImplTest {
     private ReCaptchaClient reCaptchaClient;
 
     @Test
-    public void shouldValidateWithSuccessResponse() throws CommunicationFailureException, JsonProcessingException {
+    public void shouldValidateWithSuccessResponse() throws CommunicationFailureException {
 
         // given
         givenThat(post(urlPathEqualTo(ReCaptchaServicePath.VERIFY.getURI()))
@@ -103,7 +99,7 @@ public class ReCaptchaClientImplTest {
     }
 
     @Test
-    public void shouldValidateWithFailureResponse() throws CommunicationFailureException, JsonProcessingException {
+    public void shouldValidateWithFailureResponse() throws CommunicationFailureException {
 
         // given
         givenThat(post(urlPathEqualTo(ReCaptchaServicePath.VERIFY.getURI()))
@@ -117,11 +113,11 @@ public class ReCaptchaClientImplTest {
         verifyRequest();
     }
 
-    private ResponseDefinitionBuilder prepareResponseDefinition(ReCaptchaResponse response) throws JsonProcessingException {
+    private ResponseDefinitionBuilder prepareResponseDefinition(ReCaptchaResponse response) {
         return ResponseDefinitionBuilder.responseDefinition()
                 .withStatus(HttpStatus.OK.value())
-                .withHeader("Content-Type", MediaType.APPLICATION_JSON)
-                .withBody(OBJECT_MAPPER.writeValueAsString(prepareRawResponse(response)));
+                .withHeader("Content-Type", "application/json")
+                .withBody(JSON_MAPPER.writeValueAsString(prepareRawResponse(response)));
     }
 
     private void verifyRequest() {
@@ -164,8 +160,8 @@ public class ReCaptchaClientImplTest {
         static final String RE_CAPTCHA_CLIENT_INTEGRATION_TEST_PROFILE = "it";
 
         @Bean
-        public ObjectMapper objectMapper() {
-            return new ObjectMapper();
+        public JsonMapper jsonMapper() {
+            return new JsonMapper();
         }
 
         @Bean

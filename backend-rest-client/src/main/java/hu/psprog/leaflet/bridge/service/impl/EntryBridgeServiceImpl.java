@@ -18,8 +18,8 @@ import hu.psprog.leaflet.bridge.client.request.RESTRequest;
 import hu.psprog.leaflet.bridge.client.request.RequestMethod;
 import hu.psprog.leaflet.bridge.config.LeafletPath;
 import hu.psprog.leaflet.bridge.service.EntryBridgeService;
-import jakarta.ws.rs.core.GenericType;
 import org.springframework.beans.factory.annotation.Autowired;
+import tools.jackson.core.type.TypeReference;
 
 /**
  * Implementation of {@link EntryBridgeService}.
@@ -39,6 +39,10 @@ public class EntryBridgeServiceImpl implements EntryBridgeService {
     private static final String STATUS = "status";
     private static final String ENABLED = "enabled";
     private static final String CATEGORY_ID = "categoryID";
+    private static final TypeReference<WrapperBodyDataModel<EntryListDataModel>> WRAPPED_ENTRY_LIST_TYPE_REFERENCE = new TypeReference<>() {};
+    private static final TypeReference<WrapperBodyDataModel<EntrySearchResultDataModel>> WRAPPED_ENTRY_SEARCH_RESULT_TYPE_REREFENCE = new TypeReference<>() {};
+    private static final TypeReference<WrapperBodyDataModel<ExtendedEntryDataModel>> WRAPPED_EXTENDED_ENTRY_TYPE_REFERENCE = new TypeReference<>() {};
+    private static final TypeReference<WrapperBodyDataModel<EditEntryDataModel>> WRAPPED_EDIT_ENTRY_TYPE_REFERENCE = new TypeReference<>() {};
 
     private final BridgeClient bridgeClient;
 
@@ -72,7 +76,7 @@ public class EntryBridgeServiceImpl implements EntryBridgeService {
                 .addRequestParameters(ORDER_DIRECTION, orderDirection.name())
                 .build();
 
-        return bridgeClient.call(restRequest, new GenericType<WrapperBodyDataModel<EntryListDataModel>>() {});
+        return bridgeClient.call(restRequest, WRAPPED_ENTRY_LIST_TYPE_REFERENCE);
     }
 
     @Override
@@ -89,7 +93,7 @@ public class EntryBridgeServiceImpl implements EntryBridgeService {
                 .authenticated()
                 .build();
 
-        return bridgeClient.call(restRequest, new GenericType<WrapperBodyDataModel<EntryListDataModel>>() {});
+        return bridgeClient.call(restRequest, WRAPPED_ENTRY_LIST_TYPE_REFERENCE);
     }
 
     @Override
@@ -106,7 +110,7 @@ public class EntryBridgeServiceImpl implements EntryBridgeService {
                 .addRequestParameters(ORDER_DIRECTION, orderDirection.name())
                 .build();
 
-        return bridgeClient.call(restRequest, new GenericType<WrapperBodyDataModel<EntryListDataModel>>() {});
+        return bridgeClient.call(restRequest, WRAPPED_ENTRY_LIST_TYPE_REFERENCE);
     }
 
     @Override
@@ -123,7 +127,7 @@ public class EntryBridgeServiceImpl implements EntryBridgeService {
                 .addRequestParameters(ORDER_DIRECTION, orderDirection.name())
                 .build();
 
-        return bridgeClient.call(restRequest, new GenericType<WrapperBodyDataModel<EntryListDataModel>>() {});
+        return bridgeClient.call(restRequest, WRAPPED_ENTRY_LIST_TYPE_REFERENCE);
     }
 
     @Override
@@ -140,7 +144,7 @@ public class EntryBridgeServiceImpl implements EntryBridgeService {
                 .addRequestParameters(ORDER_DIRECTION, orderDirection.name())
                 .build();
 
-        return bridgeClient.call(restRequest, new GenericType<WrapperBodyDataModel<EntryListDataModel>>() {});
+        return bridgeClient.call(restRequest, WRAPPED_ENTRY_LIST_TYPE_REFERENCE);
     }
 
     @Override
@@ -167,7 +171,7 @@ public class EntryBridgeServiceImpl implements EntryBridgeService {
         entrySearchParameters.getContent()
                 .ifPresent(content -> restRequestBuilder.addRequestParameters(CONTENT, content));
 
-        return bridgeClient.call(restRequestBuilder.build(), new GenericType<WrapperBodyDataModel<EntrySearchResultDataModel>>() {});
+        return bridgeClient.call(restRequestBuilder.build(), WRAPPED_ENTRY_SEARCH_RESULT_TYPE_REREFENCE);
     }
 
     @Override
@@ -179,7 +183,7 @@ public class EntryBridgeServiceImpl implements EntryBridgeService {
                 .addPathParameter(LINK, link)
                 .build();
 
-        return bridgeClient.call(request, new GenericType<WrapperBodyDataModel<ExtendedEntryDataModel>>() {});
+        return bridgeClient.call(request, WRAPPED_EXTENDED_ENTRY_TYPE_REFERENCE);
     }
 
     @Override
@@ -192,7 +196,7 @@ public class EntryBridgeServiceImpl implements EntryBridgeService {
                 .authenticated()
                 .build();
 
-        return bridgeClient.call(request, new GenericType<WrapperBodyDataModel<EditEntryDataModel>>() {});
+        return bridgeClient.call(request, WRAPPED_EDIT_ENTRY_TYPE_REFERENCE);
     }
 
     @Override
