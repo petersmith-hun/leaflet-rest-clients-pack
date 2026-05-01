@@ -6,6 +6,7 @@ import hu.psprog.leaflet.api.rest.response.common.BaseBodyDataModel;
 import hu.psprog.leaflet.api.rest.response.common.PaginationDataModel;
 import hu.psprog.leaflet.api.rest.response.common.SEODataModel;
 import hu.psprog.leaflet.api.rest.response.common.WrapperBodyDataModel;
+import org.springframework.test.annotation.DirtiesContext;
 import tools.jackson.databind.DeserializationFeature;
 import tools.jackson.databind.json.JsonMapper;
 
@@ -19,6 +20,7 @@ import static com.github.tomakehurst.wiremock.client.WireMock.equalTo;
  *
  * @author Peter Smith
  */
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 public abstract class WireMockBaseTest {
 
     static final String AUTHORIZATION_HEADER = "Authorization";
